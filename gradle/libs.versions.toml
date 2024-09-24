@@ -20,6 +20,8 @@ kotlinx-serialization = "1.7.3"
 composeLifecyleRuntime="2.8.2"
 revenueCat = "1.0.0+13.2.0"
 uuid = "0.8.4"
+multiplatformSettings = "1.1.1"
+
 
 
 
@@ -62,6 +64,7 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 revenuecat-core = { module = "com.revenuecat.purchases:purchases-kmp-core", version.ref = "revenueCat" }
 revenuecat-ui = { module = "com.revenuecat.purchases:purchases-kmp-ui", version.ref = "revenueCat" }
 uuid = { module = "com.benasher44:uuid", version.ref = "uuid" }
+multiplatformSettings-noargs = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatformSettings" }
 
 
 [plugins]

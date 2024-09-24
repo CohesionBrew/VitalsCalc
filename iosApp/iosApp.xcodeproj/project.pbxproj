@@ -29,7 +29,7 @@
 		A631C8A52C8DE8B50075EE70 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A631C8B72C8DEAA50075EE70 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		A631C8BB2C8DEBD70075EE70 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		A93A953729CC810C00F8E227 /* KAppMaker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KAppMaker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A93A953729CC810C00F8E227 /* KAppMakerAllModules.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KAppMakerAllModules.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A93A953A29CC810C00F8E227 /* iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iosApp.swift; sourceTree = "<group>"; };
 		A93A953E29CC810D00F8E227 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A93A954129CC810D00F8E227 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -69,7 +69,7 @@
 		A93A953829CC810C00F8E227 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A93A953729CC810C00F8E227 /* KAppMaker.app */,
+				A93A953729CC810C00F8E227 /* KAppMakerAllModules.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -142,7 +142,7 @@
 				A631C8B92C8DEB220075EE70 /* FirebaseMessaging */,
 			);
 			productName = iosApp;
-			productReference = A93A953729CC810C00F8E227 /* KAppMaker.app */;
+			productReference = A93A953729CC810C00F8E227 /* KAppMakerAllModules.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -392,15 +392,15 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iosApp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = KAppMaker;
+				INFOPLIST_KEY_CFBundleDisplayName = KAppMakerAllModules;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.measify.kappbuilder;
-				PRODUCT_NAME = KAppMaker;
+				PRODUCT_BUNDLE_IDENTIFIER = com.measify.kappmaker;
+				PRODUCT_NAME = KAppMakerAllModules;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -419,15 +419,15 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iosApp/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = KAppMaker;
+				INFOPLIST_KEY_CFBundleDisplayName = KAppMakerAllModules;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.measify.kappbuilder;
-				PRODUCT_NAME = KAppMaker;
+				PRODUCT_BUNDLE_IDENTIFIER = com.measify.kappmaker;
+				PRODUCT_NAME = KAppMakerAllModules;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

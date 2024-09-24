@@ -14,6 +14,11 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
 }
 
+//Custom scripts
+apply(from = rootProject.file("gradle/scripts/refactorPackage.gradle.kts"))
+apply(from = rootProject.file("gradle/scripts/generateNewScreen.gradle.kts"))
+
+
 kotlin {
     task("testClasses")
     jvmToolchain(11)
@@ -61,6 +66,7 @@ kotlin {
             implementation(libs.revenuecat.core)
             implementation(libs.revenuecat.ui)
             implementation(libs.uuid)
+            implementation(libs.multiplatformSettings.noargs)
 
         }
 
@@ -91,18 +97,18 @@ kotlin {
 }
 
 compose.resources {
-    packageOfResClass = "com.measify.kappbuilder.generated.resources"
+    packageOfResClass = "com.measify.kappmaker.generated.resources"
 }
 
 android {
-    namespace = "com.measify.kappbuilder"
+    namespace = "com.measify.kappmaker"
     compileSdk = 34
 
     defaultConfig {
         minSdk = 24
         targetSdk = 34
 
-        applicationId = "com.measify.kappbuilder"
+        applicationId = "com.measify.kappmaker"
         versionCode = 1
         versionName = "1.0.0"
 
@@ -155,7 +161,7 @@ dependencies {
 buildConfig {
     // BuildConfig configuration here.
     // https://github.com/gmazzo/gradle-buildconfig-plugin#usage-in-kts
-    packageName("com.measify.kappbuilder")
+    packageName("com.measify.kappmaker")
     buildConfigField("GOOGLE_WEB_CLIENT_ID", getRequiredProperty("GOOGLE_WEB_CLIENT_ID"))
     buildConfigField("REVENUECAT_ANDROID_API_KEY", getRequiredProperty("REVENUECAT_ANDROID_API_KEY"))
     buildConfigField("REVENUECAT_IOS_API_KEY", getRequiredProperty("REVENUECAT_IOS_API_KEY"))

@@ -1,0 +1,23 @@
+package com.measify.kappmaker.presentation.screens.paywall
+
+import com.measify.kappmaker.util.UiMessage
+import com.revenuecat.purchases.kmp.Package
+
+data class PaywallUiState(
+    val title: String = "Go Premium",
+    val buyButtonText: String = "Buy Now",
+    val features: List<String> = emptyList(),
+    val isLoading: Boolean = true,
+    val message: UiMessage? = null,
+    val selectedPackage: Package? = null,
+    val buyButtonEnabled: Boolean = false,
+    val packages: List<Package> = emptyList(),
+    val isSuccessfulPurchase: Boolean = false,
+)
+
+sealed class PaywallUiEvent {
+    data object OnClickBuy : PaywallUiEvent()
+    data object OnClickRestore : PaywallUiEvent()
+    data class OnSelectPackage(val rcPackage: Package) : PaywallUiEvent()
+}
+

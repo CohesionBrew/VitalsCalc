@@ -22,6 +22,11 @@
     <string name="msg_successful_payment">Congrats!!! Purchase was successful</string>
     <string name="msg_successful_restore_payment">Congrats!!! Restore was successful</string>
     <string name="btn_restore_purchase">Restore Purchase</string>
+    <string name="title_onboarding_page_1">Amazing Title</string>
+    <string name="desc_onboarding_page_1">Amazing Description Text will be here</string>
+    <string name="btn_get_started">Get Started</string>
+    <string name="btn_skip">Skip</string>
+    <string name="btn_next">Next</string>
 
 
 

@@ -1,4 +1,4 @@
-rootProject.name = "KAppMaker"
+rootProject.name = "KAppMakerAllModules"
 
 pluginManagement {
     repositories {
