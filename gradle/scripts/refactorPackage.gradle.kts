@@ -100,7 +100,7 @@ tasks.register("refactorPackage") {
     }
 
     fun updateGradleFiles() {
-        val gradleFiles = listOf("composeApp/build.gradle.kts") // Add more paths as needed
+        val gradleFiles = listOf("composeApp/build.gradle.kts","gradle/scripts/generateNewScreen.gradle.kts") // Add more paths as needed
         gradleFiles.forEach { filePath ->
             val gradleFile = project.rootDir.resolve(filePath)
             updateFileContent(gradleFile, "Gradle File")
