@@ -45,39 +45,71 @@ object AppInitializer {
 
     private fun KoinApplication.onApplicationStart() {
         onApplicationStartPlatformSpecific()
-        //Add common application start functions here
+        //Add common application start functions below
+
+        //initialize logging
         AppLogger.initialize(isDebug = true)
 
-        NotifierManager.addListener(object : NotifierManager.Listener {
-            override fun onNewToken(token: String) {
-                super.onNewToken(token)
-                AppLogger.d("Firebase onNewToken: $token")
-            }
+        initializeNotification()
+        initializeAuthentication()
+        initializeInAppPurchase()
 
-            override fun onNotificationClicked(data: PayloadData) {
-                super.onNotificationClicked(data)
-                AppLogger.d("onNotification clicked: $data")
 
-            }
-
-            override fun onPayloadData(data: PayloadData) {
-                super.onPayloadData(data)
-                AppLogger.d("Firebase notification onPayloadData: $data")
-
-            }
-
-            override fun onPushNotification(title: String?, body: String?) {
-                super.onPushNotification(title, body)
-                AppLogger.d("Firebase onPushNotification: title: $title, body: $body")
-
-            }
-        })
-
-        GoogleAuthProvider.create(credentials = GoogleAuthCredentials(serverId = BuildConfig.GOOGLE_WEB_CLIENT_ID))
-        val revenueCatApiKey =
-            if (isAndroid) BuildConfig.REVENUECAT_ANDROID_API_KEY else BuildConfig.REVENUECAT_IOS_API_KEY
-        Purchases.configure(PurchasesConfiguration(apiKey = revenueCatApiKey))
     }
+}
+
+private fun initializeNotification(){
+    NotifierManager.addListener(object : NotifierManager.Listener {
+
+        /**
+         * This method is called when a new FCM token is generated.
+         * You can use this token for sending notifications to the specific device or saving in the server.
+         * It is logged for debugging purposes.
+         */
+        override fun onNewToken(token: String) {
+            super.onNewToken(token)
+            AppLogger.d("Firebase onNewToken: $token")
+        }
+
+        /**
+         * This method is invoked when the user clicks on a notification.
+         * @param data parameter contains the payload data sent with the notification
+         */
+        override fun onNotificationClicked(data: PayloadData) {
+            super.onNotificationClicked(data)
+            AppLogger.d("onNotification clicked: $data")
+
+        }
+
+        /**
+         * This method is invoked when receiving a data type notification.
+         * @param data parameter contains the payload data sent with the notification
+         */
+        override fun onPayloadData(data: PayloadData) {
+            super.onPayloadData(data)
+            AppLogger.d("Firebase notification onPayloadData: $data")
+
+        }
+
+        /**
+         * This method is invoked when receiving a notification
+         */
+        override fun onPushNotification(title: String?, body: String?) {
+            super.onPushNotification(title, body)
+            AppLogger.d("Firebase onPushNotification: title: $title, body: $body")
+
+        }
+    })
+}
+
+private fun initializeAuthentication(){
+    GoogleAuthProvider.create(credentials = GoogleAuthCredentials(serverId = BuildConfig.GOOGLE_WEB_CLIENT_ID))
+}
+
+private fun initializeInAppPurchase(){
+    val revenueCatApiKey =
+        if (isAndroid) BuildConfig.REVENUECAT_ANDROID_API_KEY else BuildConfig.REVENUECAT_IOS_API_KEY
+    Purchases.configure(PurchasesConfiguration(apiKey = revenueCatApiKey))
 }
 
 private val domainModule = module {
