@@ -8,6 +8,7 @@ on:
 jobs:
   publish_app:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     name: Publishing Android App
     permissions:
       contents: write
