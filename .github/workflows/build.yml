@@ -21,7 +21,15 @@ jobs:
             upload_artifact: true
           - os: macos-latest
             platform: iOS
-            build_command: xcodebuild -allowProvisioningUpdates -project iosApp/iosApp.xcodeproj -configuration Debug -scheme iosApp -sdk iphoneos -destination name='iPhone 14' build
+            build_command: |
+              gem install cocoapods
+              cd iosApp
+              pod install --repo-update
+              xcodebuild \
+                -workspace iosApp.xcworkspace \
+                -configuration Debug \
+                -scheme iosApp \
+                -destination 'platform=iOS Simulator,name=iPhone 14' CODE_SIGNING_ALLOWED='NO'
             upload_artifact: false
     runs-on: ${{ matrix.os }}
     name: Build ${{ matrix.platform }}
