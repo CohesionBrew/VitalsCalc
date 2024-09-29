@@ -130,6 +130,10 @@ tasks.register("refactorPackage") {
         val publishAndroidWorkflow =
             project.rootDir.resolve(".github/workflows/publish_android_playstore.yml")
         updateFileContent(publishAndroidWorkflow, "publish_android_playstore.yml")
+
+        val publishIosWorkflow =
+            project.rootDir.resolve(".github/workflows/publish_ios_appstore.yml")
+        updateFileContent(publishIosWorkflow, "publish_ios_appstore.yml")
     }
 
 
@@ -153,7 +157,8 @@ tasks.register("refactorPackage") {
         val files = listOf(
             "composeApp/src/androidMain/AndroidManifest.xml",
             "settings.gradle.kts",
-            "iosApp/iosApp.xcodeproj/project.pbxproj"
+            "iosApp/iosApp.xcodeproj/project.pbxproj",
+            ".github/workflows/publish_ios_appstore.yml"
         ) // Add more paths as needed
         files.forEach { filePath ->
             val file = project.rootDir.resolve(filePath)
