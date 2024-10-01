@@ -1,5 +1,7 @@
 # Compose Multiplatform Application
 
+Documentation is available at [docs.kappmaker.com](https://docs.kappmaker.com)  
+
 ## Before running!
 
 - check your system with [KDoctor](https://github.com/Kotlin/kdoctor)
