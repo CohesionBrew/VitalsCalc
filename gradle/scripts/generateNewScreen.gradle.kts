@@ -12,7 +12,8 @@ tasks.register("generateNewScreen") {
     // Extract the first argument (screen name) from the task names
     val screenBasePrefix = (project.findProperty("screenName") as String?)
         ?.let { it.replaceFirstChar { char -> char.uppercase() } }
-        ?: throw IllegalArgumentException("Screen name must be provided using -PscreenName=ScreenName")
+//        ?: throw IllegalArgumentException("Screen name must be provided using -PscreenName=ScreenName")
+        ?: return@register
 
     // Class and package name formatting
     val screensPackageName = "$defaultPackageName.presentation.screens"
