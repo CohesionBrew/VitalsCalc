@@ -8,37 +8,38 @@ tasks.register("generateNewScreen") {
     var viewModelSuffix = "UiStateHolder"
 
 
-    // Input for the task: Screen name passed as a parameter
-    // Extract the first argument (screen name) from the task names
-    val screenBasePrefix = (project.findProperty("screenName") as String?)
-        ?.let { it.replaceFirstChar { char -> char.uppercase() } }
-//        ?: throw IllegalArgumentException("Screen name must be provided using -PscreenName=ScreenName")
-        ?: return@register
+    doLast {
+        // Input for the task: Screen name passed as a parameter
+        // Extract the first argument (screen name) from the task names
+        val screenBasePrefix = (project.findProperty("screenName") as String?)
+            ?.let { it.replaceFirstChar { char -> char.uppercase() } }
+            ?: throw IllegalArgumentException("Screen name must be provided using -PscreenName=ScreenName")
 
-    // Class and package name formatting
-    val screensPackageName = "$defaultPackageName.presentation.screens"
-    val screenClassName = "$screenBasePrefix$screenSuffix"
-    val uiStateClassName = "$screenBasePrefix$uiStateSuffix"
-    val uiEventClassName = "$screenBasePrefix$uiEventSuffix"
-    val viewModelClassName = "$screenBasePrefix$viewModelSuffix"
-    val screenRouteClassName = "${screenBasePrefix}${screenSuffix}Route"
+        // Class and package name formatting
+        val screensPackageName = "$defaultPackageName.presentation.screens"
+        val screenClassName = "$screenBasePrefix$screenSuffix"
+        val uiStateClassName = "$screenBasePrefix$uiStateSuffix"
+        val uiEventClassName = "$screenBasePrefix$uiEventSuffix"
+        val viewModelClassName = "$screenBasePrefix$viewModelSuffix"
+        val screenRouteClassName = "${screenBasePrefix}${screenSuffix}Route"
 
-    // Lowercase screen name for folder path
-    val lowerScreenName = screenBasePrefix.lowercase()
-    val packgageDir = defaultPackageName.replace(".", "/")
-    val screenDir = file("src/commonMain/kotlin/${packgageDir}/presentation/screens/$lowerScreenName")
+        // Lowercase screen name for folder path
+        val lowerScreenName = screenBasePrefix.lowercase()
+        val packgageDir = defaultPackageName.replace(".", "/")
+        val screenDir =
+            file("src/commonMain/kotlin/${packgageDir}/presentation/screens/$lowerScreenName")
 
-    // Ensure directory exists
-    doFirst {
+        // Ensure directory exists
+
         if (!screenDir.exists()) {
             screenDir.mkdirs()
         }
-    }
 
-    doLast {
+
         // Generate UiState.kt file
         val uiStateFile = file("$screenDir/${uiStateClassName}.kt")
-        uiStateFile.writeText("""
+        uiStateFile.writeText(
+            """
             package $screensPackageName.$lowerScreenName
 
             class $uiStateClassName()
@@ -46,11 +47,13 @@ tasks.register("generateNewScreen") {
             sealed class $uiEventClassName {
                 data object OnClick : $uiEventClassName()
             }
-        """.trimIndent())
+        """.trimIndent()
+        )
 
         // Generate UiStateHolder.kt (ViewModel) file
         val viewModelFile = file("$screenDir/${viewModelClassName}.kt")
-        viewModelFile.writeText("""
+        viewModelFile.writeText(
+            """
             package $screensPackageName.$lowerScreenName
 
             import $defaultPackageName.util.UiStateHolder
@@ -62,11 +65,13 @@ tasks.register("generateNewScreen") {
                 private val _uiState = MutableStateFlow($uiStateClassName())
                 val uiState: StateFlow<$uiStateClassName> = _uiState.asStateFlow()
             }
-        """.trimIndent())
+        """.trimIndent()
+        )
 
         // Generate Screen.kt file
         val screenFile = file("$screenDir/${screenClassName}.kt")
-        screenFile.writeText("""
+        screenFile.writeText(
+            """
             package $screensPackageName.$lowerScreenName
 
             import androidx.compose.foundation.layout.Box
@@ -100,11 +105,13 @@ tasks.register("generateNewScreen") {
                     // UI components go here
                 }
             }
-        """.trimIndent())
+        """.trimIndent()
+        )
 
         // Generate ScreenRoute.kt file
         val screenRouteFile = file("$screenDir/${screenRouteClassName}.kt")
-        screenRouteFile.writeText("""
+        screenRouteFile.writeText(
+            """
             package $screensPackageName.$lowerScreenName
 
             import androidx.compose.runtime.Composable
@@ -119,7 +126,8 @@ tasks.register("generateNewScreen") {
                     $screenClassName(uiStateHolder = uiStateHolder)
                 }
             }
-        """.trimIndent())
+        """.trimIndent()
+        )
 
         println("Screen files for $screenClassName have been created in $screenDir")
     }
