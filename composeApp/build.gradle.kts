@@ -12,6 +12,8 @@ plugins {
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.buildConfig)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 //Custom scripts
@@ -67,6 +69,8 @@ kotlin {
             implementation(libs.revenuecat.ui)
             implementation(libs.uuid)
             implementation(libs.multiplatformSettings.noargs)
+            implementation(libs.room.runtime)
+            implementation(libs.sqlite.bundled)
 
         }
 
@@ -156,6 +160,15 @@ dependencies {
     androidTestImplementation("androidx.test:monitor") {
         version { strictly("1.6.1") }
     }
+
+    add("kspAndroid",libs.room.compiler)
+    add("kspIosX64",libs.room.compiler)
+    add("kspIosArm64",libs.room.compiler)
+    add("kspIosSimulatorArm64",libs.room.compiler)
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 buildConfig {

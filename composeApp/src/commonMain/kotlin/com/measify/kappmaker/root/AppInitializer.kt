@@ -1,8 +1,11 @@
 package com.measify.kappmaker.root
 
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.measify.kappmaker.BuildConfig
 import com.measify.kappmaker.data.BackgroundExecutor
 import com.measify.kappmaker.data.repository.UserRepository
+import com.measify.kappmaker.data.source.local.AppDatabase
+import com.measify.kappmaker.data.source.local.DatabaseProvider
 import com.measify.kappmaker.data.source.preferences.UserPreferences
 import com.measify.kappmaker.data.source.preferences.UserPreferencesImpl
 import com.measify.kappmaker.data.source.remote.HttpClientFactory
@@ -58,7 +61,7 @@ object AppInitializer {
     }
 }
 
-private fun initializeNotification(){
+private fun initializeNotification() {
     NotifierManager.addListener(object : NotifierManager.Listener {
 
         /**
@@ -102,11 +105,11 @@ private fun initializeNotification(){
     })
 }
 
-private fun initializeAuthentication(){
+private fun initializeAuthentication() {
     GoogleAuthProvider.create(credentials = GoogleAuthCredentials(serverId = BuildConfig.GOOGLE_WEB_CLIENT_ID))
 }
 
-private fun initializeInAppPurchase(){
+private fun initializeInAppPurchase() {
     val revenueCatApiKey =
         if (isAndroid) BuildConfig.REVENUECAT_ANDROID_API_KEY else BuildConfig.REVENUECAT_IOS_API_KEY
     Purchases.configure(PurchasesConfiguration(apiKey = revenueCatApiKey))
@@ -129,6 +132,17 @@ private val dataModule = module {
     //Remote source
     single { HttpClientFactory.default() }
     factoryOf(::ApiService)
+
+    //Local Source
+    single<AppDatabase> {
+        val databaseProvider = get<DatabaseProvider>()
+        databaseProvider.provideAppDatabaseBuilder()
+            .fallbackToDestructiveMigration(dropAllTables = true)
+            .setDriver(BundledSQLiteDriver())
+            .setQueryCoroutineContext(Dispatchers.IO)
+            .build()
+    }
+    single { get<AppDatabase>().exampleDao() }
 
     //Repositories
     single { UserRepository(get(), get()) }

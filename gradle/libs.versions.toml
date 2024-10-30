@@ -21,6 +21,9 @@ composeLifecyleRuntime="2.8.3"
 revenueCat = "1.2.0+13.6.0"
 uuid = "0.8.4"
 multiplatformSettings = "1.1.1"
+ksp = "2.0.20-1.0.25"
+room="2.7.0-alpha10"
+sqlite="2.5.0-alpha08"
 
 
 
@@ -65,7 +68,9 @@ revenuecat-core = { module = "com.revenuecat.purchases:purchases-kmp-core", vers
 revenuecat-ui = { module = "com.revenuecat.purchases:purchases-kmp-ui", version.ref = "revenueCat" }
 uuid = { module = "com.benasher44:uuid", version.ref = "uuid" }
 multiplatformSettings-noargs = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatformSettings" }
-
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 
 [plugins]
 
@@ -77,3 +82,5 @@ google-services = { id = "com.google.gms.google-services", version.ref = "google
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlytics" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+room = { id = "androidx.room", version.ref = "room" }
