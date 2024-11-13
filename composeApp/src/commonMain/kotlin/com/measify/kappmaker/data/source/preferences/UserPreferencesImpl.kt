@@ -30,6 +30,10 @@ internal class UserPreferencesImpl(private val multiplatformSettings: Settings) 
         multiplatformSettings.putBoolean(key, value)
     }
 
+    override suspend fun remove(key: String) {
+        multiplatformSettings.remove(key)
+    }
+
     override suspend fun clear() {
         multiplatformSettings.clear()
     }
