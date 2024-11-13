@@ -19,10 +19,7 @@ import kotlinx.serialization.json.Json
 object HttpClientFactory {
     fun default() = HttpClient {
         defaultRequest {
-            url {
-                protocol = URLProtocol.HTTPS
-                host = "BASE_URL"
-            }
+            url("BASE_URL")
             header(HttpHeaders.ContentType, "application/json")
         }
 
