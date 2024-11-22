@@ -11,8 +11,8 @@ import com.measify.kappmaker.generated.resources.msg_successful_restore_payment
 import com.measify.kappmaker.presentation.components.MessageDialog
 import com.measify.kappmaker.util.UiMessage
 import com.measify.kappmaker.util.logging.AppLogger
-import com.revenuecat.purchases.kmp.CustomerInfo
-import com.revenuecat.purchases.kmp.PurchasesError
+import com.revenuecat.purchases.kmp.models.CustomerInfo
+import com.revenuecat.purchases.kmp.models.PurchasesError
 import com.revenuecat.purchases.kmp.models.StoreTransaction
 import com.revenuecat.purchases.kmp.ui.revenuecatui.Paywall
 import com.revenuecat.purchases.kmp.ui.revenuecatui.PaywallListener

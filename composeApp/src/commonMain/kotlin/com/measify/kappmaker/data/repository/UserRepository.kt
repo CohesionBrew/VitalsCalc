@@ -6,7 +6,7 @@ import com.measify.kappmaker.domain.model.User
 import com.measify.kappmaker.util.ApplicationScope
 import com.measify.kappmaker.util.Constants.PAYWALL_PREMIUM_ENTITLEMENT
 import com.measify.kappmaker.util.logging.AppLogger
-import com.revenuecat.purchases.kmp.CacheFetchPolicy
+import com.revenuecat.purchases.kmp.models.CacheFetchPolicy
 import com.revenuecat.purchases.kmp.Purchases
 import com.revenuecat.purchases.kmp.ktx.awaitCustomerInfo
 import dev.gitlive.firebase.Firebase

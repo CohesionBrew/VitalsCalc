@@ -5,11 +5,13 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
+import com.measify.kappmaker.presentation.components.bottomnav.BottomNavItem
 import com.measify.kappmaker.presentation.screens.favorite.FavoriteScreenRoute
 import com.measify.kappmaker.presentation.screens.home.HomeScreenRoute
 import com.measify.kappmaker.presentation.screens.paywall.PaywallScreenRoute
 import com.measify.kappmaker.presentation.screens.profile.ProfileScreenRoute
 import com.measify.kappmaker.util.ScreenRoute
+import com.measify.kappmaker.util.logging.AppLogger
 
 class MainScreenRoute : Screen {
 
@@ -19,19 +21,21 @@ class MainScreenRoute : Screen {
         Navigator(startScreen) { navigator ->
             val currentScreen = navigator.lastItem
             val currentScreenTitle = (currentScreen as? ScreenRoute)?.title ?: ""
-            val selectedBottomNavIndex = getBottomNavPositionByScreenRoute(currentScreen)
+            val selectedBottomNavIndex =
+                getBottomNavPositionByScreenRoute(currentScreen as ScreenRoute?)
 
-            val isBottomNavVisible =
-                currentScreen is HomeScreenRoute
-                        || currentScreen is ProfileScreenRoute
-                        || currentScreen is FavoriteScreenRoute
+            val bottomNavVisibleScreens = BottomNavItem.items().map { it.destination }
+            val toolbarHiddenScreens = bottomNavVisibleScreens + listOf(PaywallScreenRoute())
+
+            val isBottomNavVisible = bottomNavVisibleScreens.any { it.key == currentScreen.key }
+            val isToolbarHidden = toolbarHiddenScreens.any { it.key == currentScreen.key }
             val mainScreenUiState = MainScreenUiState(
                 bottomNavUiState = BottomNavUiState(
                     isVisible = isBottomNavVisible,
                     selectedBottomNavIndex = selectedBottomNavIndex
                 ),
                 toolbarUiState = ToolbarUiState(
-                    isVisible = isBottomNavVisible.not() && currentScreen !is PaywallScreenRoute,
+                    isVisible = isToolbarHidden.not(),
                     text = currentScreenTitle
                 ),
                 contentPadding = if (currentScreen is PaywallScreenRoute) 0.dp else 20.dp
@@ -43,9 +47,9 @@ class MainScreenRoute : Screen {
                     when (event) {
                         is MainScreenUiEvent.OnBottomNavItemClick -> {
                             navigator.popUntilRoot()
-                            when (event.bottomNavItem.position) {
-                                0 -> Unit //Already popped all the screens
-                                else -> navigator.push(getScreenRouteByBottomNavPosition(event.bottomNavItem.position))
+                            when (event.bottomNavItem.destination.key) {
+                                startScreen.key -> Unit //Already popped all the screens
+                                else -> navigator.push(event.bottomNavItem.destination)
                             }
                         }
 
@@ -61,21 +65,10 @@ class MainScreenRoute : Screen {
     }
 
 
-    private fun getScreenRouteByBottomNavPosition(position: Int): ScreenRoute {
-        return when (position) {
-            0 -> HomeScreenRoute()
-            1 -> FavoriteScreenRoute()
-            2 -> ProfileScreenRoute()
-            else -> throw RuntimeException("ScreenRoute is not defined in position $position")
-        }
-    }
-
-    private fun getBottomNavPositionByScreenRoute(screenRoute: Screen): Int {
-        return when (screenRoute) {
-            is HomeScreenRoute -> 0
-            is FavoriteScreenRoute -> 1
-            is ProfileScreenRoute -> 2
-            else -> 0
-        }
+    @Composable
+    private fun getBottomNavPositionByScreenRoute(screenRoute: ScreenRoute?): Int {
+        if (screenRoute == null) return -1
+        return BottomNavItem.items()
+            .indexOfFirst { it.destination.key == screenRoute.key }
     }
 }

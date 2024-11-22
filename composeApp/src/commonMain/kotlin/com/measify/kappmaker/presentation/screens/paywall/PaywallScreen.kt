@@ -44,7 +44,7 @@ import com.measify.kappmaker.presentation.components.FullScreenLoading
 import com.measify.kappmaker.presentation.components.MessageDialog
 import com.measify.kappmaker.util.extensions.productDescription
 import com.measify.kappmaker.util.extensions.productName
-import com.revenuecat.purchases.kmp.Package
+import com.revenuecat.purchases.kmp.models.Package
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

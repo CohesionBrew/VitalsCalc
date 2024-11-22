@@ -46,7 +46,7 @@ fun AuthUIHelperButtons(
         val isDarkMode by LocalThemeIsDark.current
         if (authProviders.contains(AuthProvider.GOOGLE)) {
             //Google Sign-In Button and authentication with Firebase
-            GoogleButtonUiContainerFirebase(onResult = {
+            GoogleButtonUiContainerFirebase(linkAccount = false, onResult = {
                 AppLogger.d("GoogleSignIn Result: $it")
                 updatedOnFirebaseResult(it)
             }) {
@@ -62,7 +62,7 @@ fun AuthUIHelperButtons(
 
         if (authProviders.contains(AuthProvider.APPLE)) {
             //Apple Sign-In Button and authentication with Firebase
-            AppleButtonUiContainer(onResult = {
+            AppleButtonUiContainer(linkAccount = false, onResult = {
                 AppLogger.d("AppleSignIn Result: $it")
                 updatedOnFirebaseResult(it)
             }) {

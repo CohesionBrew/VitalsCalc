@@ -1,6 +1,6 @@
 package com.measify.kappmaker.util.extensions
 
-import com.revenuecat.purchases.kmp.Package
+import com.revenuecat.purchases.kmp.models.Package
 
 
 val Package.productName :String

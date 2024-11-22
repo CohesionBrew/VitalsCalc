@@ -1,7 +1,7 @@
 package com.measify.kappmaker.presentation.screens.paywall
 
 import com.measify.kappmaker.util.UiMessage
-import com.revenuecat.purchases.kmp.Package
+import com.revenuecat.purchases.kmp.models.Package
 
 data class PaywallUiState(
     val title: String = "Go Premium",
