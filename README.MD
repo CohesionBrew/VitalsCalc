@@ -2,6 +2,11 @@
 
 Documentation is available at [docs.kappmaker.com](https://docs.kappmaker.com)  
 
+This repository provides two versions of KAppMaker:
+
+1. **Main Branch**: Uses the **Voyager** library for ViewModel and Navigation.
+2. **jetpack_viewmodel_navigation Branch**: Uses **Google Jetpack** ViewModel and Navigation components.
+
 ## Before running!
 
 - check your system with [KDoctor](https://github.com/Kotlin/kdoctor)
