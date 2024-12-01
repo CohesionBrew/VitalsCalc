@@ -1,5 +1,6 @@
 package com.measify.kappmaker.util
 
+import com.measify.kappmaker.BuildConfig
 import com.measify.kappmaker.data.source.local.DatabaseProvider
 import com.measify.kappmaker.data.source.local.DatabaseProviderImpl
 import com.mmk.kmpnotifier.notification.NotifierManager
@@ -24,3 +25,4 @@ internal actual fun onApplicationStartPlatformSpecific() {
 }
 
 internal actual val isAndroid = true
+internal actual val isDebug = BuildConfig.DEBUG

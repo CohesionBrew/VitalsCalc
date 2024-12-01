@@ -9,6 +9,7 @@ import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import kotlin.experimental.ExperimentalNativeApi
 
 internal actual val platformModule: Module = module {
     singleOf(::DatabaseProviderImpl) bind DatabaseProvider::class
@@ -20,3 +21,5 @@ internal actual fun onApplicationStartPlatformSpecific() {
 }
 
 internal actual val isAndroid = false
+@OptIn(ExperimentalNativeApi::class)
+internal actual val isDebug = Platform.isDebugBinary

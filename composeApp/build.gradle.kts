@@ -150,6 +150,10 @@ android {
             signingConfig = signingConfigs.getByName(if (isSigningKeyExists) "release" else "debug")
         }
     }
+    buildFeatures {
+        buildConfig = true
+    }
+
 }
 
 //https://developer.android.com/develop/ui/compose/testing#setup
@@ -174,7 +178,7 @@ room {
 buildConfig {
     // BuildConfig configuration here.
     // https://github.com/gmazzo/gradle-buildconfig-plugin#usage-in-kts
-    packageName("com.measify.kappmaker")
+    packageName("com.measify.kappmaker.common")
     buildConfigField("GOOGLE_WEB_CLIENT_ID", getRequiredProperty("GOOGLE_WEB_CLIENT_ID"))
     buildConfigField("REVENUECAT_ANDROID_API_KEY", getRequiredProperty("REVENUECAT_ANDROID_API_KEY"))
     buildConfigField("REVENUECAT_IOS_API_KEY", getRequiredProperty("REVENUECAT_IOS_API_KEY"))

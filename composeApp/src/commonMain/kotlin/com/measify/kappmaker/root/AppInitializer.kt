@@ -1,7 +1,7 @@
 package com.measify.kappmaker.root
 
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
-import com.measify.kappmaker.BuildConfig
+import com.measify.kappmaker.common.BuildConfig
 import com.measify.kappmaker.data.BackgroundExecutor
 import com.measify.kappmaker.data.repository.UserRepository
 import com.measify.kappmaker.data.source.local.AppDatabase
@@ -15,6 +15,7 @@ import com.measify.kappmaker.presentation.screens.paywall.PaywallUiStateHolder
 import com.measify.kappmaker.presentation.screens.profile.ProfileUiStateHolder
 import com.measify.kappmaker.util.ApplicationScope
 import com.measify.kappmaker.util.isAndroid
+import com.measify.kappmaker.util.isDebug
 import com.measify.kappmaker.util.logging.AppLogger
 import com.measify.kappmaker.util.onApplicationStartPlatformSpecific
 import com.measify.kappmaker.util.platformModule
@@ -51,7 +52,7 @@ object AppInitializer {
         //Add common application start functions below
 
         //initialize logging
-        AppLogger.initialize(isDebug = true)
+        AppLogger.initialize(isDebug = isDebug)
 
         initializeNotification()
         initializeAuthentication()
