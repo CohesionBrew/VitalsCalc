@@ -5,12 +5,13 @@ import com.russhwolf.settings.Settings
 internal class UserPreferencesImpl(private val multiplatformSettings: Settings) : UserPreferences {
 
     override suspend fun getString(key: String, defaultValue: String?): String? {
-        return multiplatformSettings.getStringOrNull(key)?.let { defaultValue }
+        val value = multiplatformSettings.getStringOrNull(key)
+        return value ?: defaultValue
     }
 
     override suspend fun getInt(key: String, defaultValue: Int?): Int? {
-        return multiplatformSettings.getIntOrNull(key)?.let { defaultValue }
-
+        val value = multiplatformSettings.getIntOrNull(key)
+        return value ?: defaultValue
     }
 
     override suspend fun getBoolean(key: String, defaultValue: Boolean): Boolean {
