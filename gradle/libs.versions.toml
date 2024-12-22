@@ -24,6 +24,7 @@ multiplatformSettings = "1.1.1"
 ksp = "2.1.0-1.0.29"
 room="2.7.0-alpha12"
 sqlite="2.5.0-alpha12"
+android-inappreview = "2.0.2"
 
 
 
@@ -70,6 +71,7 @@ multiplatformSettings-noargs = { module = "com.russhwolf:multiplatform-settings-
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+android-inappreview = { module = "com.google.android.play:review", version.ref = "android-inappreview" }
 
 [plugins]
 

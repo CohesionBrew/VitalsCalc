@@ -70,6 +70,7 @@ kotlin {
             implementation(libs.multiplatformSettings.noargs)
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
+            implementation(libs.android.inappreview)
 
         }
 
