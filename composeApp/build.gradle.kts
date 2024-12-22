@@ -54,7 +54,6 @@ kotlin {
             implementation(libs.kmpauth.firebase)
             implementation(libs.kmpauth.uihelper)
             implementation(libs.voyager.navigator)
-            implementation(libs.voyager.koin)
             implementation(libs.voyager.screenmodel)
             implementation(libs.napier)
             implementation(libs.kotlinx.coroutines.core)
@@ -106,11 +105,11 @@ compose.resources {
 
 android {
     namespace = "com.measify.kappmaker"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
 
         applicationId = "com.measify.kappmaker"
         versionCode = 1
