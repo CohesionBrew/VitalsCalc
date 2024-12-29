@@ -8,4 +8,13 @@ object Constants {
     const val SHOW_REMOTE_PAYWALL = true // Change to false for presenting custom paywall screen
 
     const val LOCAL_DB_STORAGE_NAME = "local_storage.db"
+
+    /**
+     * CLOUD_FUNCTIONS_URL should be something like: "https://REGION-PROJECT_ID.cloudfunctions.net"
+     * Regions:
+     * US(Default): us-central1
+     * EU: europe-west1
+     */
+    const val CLOUD_FUNCTIONS_URL=""
+
 }

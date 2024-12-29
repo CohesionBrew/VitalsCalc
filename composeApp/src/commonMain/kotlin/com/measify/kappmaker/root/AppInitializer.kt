@@ -10,6 +10,8 @@ import com.measify.kappmaker.data.source.preferences.UserPreferences
 import com.measify.kappmaker.data.source.preferences.UserPreferencesImpl
 import com.measify.kappmaker.data.source.remote.HttpClientFactory
 import com.measify.kappmaker.data.source.remote.apiservices.ApiService
+import com.measify.kappmaker.data.source.remote.apiservices.ai.OpenAiApiService
+import com.measify.kappmaker.data.source.remote.apiservices.ai.ReplicateApiService
 import com.measify.kappmaker.presentation.screens.onboarding.OnBoardingUiStateHolder
 import com.measify.kappmaker.presentation.screens.paywall.PaywallUiStateHolder
 import com.measify.kappmaker.presentation.screens.profile.ProfileUiStateHolder
@@ -133,6 +135,10 @@ private val dataModule = module {
     //Remote source
     single { HttpClientFactory.default() }
     factoryOf(::ApiService)
+
+    //AI API services
+    factoryOf(::OpenAiApiService)
+    factoryOf(::ReplicateApiService)
 
     //Local Source
     single<AppDatabase> {
