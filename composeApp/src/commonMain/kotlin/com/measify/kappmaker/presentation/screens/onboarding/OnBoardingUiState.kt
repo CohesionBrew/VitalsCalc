@@ -3,6 +3,7 @@ package com.measify.kappmaker.presentation.screens.onboarding
 import com.measify.kappmaker.generated.resources.Res
 import com.measify.kappmaker.generated.resources.desc_onboarding_page_1
 import com.measify.kappmaker.generated.resources.ic_logo
+import com.measify.kappmaker.generated.resources.screenshot_example_onboarding_phone_mockup
 import com.measify.kappmaker.generated.resources.title_onboarding_page_1
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
@@ -20,7 +21,7 @@ data class OnBoardingUiState(
         OnBoardingScreenData(
             Res.string.title_onboarding_page_1,
             Res.string.desc_onboarding_page_1,
-            Res.drawable.ic_logo
+            Res.drawable.screenshot_example_onboarding_phone_mockup
         ),
         OnBoardingScreenData(
             Res.string.title_onboarding_page_1,

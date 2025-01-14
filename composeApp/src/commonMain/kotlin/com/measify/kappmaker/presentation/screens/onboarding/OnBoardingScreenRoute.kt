@@ -14,6 +14,7 @@ class OnBoardingScreenRoute : ScreenRoute {
         val uiStateHolder = uiStateHolder<OnBoardingUiStateHolder>()
         val navigator = LocalNavigator.currentOrThrow
         OnBoardingScreen(
+            style = OnBoardingScreenStyle.STYLE1,
             uiStateHolder = uiStateHolder,
             onNavigateMain = { navigator.replace(MainScreenRoute()) }
         )
