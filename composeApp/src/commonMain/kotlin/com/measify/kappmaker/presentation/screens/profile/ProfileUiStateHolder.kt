@@ -59,7 +59,7 @@ class ProfileUiStateHolder(private val userRepository: UserRepository) : UiState
             .onFailure { error ->
                 AppLogger.d("Account deletion failed ${error.message}")
                 if (error is FirebaseAuthRecentLoginRequiredException) {
-                    _uiState.update { it.copy(isLoading = false) }
+                    _uiState.update { it.copy(isLoading = false, user = null) }
                 } else
                     _uiState.update { it.copy(isLoading = false, errorMessage = error.message) }
             }
