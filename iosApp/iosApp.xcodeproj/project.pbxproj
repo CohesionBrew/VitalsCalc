@@ -17,6 +17,7 @@
 		A631C8B62C8DE94A0075EE70 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = A631C8B52C8DE94A0075EE70 /* FirebaseCrashlytics */; };
 		A631C8BA2C8DEB220075EE70 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = A631C8B92C8DEB220075EE70 /* FirebaseMessaging */; };
 		A631C8BC2C8DEBD80075EE70 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A631C8BB2C8DEBD70075EE70 /* GoogleService-Info.plist */; };
+		A6E617592D415F40009646A5 /* IosNativeViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E617582D415F40009646A5 /* IosNativeViewFactory.swift */; };
 		A93A953B29CC810C00F8E227 /* iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93A953A29CC810C00F8E227 /* iosApp.swift */; };
 		A93A953F29CC810D00F8E227 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A93A953E29CC810D00F8E227 /* Assets.xcassets */; };
 		A93A954229CC810D00F8E227 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A93A954129CC810D00F8E227 /* Preview Assets.xcassets */; };
@@ -29,6 +30,7 @@
 		A631C8A52C8DE8B50075EE70 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A631C8B72C8DEAA50075EE70 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		A631C8BB2C8DEBD70075EE70 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A6E617582D415F40009646A5 /* IosNativeViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IosNativeViewFactory.swift; sourceTree = "<group>"; };
 		A93A953729CC810C00F8E227 /* KAppMakerAllModules.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KAppMakerAllModules.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A93A953A29CC810C00F8E227 /* iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iosApp.swift; sourceTree = "<group>"; };
 		A93A953E29CC810D00F8E227 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 				A93A953A29CC810C00F8E227 /* iosApp.swift */,
 				A93A953E29CC810D00F8E227 /* Assets.xcassets */,
 				A93A954029CC810D00F8E227 /* Preview Content */,
+				A6E617582D415F40009646A5 /* IosNativeViewFactory.swift */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -243,11 +246,11 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-			    "${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
-                "${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
-                "${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
-                "$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
-                "$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
 			);
 			outputFileListPaths = (
 			);
@@ -282,6 +285,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A93A953B29CC810C00F8E227 /* iosApp.swift in Sources */,
+				A6E617592D415F40009646A5 /* IosNativeViewFactory.swift in Sources */,
 				A631C8A62C8DE8B50075EE70 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
