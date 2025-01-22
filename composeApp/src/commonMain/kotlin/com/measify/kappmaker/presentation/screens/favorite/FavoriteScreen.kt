@@ -3,11 +3,15 @@ package com.measify.kappmaker.presentation.screens.favorite
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.measify.kappmaker.presentation.components.ExampleNativeTextView
 import com.measify.kappmaker.presentation.components.PrimaryButton
 
 @Composable
@@ -17,7 +21,11 @@ fun FavoriteScreen(modifier: Modifier = Modifier, onPaymentRequired: () -> Unit)
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Favorite Screen")
+        //For Native view we have to pass width, height params to the view.
+        ExampleNativeTextView(
+            text = "Native Text View",
+            modifier = Modifier.fillMaxWidth().height(56.dp)
+        )
         PrimaryButton(text = "Get Premium Content") {
             onPaymentRequired()
         }
