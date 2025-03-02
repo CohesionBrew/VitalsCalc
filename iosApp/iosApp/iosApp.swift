@@ -15,8 +15,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         
         FirebaseApp.configure()
-        
-        AppInitializer.shared.initialize(onKoinStart: { _ in })
+
+        AppInitializer.shared.initialize(onKoinStart: { koinApp in
+            koinApp.provideSwiftLibDependencyFactory(
+                factory: SwiftLibDependencyFactoryImpl.shared
+            )
+        })
         
         return true
     }

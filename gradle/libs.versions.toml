@@ -45,6 +45,7 @@ kmpauth-firebase = { module = "io.github.mirzemehdi:kmpauth-firebase", version.r
 kmpauth-uihelper = { module = "io.github.mirzemehdi:kmpauth-uihelper", version.ref = "kmpauth" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+firebase-config = { module = "com.google.firebase:firebase-config-ktx" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-screenmodel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
 napier = { module = "io.github.aakira:napier", version.ref = "napier" }
