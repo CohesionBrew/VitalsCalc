@@ -4,6 +4,7 @@ import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.measify.kappmaker.common.BuildConfig
 import com.measify.kappmaker.data.BackgroundExecutor
 import com.measify.kappmaker.data.repository.UserRepository
+import com.measify.kappmaker.data.source.featureflag.FeatureFlagManager
 import com.measify.kappmaker.data.source.local.AppDatabase
 import com.measify.kappmaker.data.source.local.DatabaseProvider
 import com.measify.kappmaker.data.source.preferences.UserPreferences
@@ -56,12 +57,18 @@ object AppInitializer {
         //initialize logging
         AppLogger.initialize(isDebug = isDebug)
 
+        refreshFeatureFlags()
         initializeNotification()
         initializeAuthentication()
         initializeInAppPurchase()
 
 
     }
+}
+
+private fun KoinApplication.refreshFeatureFlags() {
+    val featureFlagManager by this.koin.inject<FeatureFlagManager>()
+    featureFlagManager.syncsFlagsAsync()
 }
 
 private fun initializeNotification() {

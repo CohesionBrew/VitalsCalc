@@ -1,5 +1,6 @@
 package com.measify.kappmaker.util
 
+import com.measify.kappmaker.data.source.featureflag.FeatureFlagManager
 import com.measify.kappmaker.data.source.local.DatabaseProvider
 import com.measify.kappmaker.data.source.local.DatabaseProviderImpl
 import com.measify.kappmaker.util.inappreview.InAppReviewManager
@@ -19,11 +20,16 @@ internal actual val platformModule: Module = module {
     factoryOf(::InAppReviewManagerImpl) bind InAppReviewManager::class
 }
 
+internal fun swiftLibDependenciesModule(factory: SwiftLibDependencyFactory): Module = module {
+    single { factory.provideFeatureFlagManagerImpl() } bind FeatureFlagManager::class
+}
+
 internal actual fun onApplicationStartPlatformSpecific() {
     NotifierManager.initialize(NotificationPlatformConfiguration.Ios())
 
 }
 
 internal actual val isAndroid = false
+
 @OptIn(ExperimentalNativeApi::class)
 internal actual val isDebug = Platform.isDebugBinary

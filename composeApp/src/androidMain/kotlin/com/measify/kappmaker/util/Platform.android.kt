@@ -1,6 +1,11 @@
 package com.measify.kappmaker.util
 
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.measify.kappmaker.BuildConfig
+import com.measify.kappmaker.data.source.featureflag.FeatureFlagManager
+import com.measify.kappmaker.data.source.featureflag.FeatureFlagManagerImpl
 import com.measify.kappmaker.data.source.local.DatabaseProvider
 import com.measify.kappmaker.data.source.local.DatabaseProviderImpl
 import com.measify.kappmaker.util.inappreview.InAppReviewManager
@@ -17,6 +22,16 @@ import org.koin.dsl.module
 internal actual val platformModule: Module = module {
     singleOf(::DatabaseProviderImpl) bind DatabaseProvider::class
     factoryOf(::InAppReviewManagerImpl) bind InAppReviewManager::class
+    single<FeatureFlagManagerImpl> {
+        val remoteConfig = Firebase.remoteConfig.apply {
+            setConfigSettingsAsync(remoteConfigSettings {
+                // set minimumFetchIntervalInSeconds to 0 to get fresh updates in debug mode for testing
+                if (BuildConfig.DEBUG) minimumFetchIntervalInSeconds = 3600
+            })
+            setDefaultsAsync(FeatureFlagManager.DEFAULT_VALUES)
+        }
+        FeatureFlagManagerImpl(remoteConfig = remoteConfig)
+    } bind FeatureFlagManager::class
 }
 
 internal actual fun onApplicationStartPlatformSpecific() {
