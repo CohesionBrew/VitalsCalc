@@ -15,6 +15,7 @@ import com.measify.kappmaker.presentation.screens.onboarding.OnBoardingUiStateHo
 import com.measify.kappmaker.presentation.screens.paywall.PaywallUiStateHolder
 import com.measify.kappmaker.presentation.screens.profile.ProfileUiStateHolder
 import com.measify.kappmaker.util.ApplicationScope
+import com.measify.kappmaker.util.analytics.Analytics
 import com.measify.kappmaker.util.isAndroid
 import com.measify.kappmaker.util.isDebug
 import com.measify.kappmaker.util.logging.AppLogger
@@ -56,6 +57,7 @@ object AppInitializer {
         AppLogger.initialize(isDebug = isDebug)
 
         refreshFeatureFlags()
+        initializeAnalytics()
         initializeNotification()
         initializeAuthentication()
         initializeInAppPurchase()
@@ -67,6 +69,13 @@ object AppInitializer {
 private fun KoinApplication.refreshFeatureFlags() {
     val featureFlagManager by this.koin.inject<FeatureFlagManager>()
     featureFlagManager.syncsFlagsAsync()
+}
+
+private fun KoinApplication.initializeAnalytics() {
+    val featureFlagManager by this.koin.inject<FeatureFlagManager>()
+    val analytics by this.koin.inject<Analytics>()
+    val isAnalyticsEnabled = featureFlagManager.getBoolean(FeatureFlagManager.Keys.IS_ANALYTICS_ENABLED)
+    analytics.setEnabled(enabled = isAnalyticsEnabled)
 }
 
 private fun initializeNotification() {

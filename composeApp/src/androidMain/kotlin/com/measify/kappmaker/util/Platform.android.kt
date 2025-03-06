@@ -1,5 +1,6 @@
 package com.measify.kappmaker.util
 
+import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
@@ -8,6 +9,8 @@ import com.measify.kappmaker.data.source.featureflag.FeatureFlagManager
 import com.measify.kappmaker.data.source.featureflag.FeatureFlagManagerImpl
 import com.measify.kappmaker.data.source.local.DatabaseProvider
 import com.measify.kappmaker.data.source.local.DatabaseProviderImpl
+import com.measify.kappmaker.util.analytics.Analytics
+import com.measify.kappmaker.util.analytics.FirebaseAnalyticsImpl
 import com.measify.kappmaker.util.inappreview.InAppReviewManager
 import com.measify.kappmaker.util.inappreview.InAppReviewManagerImpl
 import com.mmk.kmpnotifier.notification.NotifierManager
@@ -32,6 +35,7 @@ internal actual val platformModule: Module = module {
         }
         FeatureFlagManagerImpl(remoteConfig = remoteConfig)
     } bind FeatureFlagManager::class
+    single { FirebaseAnalyticsImpl(firebaseAnalytics = Firebase.analytics) } bind Analytics::class
 }
 
 internal actual fun onApplicationStartPlatformSpecific() {

@@ -20,6 +20,7 @@
 		A64B10C82D73E71E000997FB /* SwiftLibDependencyFactoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64B10C72D73E71E000997FB /* SwiftLibDependencyFactoryImpl.swift */; };
 		A64B10CA2D73E74C000997FB /* FeatureFlagManagerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64B10C92D73E74C000997FB /* FeatureFlagManagerImpl.swift */; };
 		A64B10CC2D73E7D7000997FB /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = A64B10CB2D73E7D7000997FB /* FirebaseRemoteConfig */; };
+		A6BE5C002D7A2B6000E2B823 /* FirebaseAnalyticsImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6BE5BFF2D7A2B6000E2B823 /* FirebaseAnalyticsImpl.swift */; };
 		A6E617592D415F40009646A5 /* IosNativeViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E617582D415F40009646A5 /* IosNativeViewFactory.swift */; };
 		A93A953B29CC810C00F8E227 /* iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93A953A29CC810C00F8E227 /* iosApp.swift */; };
 		A93A953F29CC810D00F8E227 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A93A953E29CC810D00F8E227 /* Assets.xcassets */; };
@@ -35,6 +36,7 @@
 		A631C8BB2C8DEBD70075EE70 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A64B10C72D73E71E000997FB /* SwiftLibDependencyFactoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftLibDependencyFactoryImpl.swift; sourceTree = "<group>"; };
 		A64B10C92D73E74C000997FB /* FeatureFlagManagerImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagManagerImpl.swift; sourceTree = "<group>"; };
+		A6BE5BFF2D7A2B6000E2B823 /* FirebaseAnalyticsImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAnalyticsImpl.swift; sourceTree = "<group>"; };
 		A6E617582D415F40009646A5 /* IosNativeViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IosNativeViewFactory.swift; sourceTree = "<group>"; };
 		A93A953729CC810C00F8E227 /* KAppMakerAllModules.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KAppMakerAllModules.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A93A953A29CC810C00F8E227 /* iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iosApp.swift; sourceTree = "<group>"; };
@@ -64,6 +66,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A6BE5BFE2D7A2B4300E2B823 /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				A6BE5BFF2D7A2B6000E2B823 /* FirebaseAnalyticsImpl.swift */,
+			);
+			path = Analytics;
+			sourceTree = "<group>";
+		};
 		A93A952E29CC810C00F8E227 = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +95,7 @@
 		A93A953929CC810C00F8E227 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				A6BE5BFE2D7A2B4300E2B823 /* Analytics */,
 				A631C8BB2C8DEBD70075EE70 /* GoogleService-Info.plist */,
 				A631C8B72C8DEAA50075EE70 /* Info.plist */,
 				A631C8A52C8DE8B50075EE70 /* ContentView.swift */,
@@ -294,6 +305,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A93A953B29CC810C00F8E227 /* iosApp.swift in Sources */,
+				A6BE5C002D7A2B6000E2B823 /* FirebaseAnalyticsImpl.swift in Sources */,
 				A6E617592D415F40009646A5 /* IosNativeViewFactory.swift in Sources */,
 				A64B10CA2D73E74C000997FB /* FeatureFlagManagerImpl.swift in Sources */,
 				A631C8A62C8DE8B50075EE70 /* ContentView.swift in Sources */,
