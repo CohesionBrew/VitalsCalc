@@ -3,6 +3,7 @@ package com.measify.kappmaker.util
 import com.measify.kappmaker.data.source.featureflag.FeatureFlagManager
 import com.measify.kappmaker.data.source.local.DatabaseProvider
 import com.measify.kappmaker.data.source.local.DatabaseProviderImpl
+import com.measify.kappmaker.util.analytics.Analytics
 import com.measify.kappmaker.util.inappreview.InAppReviewManager
 import com.measify.kappmaker.util.inappreview.InAppReviewManagerImpl
 import com.mmk.kmpnotifier.notification.NotifierManager
@@ -22,6 +23,7 @@ internal actual val platformModule: Module = module {
 
 internal fun swiftLibDependenciesModule(factory: SwiftLibDependencyFactory): Module = module {
     single { factory.provideFeatureFlagManagerImpl() } bind FeatureFlagManager::class
+    single { factory.provideFirebaseAnalyticsImpl() } bind Analytics::class
 }
 
 internal actual fun onApplicationStartPlatformSpecific() {

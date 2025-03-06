@@ -18,4 +18,8 @@ class SwiftLibDependencyFactoryImpl: SwiftLibDependencyFactory {
         return FeatureFlagManagerImpl()
     }
 
+    func provideFirebaseAnalyticsImpl() -> any Analytics {
+        return FirebaseAnalyticsImpl()
+    }
+
 }

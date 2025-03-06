@@ -4,6 +4,7 @@ interface FeatureFlagManager {
 
     object Keys {
         const val IS_ADS_ENABLED = "is_ads_enabled"
+        const val IS_ANALYTICS_ENABLED = "is_analytics_enabled"
         const val SHOW_REMOTE_PAYWALL = "show_remote_paywall"
     }
 
@@ -11,6 +12,7 @@ interface FeatureFlagManager {
         //Add Optional Default Feature Flag Values Here
         val DEFAULT_VALUES = mapOf(
             Keys.IS_ADS_ENABLED to false,
+            Keys.IS_ANALYTICS_ENABLED to true,
             Keys.SHOW_REMOTE_PAYWALL to true // Change to false for presenting custom paywall screen
         )
     }
