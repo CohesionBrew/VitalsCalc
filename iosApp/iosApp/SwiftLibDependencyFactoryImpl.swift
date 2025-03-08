@@ -21,5 +21,13 @@ class SwiftLibDependencyFactoryImpl: SwiftLibDependencyFactory {
     func provideFirebaseAnalyticsImpl() -> any Analytics {
         return FirebaseAnalyticsImpl()
     }
+    
+    func provideAdsManagerImpl() -> AdsManager {
+        return AdsManagerImpl()
+    }
+        
+    func provideIosAdsDisplayer() -> IosAdsDisplayer {
+        return IosAdsDisplayerImpl()
+    }
 
 }

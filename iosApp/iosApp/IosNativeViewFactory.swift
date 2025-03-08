@@ -18,4 +18,17 @@ class IosNativeViewFactory: NativeViewFactory{
         return UIHostingController(rootView: swiftUIView)
     }
     
+    func createAdmobBannerView(
+            bannerId: String,
+            onAdLoaded: @escaping () -> Void,
+            onAdFailedToLoad: @escaping () -> Void
+    ) -> UIViewController {
+        let adMobBannerView = BannerAdView(
+            bannerAdUnitId: bannerId,
+            onAdLoaded: onAdLoaded,
+            onAdFailedToLoad: onAdFailedToLoad
+        )
+        return UIHostingController(rootView: adMobBannerView)
+    }
+    
 }

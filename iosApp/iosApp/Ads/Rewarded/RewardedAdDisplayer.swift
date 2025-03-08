@@ -1,0 +1,64 @@
+//
+//  RewardedAdDisplayer.swift
+//  iosApp
+//
+//  Created by Mirzamehdi on 07/03/2025.
+//
+
+import Foundation
+import ComposeApp
+import SwiftUI
+import GoogleMobileAds
+
+
+class RewardedAdDisplayer: NSObject, FullScreenAdDisplayer {
+    
+    private let adLoader: FullScreenAdLoader
+    
+    init(adLoader: FullScreenAdLoader) {
+        self.adLoader = adLoader
+    }
+    
+    func show() {
+        
+        guard let rewardedAdLoader = adLoader as? RewardedAdLoader else {
+            print("Ad loader is not of type RewardedAdLoader")
+            return
+        }
+        
+        guard let rewardedAd = rewardedAdLoader.rewardedAd else {
+            print("Rewarded ad is not loaded yet")
+            rewardedAdLoader.load()
+            return
+        }
+        
+        rewardedAd.fullScreenContentDelegate = self
+        rewardedAd.present(fromRootViewController: nil) {
+            let reward = rewardedAd.adReward
+            print("Reward received with type \(reward.type), amount \(reward.amount)")
+          }
+        
+    }
+    
+}
+
+extension RewardedAdDisplayer: GADFullScreenContentDelegate {
+    
+    func adDidDismissFullScreenContent(_ ad: any GADFullScreenPresentingAd) {
+        print("Rewarded ad is dismissed, loading a new one")
+        guard let rewardedAdLoader = adLoader as? RewardedAdLoader else { return }
+        rewardedAdLoader.rewardedAd = nil
+        rewardedAdLoader.load()
+    }
+    
+    func ad(_ ad: any GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: any Error) {
+        print("Rewarded ad failed to show")
+        guard let rewardedAdLoader = adLoader as? RewardedAdLoader else { return }
+        rewardedAdLoader.rewardedAd = nil
+    }
+    
+    func adWillPresentFullScreenContent(_ ad: any GADFullScreenPresentingAd) {
+        print("Rewarded ad is shown")
+    }
+    
+}
