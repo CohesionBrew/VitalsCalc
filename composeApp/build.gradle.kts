@@ -212,11 +212,6 @@ private fun BuildConfigExtension.setupAdmobAdsIds() {
         value = getRequiredProperty(key = "ADMOB_REWARDED_AD_ID_ANDROID", defaultValue = "")
     )
 
-    // ios Admob ids
-    buildConfigField(
-        name = "ADMOB_APP_ID_IOS",
-        value = getRequiredProperty(key = "ADMOB_APP_ID_IOS", defaultValue = "")
-    )
     buildConfigField(
         name = "ADMOB_BANNER_AD_ID_IOS",
         value = getRequiredProperty(key = "ADMOB_BANNER_AD_ID_IOS", defaultValue = "")
