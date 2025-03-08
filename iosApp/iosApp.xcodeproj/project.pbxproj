@@ -21,6 +21,13 @@
 		A64B10CA2D73E74C000997FB /* FeatureFlagManagerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64B10C92D73E74C000997FB /* FeatureFlagManagerImpl.swift */; };
 		A64B10CC2D73E7D7000997FB /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = A64B10CB2D73E7D7000997FB /* FirebaseRemoteConfig */; };
 		A6BE5C002D7A2B6000E2B823 /* FirebaseAnalyticsImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6BE5BFF2D7A2B6000E2B823 /* FirebaseAnalyticsImpl.swift */; };
+		A6C616B52D7C8FB7008FE51C /* AdsManagerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C616B42D7C8FB6008FE51C /* AdsManagerImpl.swift */; };
+		A6C616B72D7C8FC5008FE51C /* IosAdsDisplayerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C616B62D7C8FC5008FE51C /* IosAdsDisplayerImpl.swift */; };
+		A6C616BC2D7C8FF3008FE51C /* InterstitialAdDisplayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C616BB2D7C8FF3008FE51C /* InterstitialAdDisplayer.swift */; };
+		A6C616BE2D7C9000008FE51C /* InterstitialAdLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C616BD2D7C9000008FE51C /* InterstitialAdLoader.swift */; };
+		A6C616C02D7C9029008FE51C /* RewardedAdDisplayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C616BF2D7C9029008FE51C /* RewardedAdDisplayer.swift */; };
+		A6C616C22D7C9038008FE51C /* RewardedAdLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C616C12D7C9038008FE51C /* RewardedAdLoader.swift */; };
+		A6C616C42D7C9050008FE51C /* AdMobBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C616C32D7C9050008FE51C /* AdMobBannerView.swift */; };
 		A6E617592D415F40009646A5 /* IosNativeViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E617582D415F40009646A5 /* IosNativeViewFactory.swift */; };
 		A93A953B29CC810C00F8E227 /* iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93A953A29CC810C00F8E227 /* iosApp.swift */; };
 		A93A953F29CC810D00F8E227 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A93A953E29CC810D00F8E227 /* Assets.xcassets */; };
@@ -37,6 +44,16 @@
 		A64B10C72D73E71E000997FB /* SwiftLibDependencyFactoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftLibDependencyFactoryImpl.swift; sourceTree = "<group>"; };
 		A64B10C92D73E74C000997FB /* FeatureFlagManagerImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagManagerImpl.swift; sourceTree = "<group>"; };
 		A6BE5BFF2D7A2B6000E2B823 /* FirebaseAnalyticsImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAnalyticsImpl.swift; sourceTree = "<group>"; };
+		A6C616B02D7C8E90008FE51C /* DebugConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = DebugConfig.xcconfig; sourceTree = "<group>"; };
+		A6C616B12D7C8E9F008FE51C /* ReleaseConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ReleaseConfig.xcconfig; sourceTree = "<group>"; };
+		A6C616B22D7C8EAC008FE51C /* BaseConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BaseConfig.xcconfig; sourceTree = "<group>"; };
+		A6C616B42D7C8FB6008FE51C /* AdsManagerImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdsManagerImpl.swift; sourceTree = "<group>"; };
+		A6C616B62D7C8FC5008FE51C /* IosAdsDisplayerImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IosAdsDisplayerImpl.swift; sourceTree = "<group>"; };
+		A6C616BB2D7C8FF3008FE51C /* InterstitialAdDisplayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterstitialAdDisplayer.swift; sourceTree = "<group>"; };
+		A6C616BD2D7C9000008FE51C /* InterstitialAdLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterstitialAdLoader.swift; sourceTree = "<group>"; };
+		A6C616BF2D7C9029008FE51C /* RewardedAdDisplayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardedAdDisplayer.swift; sourceTree = "<group>"; };
+		A6C616C12D7C9038008FE51C /* RewardedAdLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardedAdLoader.swift; sourceTree = "<group>"; };
+		A6C616C32D7C9050008FE51C /* AdMobBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdMobBannerView.swift; sourceTree = "<group>"; };
 		A6E617582D415F40009646A5 /* IosNativeViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IosNativeViewFactory.swift; sourceTree = "<group>"; };
 		A93A953729CC810C00F8E227 /* KAppMakerAllModules.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KAppMakerAllModules.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A93A953A29CC810C00F8E227 /* iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iosApp.swift; sourceTree = "<group>"; };
@@ -74,9 +91,58 @@
 			path = Analytics;
 			sourceTree = "<group>";
 		};
+		A6C616AF2D7C8E75008FE51C /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				A6C616B02D7C8E90008FE51C /* DebugConfig.xcconfig */,
+				A6C616B12D7C8E9F008FE51C /* ReleaseConfig.xcconfig */,
+				A6C616B22D7C8EAC008FE51C /* BaseConfig.xcconfig */,
+			);
+			path = Configuration;
+			sourceTree = "<group>";
+		};
+		A6C616B32D7C8F99008FE51C /* Ads */ = {
+			isa = PBXGroup;
+			children = (
+				A6C616BA2D7C8FE1008FE51C /* Rewarded */,
+				A6C616B92D7C8FDB008FE51C /* Interstitial */,
+				A6C616B82D7C8FCD008FE51C /* Banner */,
+				A6C616B42D7C8FB6008FE51C /* AdsManagerImpl.swift */,
+				A6C616B62D7C8FC5008FE51C /* IosAdsDisplayerImpl.swift */,
+			);
+			path = Ads;
+			sourceTree = "<group>";
+		};
+		A6C616B82D7C8FCD008FE51C /* Banner */ = {
+			isa = PBXGroup;
+			children = (
+				A6C616C32D7C9050008FE51C /* AdMobBannerView.swift */,
+			);
+			path = Banner;
+			sourceTree = "<group>";
+		};
+		A6C616B92D7C8FDB008FE51C /* Interstitial */ = {
+			isa = PBXGroup;
+			children = (
+				A6C616BB2D7C8FF3008FE51C /* InterstitialAdDisplayer.swift */,
+				A6C616BD2D7C9000008FE51C /* InterstitialAdLoader.swift */,
+			);
+			path = Interstitial;
+			sourceTree = "<group>";
+		};
+		A6C616BA2D7C8FE1008FE51C /* Rewarded */ = {
+			isa = PBXGroup;
+			children = (
+				A6C616BF2D7C9029008FE51C /* RewardedAdDisplayer.swift */,
+				A6C616C12D7C9038008FE51C /* RewardedAdLoader.swift */,
+			);
+			path = Rewarded;
+			sourceTree = "<group>";
+		};
 		A93A952E29CC810C00F8E227 = {
 			isa = PBXGroup;
 			children = (
+				A6C616AF2D7C8E75008FE51C /* Configuration */,
 				A93A953929CC810C00F8E227 /* iosApp */,
 				A93A953829CC810C00F8E227 /* Products */,
 				C4127409AE3703430489E7BC /* Frameworks */,
@@ -95,6 +161,7 @@
 		A93A953929CC810C00F8E227 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				A6C616B32D7C8F99008FE51C /* Ads */,
 				A6BE5BFE2D7A2B4300E2B823 /* Analytics */,
 				A631C8BB2C8DEBD70075EE70 /* GoogleService-Info.plist */,
 				A631C8B72C8DEAA50075EE70 /* Info.plist */,
@@ -148,6 +215,7 @@
 				A93A953529CC810C00F8E227 /* Resources */,
 				0AB67C2303F7EBBC4A06EB38 /* [CP] Embed Pods Frameworks */,
 				A66B50422D08990D00383A48 /* ShellScript */,
+				504EB862A8F20E0E066BC11A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -258,6 +326,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		504EB862A8F20E0E066BC11A /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		A66B50422D08990D00383A48 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -304,12 +389,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6C616B52D7C8FB7008FE51C /* AdsManagerImpl.swift in Sources */,
 				A93A953B29CC810C00F8E227 /* iosApp.swift in Sources */,
+				A6C616BC2D7C8FF3008FE51C /* InterstitialAdDisplayer.swift in Sources */,
 				A6BE5C002D7A2B6000E2B823 /* FirebaseAnalyticsImpl.swift in Sources */,
+				A6C616C02D7C9029008FE51C /* RewardedAdDisplayer.swift in Sources */,
+				A6C616C42D7C9050008FE51C /* AdMobBannerView.swift in Sources */,
 				A6E617592D415F40009646A5 /* IosNativeViewFactory.swift in Sources */,
 				A64B10CA2D73E74C000997FB /* FeatureFlagManagerImpl.swift in Sources */,
 				A631C8A62C8DE8B50075EE70 /* ContentView.swift in Sources */,
+				A6C616BE2D7C9000008FE51C /* InterstitialAdLoader.swift in Sources */,
+				A6C616B72D7C8FC5008FE51C /* IosAdsDisplayerImpl.swift in Sources */,
 				A64B10C82D73E71E000997FB /* SwiftLibDependencyFactoryImpl.swift in Sources */,
+				A6C616C22D7C9038008FE51C /* RewardedAdLoader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,6 +410,7 @@
 /* Begin XCBuildConfiguration section */
 		A93A954329CC810D00F8E227 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A6C616B02D7C8E90008FE51C /* DebugConfig.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -378,6 +471,7 @@
 		};
 		A93A954429CC810D00F8E227 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A6C616B12D7C8E9F008FE51C /* ReleaseConfig.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
