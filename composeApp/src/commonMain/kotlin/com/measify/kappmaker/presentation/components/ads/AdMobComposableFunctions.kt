@@ -40,7 +40,7 @@ fun rememberInterstitialAdDisplayer(): FullScreenAdDisplayer? {
 }
 
 @Composable
-fun rememberRewardedAdDisplayer(): FullScreenAdDisplayer? {
+fun rememberRewardedAdDisplayer(onRewarded: (AdsRewardItem) -> Unit): FullScreenAdDisplayer? {
     val featureFlagManager = koinInject<FeatureFlagManager>()
     // You can add more condition here, such as if user is premium, don't show any ads
     val isShowingAdsAllowed =
@@ -50,7 +50,7 @@ fun rememberRewardedAdDisplayer(): FullScreenAdDisplayer? {
         AppLogger.d("Showing Rewarded Ads is not allowed, ads are disabled")
         return null
     }
-    return rememberNativeRewardedAdDisplayer()
+    return rememberNativeRewardedAdDisplayer(onRewarded)
 }
 
 @Composable
@@ -60,6 +60,6 @@ expect fun NativeAdmobBanner(modifier: Modifier = Modifier)
 expect fun rememberNativeInterstitialAdDisplayer(): FullScreenAdDisplayer
 
 @Composable
-expect fun rememberNativeRewardedAdDisplayer(): FullScreenAdDisplayer
+expect fun rememberNativeRewardedAdDisplayer(onRewarded: (AdsRewardItem) -> Unit): FullScreenAdDisplayer
 
 

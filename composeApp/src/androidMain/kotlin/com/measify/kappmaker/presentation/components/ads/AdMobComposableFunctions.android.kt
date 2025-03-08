@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -73,13 +74,18 @@ actual fun rememberNativeInterstitialAdDisplayer(): FullScreenAdDisplayer {
 }
 
 @Composable
-actual fun rememberNativeRewardedAdDisplayer(): FullScreenAdDisplayer {
+actual fun rememberNativeRewardedAdDisplayer(onRewarded: (AdsRewardItem) -> Unit): FullScreenAdDisplayer {
     val adsManager = koinInject<AdsManager>()
     val rewardedAdLoader = adsManager.rewardedAdLoader
     LaunchedEffect(Unit) { rewardedAdLoader.load() }
     val activity = LocalContext.current.getActivity()
+    val updatedOnRewarded by rememberUpdatedState(onRewarded)
     return remember {
-        RewardedAdDisplayer(activity = activity, adLoader = rewardedAdLoader)
+        RewardedAdDisplayer(
+            activity = activity,
+            adLoader = rewardedAdLoader,
+            onRewarded = updatedOnRewarded
+        )
     }
 }
 

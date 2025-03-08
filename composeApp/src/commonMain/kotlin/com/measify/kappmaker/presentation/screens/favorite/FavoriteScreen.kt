@@ -17,11 +17,14 @@ import com.measify.kappmaker.presentation.components.PrimaryButton
 import com.measify.kappmaker.presentation.components.ads.AdmobBanner
 import com.measify.kappmaker.presentation.components.ads.rememberInterstitialAdDisplayer
 import com.measify.kappmaker.presentation.components.ads.rememberRewardedAdDisplayer
+import com.measify.kappmaker.util.logging.AppLogger
 
 @Composable
 fun FavoriteScreen(modifier: Modifier = Modifier, onPaymentRequired: () -> Unit) {
     val interstitialAdDisplayer = rememberInterstitialAdDisplayer()
-    val rewardedAdDisplayer = rememberRewardedAdDisplayer()
+    val rewardedAdDisplayer = rememberRewardedAdDisplayer(onRewarded = {rewardItem ->
+        AppLogger.d("User earned reward: amount: ${rewardItem.amount}, type: ${rewardItem.type}")
+    })
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),

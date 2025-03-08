@@ -14,9 +14,11 @@ import GoogleMobileAds
 class RewardedAdDisplayer: NSObject, FullScreenAdDisplayer {
     
     private let adLoader: FullScreenAdLoader
+    private let onRewarded: (AdsRewardItem) -> Void
     
-    init(adLoader: FullScreenAdLoader) {
+    init(adLoader: FullScreenAdLoader, onRewarded: @escaping (AdsRewardItem) -> Void) {
         self.adLoader = adLoader
+        self.onRewarded = onRewarded
     }
     
     func show() {
@@ -35,6 +37,11 @@ class RewardedAdDisplayer: NSObject, FullScreenAdDisplayer {
         rewardedAd.fullScreenContentDelegate = self
         rewardedAd.present(fromRootViewController: nil) {
             let reward = rewardedAd.adReward
+            let rewardItem = AdsRewardItem(
+                amount: reward.amount.int32Value,
+                type: reward.type
+            )
+            self.onRewarded(rewardItem)
             print("Reward received with type \(reward.type), amount \(reward.amount)")
           }
         

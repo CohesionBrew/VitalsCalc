@@ -17,7 +17,7 @@ class IosAdsDisplayerImpl: IosAdsDisplayer {
         return InterstitialAdDisplayer(adLoader: adLoader)
     }
 
-    func provideRewardedAdDisplayer(adLoader: FullScreenAdLoader) -> FullScreenAdDisplayer {
-        return RewardedAdDisplayer(adLoader: adLoader)
+    func provideRewardedAdDisplayer(adLoader: FullScreenAdLoader, onRewarded: @escaping (AdsRewardItem) -> Void) -> any FullScreenAdDisplayer {
+        return RewardedAdDisplayer(adLoader: adLoader, onRewarded: onRewarded)
     }
 }

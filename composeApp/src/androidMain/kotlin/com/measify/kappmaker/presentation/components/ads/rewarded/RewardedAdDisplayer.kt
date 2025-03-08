@@ -4,13 +4,15 @@ import androidx.activity.ComponentActivity
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.OnUserEarnedRewardListener
+import com.measify.kappmaker.presentation.components.ads.AdsRewardItem
 import com.measify.kappmaker.presentation.components.ads.FullScreenAdDisplayer
 import com.measify.kappmaker.presentation.components.ads.FullScreenAdLoader
 import com.measify.kappmaker.util.logging.AppLogger
 
 class RewardedAdDisplayer(
     private val activity: ComponentActivity?,
-    private val adLoader: FullScreenAdLoader
+    private val adLoader: FullScreenAdLoader,
+    private val onRewarded: (AdsRewardItem) -> Unit,
 ) : FullScreenAdDisplayer {
 
     override fun show() {
@@ -43,6 +45,12 @@ class RewardedAdDisplayer(
             }
         }
         rewardedAd.show(activity, OnUserEarnedRewardListener { rewardItem ->
+            val adsRewardItem = AdsRewardItem(
+                amount = rewardItem.amount,
+                type = rewardItem.type
+            )
+
+            onRewarded(adsRewardItem)
             AppLogger.d("User earned reward: amount: ${rewardItem.amount}, type: ${rewardItem.type}")
 
         })
