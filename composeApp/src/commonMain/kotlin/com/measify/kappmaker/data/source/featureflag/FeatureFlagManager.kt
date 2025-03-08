@@ -11,7 +11,7 @@ interface FeatureFlagManager {
     companion object {
         //Add Optional Default Feature Flag Values Here
         val DEFAULT_VALUES = mapOf(
-            Keys.IS_ADS_ENABLED to false,
+            Keys.IS_ADS_ENABLED to true,
             Keys.IS_ANALYTICS_ENABLED to true,
             Keys.SHOW_REMOTE_PAYWALL to true // Change to false for presenting custom paywall screen
         )

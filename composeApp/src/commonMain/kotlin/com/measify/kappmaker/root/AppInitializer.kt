@@ -11,6 +11,7 @@ import com.measify.kappmaker.data.source.preferences.UserPreferences
 import com.measify.kappmaker.data.source.preferences.UserPreferencesImpl
 import com.measify.kappmaker.data.source.remote.HttpClientFactory
 import com.measify.kappmaker.data.source.remote.apiservices.ApiService
+import com.measify.kappmaker.presentation.components.ads.AdsManager
 import com.measify.kappmaker.presentation.screens.onboarding.OnBoardingUiStateHolder
 import com.measify.kappmaker.presentation.screens.paywall.PaywallUiStateHolder
 import com.measify.kappmaker.presentation.screens.profile.ProfileUiStateHolder
@@ -28,8 +29,10 @@ import com.mmk.kmpnotifier.notification.PayloadData
 import com.revenuecat.purchases.kmp.Purchases
 import com.revenuecat.purchases.kmp.PurchasesConfiguration
 import com.russhwolf.settings.Settings
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.launch
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -61,7 +64,7 @@ object AppInitializer {
         initializeNotification()
         initializeAuthentication()
         initializeInAppPurchase()
-
+        initializeAds()
 
     }
 }
@@ -76,6 +79,19 @@ private fun KoinApplication.initializeAnalytics() {
     val analytics by this.koin.inject<Analytics>()
     val isAnalyticsEnabled = featureFlagManager.getBoolean(FeatureFlagManager.Keys.IS_ANALYTICS_ENABLED)
     analytics.setEnabled(enabled = isAnalyticsEnabled)
+}
+
+private fun KoinApplication.initializeAds() {
+    val backgroundScope = CoroutineScope(Dispatchers.IO)
+    val adsManager by this.koin.inject<AdsManager>()
+    val featureFlagManager by this.koin.inject<FeatureFlagManager>()
+    val isAdsEnabled = featureFlagManager.getBoolean(FeatureFlagManager.Keys.IS_ADS_ENABLED)
+    if (isAdsEnabled.not()) return
+
+    //Initialize ads
+    backgroundScope.launch {
+        adsManager.initialize()
+    }
 }
 
 private fun initializeNotification() {
