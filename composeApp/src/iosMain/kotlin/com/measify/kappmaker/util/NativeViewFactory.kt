@@ -9,6 +9,12 @@ import platform.UIKit.UIViewController
 interface NativeViewFactory {
     //Example method. Can be deleted or replaced
     fun createSwiftTextView(text: String): UIViewController
+
+    fun createAdmobBannerView(
+        bannerId: String,
+        onAdLoaded: () -> Unit,
+        onAdFailedToLoad: () -> Unit
+    ): UIViewController
 }
 
 val LocalNativeViewFactory = compositionLocalOf<NativeViewFactory> {

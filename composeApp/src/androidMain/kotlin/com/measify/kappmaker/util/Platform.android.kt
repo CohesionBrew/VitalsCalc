@@ -9,6 +9,8 @@ import com.measify.kappmaker.data.source.featureflag.FeatureFlagManager
 import com.measify.kappmaker.data.source.featureflag.FeatureFlagManagerImpl
 import com.measify.kappmaker.data.source.local.DatabaseProvider
 import com.measify.kappmaker.data.source.local.DatabaseProviderImpl
+import com.measify.kappmaker.presentation.components.ads.AdsManager
+import com.measify.kappmaker.presentation.components.ads.AdsManagerImpl
 import com.measify.kappmaker.util.analytics.Analytics
 import com.measify.kappmaker.util.analytics.FirebaseAnalyticsImpl
 import com.measify.kappmaker.util.inappreview.InAppReviewManager
@@ -36,6 +38,7 @@ internal actual val platformModule: Module = module {
         FeatureFlagManagerImpl(remoteConfig = remoteConfig)
     } bind FeatureFlagManager::class
     single { FirebaseAnalyticsImpl(firebaseAnalytics = Firebase.analytics) } bind Analytics::class
+    singleOf(::AdsManagerImpl) bind AdsManager::class
 }
 
 internal actual fun onApplicationStartPlatformSpecific() {
