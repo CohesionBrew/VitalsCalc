@@ -1,4 +1,5 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import com.github.gmazzo.buildconfig.BuildConfigExtension
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 import java.util.Properties
@@ -92,6 +93,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.koin.android)
+            implementation(libs.google.admob)
         }
 
         iosMain.dependencies {
@@ -139,6 +141,9 @@ android {
         val debug by getting {
             isMinifyEnabled = false
             isDebuggable = true
+
+            // This values is provided by Google to test ads in debug mode
+            resValue("string", "admobAppId", "ca-app-pub-3940256099942544~3347511713")
         }
 
         val release by getting {
@@ -149,6 +154,8 @@ android {
                 "proguard-rules.pro"
             )
             signingConfig = signingConfigs.getByName(if (isSigningKeyExists) "release" else "debug")
+
+            resValue("string", "admobAppId", getRequiredProperty("ADMOB_APP_ID_ANDROID",""))
         }
     }
     buildFeatures {
@@ -183,13 +190,51 @@ buildConfig {
     buildConfigField("GOOGLE_WEB_CLIENT_ID", getRequiredProperty("GOOGLE_WEB_CLIENT_ID"))
     buildConfigField("REVENUECAT_ANDROID_API_KEY", getRequiredProperty("REVENUECAT_ANDROID_API_KEY"))
     buildConfigField("REVENUECAT_IOS_API_KEY", getRequiredProperty("REVENUECAT_IOS_API_KEY"))
+    setupAdmobAdsIds()
+}
+
+private fun BuildConfigExtension.setupAdmobAdsIds() {
+    //Android Admob ids
+    buildConfigField(
+        name = "ADMOB_APP_ID_ANDROID",
+        value = getRequiredProperty(key = "ADMOB_APP_ID_ANDROID", defaultValue = "")
+    )
+    buildConfigField(
+        name = "ADMOB_BANNER_AD_ID_ANDROID",
+        value = getRequiredProperty(key = "ADMOB_BANNER_AD_ID_ANDROID", defaultValue = "")
+    )
+    buildConfigField(
+        name = "ADMOB_INTERSTITIAL_AD_ID_ANDROID",
+        value = getRequiredProperty(key = "ADMOB_INTERSTITIAL_AD_ID_ANDROID", defaultValue = "")
+    )
+    buildConfigField(
+        name = "ADMOB_REWARDED_AD_ID_ANDROID",
+        value = getRequiredProperty(key = "ADMOB_REWARDED_AD_ID_ANDROID", defaultValue = "")
+    )
+
+    // ios Admob ids
+    buildConfigField(
+        name = "ADMOB_BANNER_AD_ID_IOS",
+        value = getRequiredProperty(key = "ADMOB_BANNER_AD_ID_IOS", defaultValue = "")
+    )
+    buildConfigField(
+        name = "ADMOB_INTERSTITIAL_AD_ID_IOS",
+        value = getRequiredProperty(key = "ADMOB_INTERSTITIAL_AD_ID_IOS", defaultValue = "")
+    )
+    buildConfigField(
+        name = "ADMOB_REWARDED_AD_ID_IOS",
+        value = getRequiredProperty(key = "ADMOB_REWARDED_AD_ID_IOS", defaultValue = "")
+    )
 }
 
 fun getRequiredProperty(
     key: String,
+    defaultValue: String? = null,
     errorMessage: String = "Make sure you added `$key` in local.properties"
 ): String {
     val propertyValue: String? = gradleLocalProperties(rootDir, providers).getProperty(key)
-    require(!propertyValue.isNullOrEmpty()) { errorMessage }
-    return propertyValue
+    if (propertyValue.isNullOrEmpty() && defaultValue == null) {
+        throw IllegalArgumentException(errorMessage)
+    }
+    return propertyValue ?: defaultValue ?: ""
 }

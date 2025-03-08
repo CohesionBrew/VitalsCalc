@@ -1,4 +1,7 @@
 PODS:
+  - Google-Mobile-Ads-SDK (11.13.0):
+    - GoogleUserMessagingPlatform (>= 1.1)
+  - GoogleUserMessagingPlatform (2.7.0)
   - PurchasesHybridCommon (13.6.0):
     - RevenueCat (= 5.6.0)
   - PurchasesHybridCommonUI (13.6.0):
@@ -9,21 +12,26 @@ PODS:
     - RevenueCat (= 5.6.0)
 
 DEPENDENCIES:
+  - Google-Mobile-Ads-SDK (= 11.13.0)
   - PurchasesHybridCommonUI (= 13.6.0)
 
 SPEC REPOS:
   trunk:
+    - Google-Mobile-Ads-SDK
+    - GoogleUserMessagingPlatform
     - PurchasesHybridCommon
     - PurchasesHybridCommonUI
     - RevenueCat
     - RevenueCatUI
 
 SPEC CHECKSUMS:
+  Google-Mobile-Ads-SDK: 14f57f2dc33532a24db288897e26494640810407
+  GoogleUserMessagingPlatform: a8b56893477f67212fbc8411c139e61d463349f5
   PurchasesHybridCommon: 7201254c8cd7a735f793cf9eb46677feb218f876
   PurchasesHybridCommonUI: a66ca941d139ff2f5a827c82b4185ddc7cccba1d
   RevenueCat: a7117d40c27bc1e8a48e41ca4ea6856209664097
   RevenueCatUI: 8ea429e4f6353ef3995f24d8d069fef19e2fa130
 
-PODFILE CHECKSUM: 888fad515ecd08aadfe5afec9d63262b7c00d2ff
+PODFILE CHECKSUM: 85b0a9a53646c88f272b09841e09194ca2e3171b
 
 COCOAPODS: 1.15.2
