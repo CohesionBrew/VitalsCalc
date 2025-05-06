@@ -13,6 +13,5 @@ data class ProfileUiState(
 }
 
 sealed interface ProfileScreenUiEvent {
-    data object OnClickLogOut : ProfileScreenUiEvent
     data object OnClickDeleteAccount : ProfileScreenUiEvent
 }

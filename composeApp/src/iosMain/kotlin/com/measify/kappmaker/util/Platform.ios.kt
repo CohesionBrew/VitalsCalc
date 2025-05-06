@@ -21,6 +21,7 @@ import kotlin.experimental.ExperimentalNativeApi
 internal actual val platformModule: Module = module {
     singleOf(::DatabaseProviderImpl) bind DatabaseProvider::class
     factoryOf(::InAppReviewManagerImpl) bind InAppReviewManager::class
+    factoryOf(::AppUtilImpl) bind AppUtil::class
 }
 
 internal fun swiftLibDependenciesModule(factory: SwiftLibDependencyFactory): Module = module {

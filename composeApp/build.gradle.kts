@@ -54,8 +54,6 @@ kotlin {
             implementation(libs.kmpauth.google)
             implementation(libs.kmpauth.firebase)
             implementation(libs.kmpauth.uihelper)
-            implementation(libs.voyager.navigator)
-            implementation(libs.voyager.screenmodel)
             implementation(libs.napier)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.ktor.core)
@@ -64,6 +62,8 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.koin.compose.viewmodel.navigation)
             implementation(libs.lifecyle.runtime)
             implementation(libs.revenuecat.core)
             implementation(libs.revenuecat.ui)
@@ -72,6 +72,11 @@ kotlin {
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
             implementation(libs.android.inappreview)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.ktor)
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.navigation.compose)
 
         }
 
@@ -155,7 +160,7 @@ android {
             )
             signingConfig = signingConfigs.getByName(if (isSigningKeyExists) "release" else "debug")
 
-            resValue("string", "admobAppId", getRequiredProperty("ADMOB_APP_ID_ANDROID",""))
+            resValue("string", "admobAppId", getRequiredProperty("ADMOB_APP_ID_ANDROID","ca-app-pub-3940256099942544~3347511713"))
         }
     }
     buildFeatures {
@@ -187,9 +192,9 @@ buildConfig {
     // BuildConfig configuration here.
     // https://github.com/gmazzo/gradle-buildconfig-plugin#usage-in-kts
     packageName("com.measify.kappmaker.common")
-    buildConfigField("GOOGLE_WEB_CLIENT_ID", getRequiredProperty("GOOGLE_WEB_CLIENT_ID"))
-    buildConfigField("REVENUECAT_ANDROID_API_KEY", getRequiredProperty("REVENUECAT_ANDROID_API_KEY"))
-    buildConfigField("REVENUECAT_IOS_API_KEY", getRequiredProperty("REVENUECAT_IOS_API_KEY"))
+    buildConfigField("GOOGLE_WEB_CLIENT_ID", getRequiredProperty(key="GOOGLE_WEB_CLIENT_ID", defaultValue = "testValue"))
+    buildConfigField("REVENUECAT_ANDROID_API_KEY", getRequiredProperty(key="REVENUECAT_ANDROID_API_KEY", defaultValue = "testValue"))
+    buildConfigField("REVENUECAT_IOS_API_KEY", getRequiredProperty(key="REVENUECAT_IOS_API_KEY", defaultValue = "testValue"))
     setupAdmobAdsIds()
 }
 

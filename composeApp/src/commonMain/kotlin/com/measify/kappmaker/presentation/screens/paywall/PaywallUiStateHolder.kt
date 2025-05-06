@@ -1,71 +1,78 @@
 package com.measify.kappmaker.presentation.screens.paywall
 
-import com.measify.kappmaker.generated.resources.Res
-import com.measify.kappmaker.generated.resources.msg_successful_payment
-import com.measify.kappmaker.generated.resources.msg_successful_restore_payment
+import com.measify.kappmaker.data.repository.SubscriptionRepository
+import com.measify.kappmaker.data.repository.UserRepository
+import com.measify.kappmaker.presentation.components.premium.PremiumFeatureUiState
+import com.measify.kappmaker.root.AppGlobalUiState
 import com.measify.kappmaker.util.UiMessage
 import com.measify.kappmaker.util.UiStateHolder
+import com.measify.kappmaker.util.extensions.asPremiumSubscription
 import com.measify.kappmaker.util.extensions.buttonText
 import com.measify.kappmaker.util.logging.AppLogger
 import com.measify.kappmaker.util.uiStateHolderScope
-import com.revenuecat.purchases.kmp.Purchases
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
-class PaywallUiStateHolder() : UiStateHolder {
+class PaywallUiStateHolder(
+    private val subscriptionRepository: SubscriptionRepository,
+    private val userRepository: UserRepository
+) :
+    UiStateHolder() {
     private val _uiState = MutableStateFlow(PaywallUiState())
     val uiState: StateFlow<PaywallUiState> = _uiState.asStateFlow()
 
 
     init {
-        getOfferings()
+        getPackages()
     }
 
     fun onMessageShown() {
-        _uiState.update { it.copy(message = null) }
+        _uiState.update { it.copy(errorMessage = null) }
     }
 
-    private fun getOfferings() {
+    fun onSuccessfulPurchaseHandled() = uiStateHolderScope.launch {
+        _uiState.update { it.copy(successfulSubscription = null) }
+    }
+
+    fun onSignInActionHandled() = uiStateHolderScope.launch {
+        _uiState.update { it.copy(signInActionRequired = false) }
+    }
+
+    private fun getPackages() = uiStateHolderScope.launch {
         _uiState.update { it.copy(isLoading = true) }
-        Purchases.sharedInstance.getOfferings(
-            onError = { error ->
-                AppLogger.e("RevenueCat: Error getting offerings: $error")
+        subscriptionRepository.getPackageList()
+            .onSuccess { packages ->
+                val defaultSelectedPackageIndex = 0
+                val selectedPackage = packages.getOrNull(defaultSelectedPackageIndex)
+                // You can change features dynamically based on selected package
+                val features = PremiumFeatureUiState.defaultPremiumFeatures.map { it.text }
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        message = UiMessage.Message(error.message),
+                        features = features,
+                        packages = packages,
+                        selectedPackage = selectedPackage,
+                        buyButtonEnabled = selectedPackage != null,
+                        buyButtonText = selectedPackage.buttonText
+                    )
+                }
+            }
+
+            .onFailure { error ->
+                AppLogger.e("Error getting packages: $error")
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = UiMessage.Message(error.message),
                         buyButtonEnabled = false
                     )
                 }
-
-            },
-            onSuccess = { offerings ->
-                offerings.current?.availablePackages?.takeUnless { it.isEmpty() }?.let { packages ->
-                    val filteredPackages = packages.sortedBy { it.storeProduct.price.amountMicros }
-                    val defaultSelectedPackageIndex = 0
-                    val selectedPackage = filteredPackages.getOrNull(defaultSelectedPackageIndex)
-                    // You can change features dynamically based on selected package
-                    val features =
-                        listOf(
-                            "Amazing Feature 1",
-                            "Amazing Feature 2",
-                            "Amazing Feature 3"
-                        )
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            features = features,
-                            packages = filteredPackages,
-                            selectedPackage = selectedPackage,
-                            buyButtonEnabled = selectedPackage != null
-                        )
-                    }
-                }
-            })
+            }
     }
 
     fun onUiEvent(event: PaywallUiEvent) {
@@ -93,66 +100,68 @@ class PaywallUiStateHolder() : UiStateHolder {
     private fun restorePayment() = uiStateHolderScope.launch {
 
         if (userCanDoPaymentAction().not()) {
-            _uiState.update { it.copy(message = UiMessage.Message("You can not do payment action")) }
+            AppGlobalUiState.showUiMessage(UiMessage.Message("You need to sign in first"))
+            _uiState.update { it.copy(signInActionRequired = true) }
             return@launch
         }
 
         _uiState.update { it.copy(isLoading = true) }
-        Purchases.sharedInstance.restorePurchases(
-            onError = {
-                AppLogger.e("RevenueCat: Error restoring purchases: $it")
-                _uiState.update { state ->
-                    state.copy(
-                        message = UiMessage.Message(it.message),
-                        isLoading = false
-                    )
-                }
-            }, onSuccess = {
+        subscriptionRepository.restorePurchase()
+            .onSuccess { customerInfo ->
                 _uiState.update { state ->
                     state.copy(
                         isLoading = false,
-                        isSuccessfulPurchase = true,
-                        message = UiMessage.Resource(Res.string.msg_successful_restore_payment)
+                        successfulSubscription = customerInfo.asPremiumSubscription()
                     )
                 }
-                AppLogger.e("RevenueCat: Successful restoring purchases: $it")
-            })
+                AppLogger.d("Successful restoring purchase: $customerInfo")
+            }
+            .onFailure { error ->
+                AppLogger.e("Error restoring purchases: $error")
+                _uiState.update { state ->
+                    state.copy(
+                        errorMessage = UiMessage.Message(error.message),
+                        isLoading = false
+                    )
+                }
+            }
+
     }
 
     private fun buyPackage() = uiStateHolderScope.launch {
         if (userCanDoPaymentAction().not()) {
-            _uiState.update { it.copy(message = UiMessage.Message("You can not do payment action")) }
+            AppGlobalUiState.showUiMessage(UiMessage.Message("You need to sign in first"))
+            _uiState.update { it.copy(signInActionRequired = true) }
             return@launch
         }
         val selectedPackage = uiState.value.selectedPackage
         if (selectedPackage != null) {
             _uiState.update { it.copy(buyButtonEnabled = false) }
-            Purchases.sharedInstance.purchase(
-                selectedPackage,
-                onSuccess = { transaction, customer ->
+            subscriptionRepository.purchase(selectedPackage)
+                .onSuccess { successfulPurchase ->
                     _uiState.update {
                         it.copy(
                             buyButtonEnabled = true,
-                            isSuccessfulPurchase = true,
-                            message = UiMessage.Resource(Res.string.msg_successful_payment)
-                        )
-                    }
-                },
-                onError = { error, userCancelled ->
-                    _uiState.update {
-                        it.copy(
-                            buyButtonEnabled = true,
-                            message = UiMessage.Message(error.message)
+                            successfulSubscription = successfulPurchase.customerInfo.asPremiumSubscription()
                         )
                     }
                 }
-            )
+                .onFailure { error ->
+                    _uiState.update {
+                        it.copy(
+                            buyButtonEnabled = true,
+                            errorMessage = UiMessage.Message(error.message)
+                        )
+                    }
+                }
+
         }
     }
 
     private suspend fun userCanDoPaymentAction(): Boolean {
         //You can for example check if user is authenticated here
-        return true
+        val currentUser = userRepository.currentUser.first().getOrNull()
+        return currentUser != null
     }
 
 }

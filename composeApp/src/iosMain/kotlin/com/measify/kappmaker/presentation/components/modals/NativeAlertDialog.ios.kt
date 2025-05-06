@@ -4,7 +4,7 @@
  * https://github.com/MohamedRejeb/Calf/blob/main/calf-ui/
  */
 
-package com.measify.kappmaker.presentation.components
+package com.measify.kappmaker.presentation.components.modals
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect

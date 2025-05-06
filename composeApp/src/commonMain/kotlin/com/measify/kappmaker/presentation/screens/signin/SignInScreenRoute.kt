@@ -1,24 +1,18 @@
 package com.measify.kappmaker.presentation.screens.signin
 
 import androidx.compose.runtime.Composable
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
+import com.measify.kappmaker.root.LocalNavigator
 import com.measify.kappmaker.util.ScreenRoute
-import com.measify.kappmaker.generated.resources.Res
-import com.measify.kappmaker.generated.resources.title_sign_in
-import org.jetbrains.compose.resources.stringResource
+import kotlinx.serialization.Serializable
 
+@Serializable
 class SignInScreenRoute : ScreenRoute {
 
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
+        val navigator = LocalNavigator.current
         SignInScreen(onSuccessfulSignIn = {
-            navigator.pop()
+            navigator.popBackStack()
         })
     }
-
-    override val title: String
-        @Composable
-        get() = stringResource(Res.string.title_sign_in)
 }

@@ -1,54 +1,38 @@
 package com.measify.kappmaker.util
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
-import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.rememberNavigatorScreenModel
-import cafe.adriel.voyager.core.model.rememberScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.Navigator
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.CoroutineScope
 import org.koin.compose.currentKoinScope
+import org.koin.compose.viewmodel.koinNavViewModel
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.parameter.ParametersDefinition
-import org.koin.core.parameter.emptyParametersHolder
 import org.koin.core.qualifier.Qualifier
 import org.koin.core.scope.Scope
 
-interface UiStateHolder : ScreenModel
+abstract class UiStateHolder : ViewModel()
 
-val UiStateHolder.uiStateHolderScope: CoroutineScope get() = screenModelScope
+val UiStateHolder.uiStateHolderScope: CoroutineScope get() = viewModelScope
 
 
 @Composable
-inline fun <reified T : ScreenModel> Screen.uiStateHolder(
+inline fun <reified T : ViewModel> ScreenRoute.uiStateHolder(
     qualifier: Qualifier? = null,
     scope: Scope = currentKoinScope(),
     noinline parameters: ParametersDefinition? = null
 ): T {
-    val currentParameters by rememberUpdatedState(parameters)
-    val tag = remember(qualifier, scope) { qualifier?.value }
-    return rememberScreenModel(tag = tag) {
-        scope.get(qualifier) {
-            currentParameters?.invoke() ?: emptyParametersHolder()
-        }
-    }
+    return koinViewModel(qualifier = qualifier, scope = scope, parameters = parameters)
 }
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
-inline fun <reified T : ScreenModel> Navigator.navigatorUiStateHolder(
+inline fun <reified T : ViewModel> NavHostController.navigatorUiStateHolder(
     qualifier: Qualifier? = null,
     scope: Scope = currentKoinScope(),
     noinline parameters: ParametersDefinition? = null
 ): T {
-    val currentParameters by rememberUpdatedState(parameters)
-    val tag = remember(qualifier, scope) { qualifier?.value }
-    return rememberNavigatorScreenModel(tag = tag) {
-        scope.get(qualifier) {
-            currentParameters?.invoke() ?: emptyParametersHolder()
-        }
-    }
+    return koinNavViewModel(qualifier=qualifier,scope=scope,parameters=parameters)
 }
-

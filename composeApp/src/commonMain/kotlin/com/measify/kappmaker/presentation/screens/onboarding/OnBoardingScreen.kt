@@ -1,4 +1,3 @@
-
 package com.measify.kappmaker.presentation.screens.onboarding
 
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,16 +8,16 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.measify.kappmaker.presentation.components.LogoImage
 
+
 enum class OnBoardingScreenStyle {
     STYLE1,
-    STYLE2,
-    STYLE3
+    STYLE2
 }
 
 @Composable
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
-    style: OnBoardingScreenStyle = OnBoardingScreenStyle.STYLE1,
+    style: OnBoardingScreenStyle = OnBoardingScreenStyle.STYLE2,
     uiStateHolder: OnBoardingUiStateHolder,
     onNavigateMain: () -> Unit,
 ) {
@@ -48,15 +47,9 @@ fun OnBoardingScreen(
                     onUiEvent = uiStateHolder::onUiEvent
                 )
             }
-
-            OnBoardingScreenStyle.STYLE3 -> {
-                OnBoardingScreenVariation3(
-                    modifier = modifier.fillMaxSize(),
-                    uiState = uiState,
-                    onUiEvent = uiStateHolder::onUiEvent
-                )
-            }
         }
     }
 }
+
+
 

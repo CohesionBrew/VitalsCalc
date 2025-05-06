@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 @Composable
 internal actual fun SystemAppearance(isDark: Boolean) {
     val view = LocalView.current
+    val backgroundColor = AppTheme.colors.background
     LaunchedEffect(isDark) {
         val window = (view.context as Activity).window
         WindowInsetsControllerCompat(window, window.decorView).apply {
@@ -18,11 +19,7 @@ internal actual fun SystemAppearance(isDark: Boolean) {
             isAppearanceLightNavigationBars = !isDark
         }
 
-        //For me devices there is need to explicitly set navigation bar color
-        val backgroundColor = if (isDark) backgroundDark else backgroundLight
+        //For some devices there is need to explicitly set navigation bar color
         window.navigationBarColor = backgroundColor.toArgb()
     }
-
-
-
 }

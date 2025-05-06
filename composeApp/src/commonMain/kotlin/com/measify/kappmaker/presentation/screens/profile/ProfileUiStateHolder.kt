@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class ProfileUiStateHolder(private val userRepository: UserRepository) : UiStateHolder {
+class ProfileUiStateHolder(private val userRepository: UserRepository) : UiStateHolder() {
 
 
     private val currentUserFlow = userRepository.currentUser
@@ -67,12 +67,6 @@ class ProfileUiStateHolder(private val userRepository: UserRepository) : UiState
 
     fun onUiEvent(event: ProfileScreenUiEvent) = uiStateHolderScope.launch {
         when (event) {
-            ProfileScreenUiEvent.OnClickLogOut -> {
-                _uiState.update { it.copy(isLoading = true) }
-                userRepository.logOut()
-                _uiState.update { it.copy(isLoading = false, user = null) }
-            }
-
             ProfileScreenUiEvent.OnClickDeleteAccount -> {
                 _uiState.update { it.copy(deleteUserDialogShown = true) }
             }

@@ -61,7 +61,7 @@ tasks.register("generateNewScreen") {
             import kotlinx.coroutines.flow.StateFlow
             import kotlinx.coroutines.flow.asStateFlow
 
-            class $viewModelClassName() : UiStateHolder {
+            class $viewModelClassName() : UiStateHolder() {
                 private val _uiState = MutableStateFlow($uiStateClassName())
                 val uiState: StateFlow<$uiStateClassName> = _uiState.asStateFlow()
             }

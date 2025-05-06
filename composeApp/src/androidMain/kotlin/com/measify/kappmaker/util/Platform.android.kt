@@ -27,6 +27,7 @@ import org.koin.dsl.module
 internal actual val platformModule: Module = module {
     singleOf(::DatabaseProviderImpl) bind DatabaseProvider::class
     factoryOf(::InAppReviewManagerImpl) bind InAppReviewManager::class
+    factoryOf(::AppUtilImpl) bind AppUtil::class
     single<FeatureFlagManagerImpl> {
         val remoteConfig = Firebase.remoteConfig.apply {
             setConfigSettingsAsync(remoteConfigSettings {

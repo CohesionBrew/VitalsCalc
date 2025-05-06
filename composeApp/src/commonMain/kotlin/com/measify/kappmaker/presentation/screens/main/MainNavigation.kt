@@ -1,0 +1,71 @@
+package com.measify.kappmaker.presentation.screens.main
+
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
+import com.measify.kappmaker.generated.resources.Res
+import com.measify.kappmaker.generated.resources.help_and_support
+import com.measify.kappmaker.generated.resources.subscriptions
+import com.measify.kappmaker.generated.resources.title_screen_account
+import com.measify.kappmaker.generated.resources.title_screen_favorites
+import com.measify.kappmaker.generated.resources.title_screen_home
+import com.measify.kappmaker.generated.resources.title_screen_profile
+import com.measify.kappmaker.generated.resources.title_sign_in
+import com.measify.kappmaker.presentation.screens.account.AccountScreenRoute
+import com.measify.kappmaker.presentation.screens.favorite.FavoriteScreenRoute
+import com.measify.kappmaker.presentation.screens.helpandsupport.HelpAndSupportScreenRoute
+import com.measify.kappmaker.presentation.screens.home.HomeScreenRoute
+import com.measify.kappmaker.presentation.screens.paywall.PaywallScreenRoute
+import com.measify.kappmaker.presentation.screens.profile.ProfileScreenRoute
+import com.measify.kappmaker.presentation.screens.signin.SignInScreenRoute
+import com.measify.kappmaker.presentation.screens.subscriptions.SubscriptionsScreenRoute
+import org.jetbrains.compose.resources.stringResource
+
+@Composable
+fun MainNavigation(navController: NavHostController) {
+    NavHost(
+        navController = navController,
+        startDestination = HomeScreenRoute()
+    ) {
+        composable<HomeScreenRoute> { navBackStackEntry ->
+            navBackStackEntry.destination.label =
+                stringResource(Res.string.title_screen_home)
+            navBackStackEntry.toRoute<HomeScreenRoute>().Content()
+        }
+        composable<ProfileScreenRoute> { navBackStackEntry ->
+            navBackStackEntry.destination.label =
+                stringResource(Res.string.title_screen_profile)
+            navBackStackEntry.toRoute<ProfileScreenRoute>().Content()
+        }
+        composable<SignInScreenRoute> { navBackStackEntry ->
+            navBackStackEntry.destination.label =
+                stringResource(Res.string.title_sign_in)
+            navBackStackEntry.toRoute<SignInScreenRoute>().Content()
+        }
+        composable<AccountScreenRoute> { navBackStackEntry ->
+            navBackStackEntry.destination.label =
+                stringResource(Res.string.title_screen_account)
+            navBackStackEntry.toRoute<AccountScreenRoute>().Content()
+        }
+        composable<FavoriteScreenRoute> { navBackStackEntry ->
+            navBackStackEntry.destination.label =
+                stringResource(Res.string.title_screen_favorites)
+            navBackStackEntry.toRoute<FavoriteScreenRoute>().Content()
+        }
+        composable<PaywallScreenRoute> { navBackStackEntry ->
+            navBackStackEntry.toRoute<PaywallScreenRoute>().Content()
+        }
+        composable<HelpAndSupportScreenRoute> { navBackStackEntry ->
+            navBackStackEntry.destination.label =
+                stringResource(Res.string.help_and_support)
+            navBackStackEntry.toRoute<HelpAndSupportScreenRoute>().Content()
+        }
+        composable<SubscriptionsScreenRoute> { navBackStackEntry ->
+            navBackStackEntry.destination.label =
+                stringResource(Res.string.subscriptions)
+            navBackStackEntry.toRoute<SubscriptionsScreenRoute>().Content()
+        }
+    }
+}

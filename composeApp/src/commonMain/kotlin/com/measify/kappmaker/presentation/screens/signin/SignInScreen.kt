@@ -9,15 +9,17 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
@@ -26,18 +28,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.measify.kappmaker.data.repository.UserRepository
 import com.measify.kappmaker.generated.resources.Res
 import com.measify.kappmaker.generated.resources.sign_in_to
 import com.measify.kappmaker.generated.resources.txt_main_action_to_sign_in
 import com.measify.kappmaker.presentation.components.AgreePrivacyPolicyTermsConditionsText
 import com.measify.kappmaker.presentation.components.AuthUIHelperButtons
 import com.measify.kappmaker.presentation.components.LogoImage
+import com.measify.kappmaker.presentation.theme.AppTheme
 import com.measify.kappmaker.util.logging.AppLogger
+import dev.gitlive.firebase.auth.FirebaseAuthUserCollisionException
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 
 @Composable
 fun SignInScreen(modifier: Modifier = Modifier, onSuccessfulSignIn: () -> Unit) {
+
+    val userRepository = koinInject<UserRepository>()
 
     val scrollState = rememberScrollState()
     LaunchedEffect(true) {
@@ -45,31 +53,54 @@ fun SignInScreen(modifier: Modifier = Modifier, onSuccessfulSignIn: () -> Unit) 
     }
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    var linkAccount by remember { mutableStateOf(true) }
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(
+                start = AppTheme.spacing.outerSpacing,
+                end = AppTheme.spacing.outerSpacing,
+                top = AppTheme.spacing.defaultSpacing,
+                bottom = AppTheme.spacing.outerSpacing
+            ),
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         }
     ) {
         Column(
-            Modifier.fillMaxSize().verticalScroll(scrollState),
+            modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.weight(1f))
-            LogoImage(modifier = Modifier.fillMaxWidth().heightIn(max = 300.dp).padding(4.dp))
+            LogoImage(
+                modifier = Modifier.fillMaxWidth().heightIn(max = 300.dp)
+                    .padding(AppTheme.spacing.defaultSpacing)
+            )
             Spacer(modifier = Modifier.weight(1f))
-            TitleText(modifier = Modifier.padding(20.dp))
-            AuthUIHelperButtons(modifier = Modifier.padding(top = 32.dp).fillMaxWidth()) { result ->
+
+            TitleText(modifier = Modifier.padding(top = AppTheme.spacing.largeSpacing))
+
+            AuthUIHelperButtons(
+                linkAccount = linkAccount,
+                modifier = Modifier.padding(top = AppTheme.spacing.largeSpacing).fillMaxWidth()
+            ) { result ->
                 result.onSuccess {
                     AppLogger.d("Successful sign in")
+                    userRepository.onSuccessfulOauthSign()
                     onSuccessfulSignIn()
-                }.onFailure {
-                    coroutineScope.launch { snackbarHostState.showSnackbar(it.message ?: "") }
+                }.onFailure { error ->
+                    var errorMessage = error.message ?: ""
+                    if (error is FirebaseAuthUserCollisionException) {
+                        linkAccount = false
+                        errorMessage += " Please, try again"
+                    }
+
+                    coroutineScope.launch { snackbarHostState.showSnackbar(errorMessage) }
                     AppLogger.e("Error occurred while signing in, $it")
                 }
             }
             AgreePrivacyPolicyTermsConditionsText(
-                modifier = Modifier.padding(top = 32.dp).fillMaxWidth(),
+                modifier = Modifier.padding(top = AppTheme.spacing.largeSpacing).fillMaxWidth(),
             )
 
 
@@ -79,7 +110,6 @@ fun SignInScreen(modifier: Modifier = Modifier, onSuccessfulSignIn: () -> Unit) 
 }
 
 
-
 @Composable
 private fun TitleText(modifier: Modifier) {
     val annotatedString = buildAnnotatedString {
@@ -87,7 +117,7 @@ private fun TitleText(modifier: Modifier) {
         appendLine()
         withStyle(
             style = SpanStyle(
-                color = MaterialTheme.colorScheme.primary,
+                color = AppTheme.colors.primary,
                 fontWeight = FontWeight.SemiBold
             )
         ) {
@@ -97,8 +127,9 @@ private fun TitleText(modifier: Modifier) {
     Text(
         modifier = modifier,
         text = annotatedString,
+        color = AppTheme.colors.text.primary,
         textAlign = TextAlign.Center,
         fontWeight = FontWeight.Medium,
-        style = MaterialTheme.typography.headlineMedium
+        style = AppTheme.typography.h3
     )
 }

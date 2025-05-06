@@ -1,22 +1,29 @@
 package com.measify.kappmaker.presentation.screens.onboarding
 
 import androidx.compose.runtime.Composable
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import com.measify.kappmaker.presentation.screens.main.MainScreenRoute
+import com.measify.kappmaker.root.LocalNavigator
 import com.measify.kappmaker.util.ScreenRoute
 import com.measify.kappmaker.util.uiStateHolder
+import kotlinx.serialization.Serializable
 
+@Serializable
 class OnBoardingScreenRoute : ScreenRoute {
 
     @Composable
     override fun Content() {
         val uiStateHolder = uiStateHolder<OnBoardingUiStateHolder>()
-        val navigator = LocalNavigator.currentOrThrow
+        val navigator = LocalNavigator.current
         OnBoardingScreen(
-            style = OnBoardingScreenStyle.STYLE1,
+            style = OnBoardingScreenStyle.STYLE2,
             uiStateHolder = uiStateHolder,
-            onNavigateMain = { navigator.replace(MainScreenRoute()) }
+            onNavigateMain = {
+                navigator.navigate(MainScreenRoute()) {
+                    popUpTo(OnBoardingScreenRoute()) {
+                        inclusive = true
+                    }
+                }
+            }
         )
     }
 

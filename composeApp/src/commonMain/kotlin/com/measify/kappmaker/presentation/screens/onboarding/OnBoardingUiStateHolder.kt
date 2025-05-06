@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
-class OnBoardingUiStateHolder(private val userPreferences: UserPreferences) : UiStateHolder {
+class OnBoardingUiStateHolder(private val userPreferences: UserPreferences) : UiStateHolder() {
     private val _uiState = MutableStateFlow(OnBoardingUiState(isLoading = true))
     val uiState: StateFlow<OnBoardingUiState> = _uiState.asStateFlow()
 

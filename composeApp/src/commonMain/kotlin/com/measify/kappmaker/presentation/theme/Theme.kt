@@ -3,98 +3,58 @@ package com.measify.kappmaker.presentation.theme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
 
-private val LightColorScheme = lightColorScheme(
-    primary = primaryLight,
-    onPrimary = onPrimaryLight,
-    primaryContainer = primaryContainerLight,
-    onPrimaryContainer = onPrimaryContainerLight,
-    secondary = secondaryLight,
-    onSecondary = onSecondaryLight,
-    secondaryContainer = secondaryContainerLight,
-    onSecondaryContainer = onSecondaryContainerLight,
-    tertiary = tertiaryLight,
-    onTertiary = onTertiaryLight,
-    tertiaryContainer = tertiaryContainerLight,
-    onTertiaryContainer = onTertiaryContainerLight,
-    error = errorLight,
-    errorContainer = errorContainerLight,
-    onError = onErrorLight,
-    onErrorContainer = onErrorContainerLight,
-    background = backgroundLight,
-    onBackground = onBackgroundLight,
-    surface = surfaceLight,
-    onSurface = onSurfaceLight,
-    surfaceVariant = surfaceLight,
-    onSurfaceVariant = onSurfaceVariantLight,
-    outline = outlineLight,
-    inverseOnSurface = inverseOnSurfaceLight,
-    inverseSurface = inverseSurfaceLight,
-    inversePrimary = inversePrimaryLight,
-    surfaceTint = surfaceLight,
-    outlineVariant = outlineVariantLight,
-    scrim = scrimLight,
-)
 
-private val DarkColorScheme = darkColorScheme(
-    primary = primaryDark,
-    onPrimary = onPrimaryDark,
-    primaryContainer = primaryContainerDark,
-    onPrimaryContainer = onPrimaryContainerDark,
-    secondary = secondaryDark,
-    onSecondary = onSecondaryDark,
-    secondaryContainer = secondaryContainerDark,
-    onSecondaryContainer = onSecondaryContainerDark,
-    tertiary = tertiaryDark,
-    onTertiary = onTertiaryDark,
-    tertiaryContainer = tertiaryContainerDark,
-    onTertiaryContainer = onTertiaryContainerDark,
-    error = errorDark,
-    errorContainer = errorContainerDark,
-    onError = onErrorDark,
-    onErrorContainer = onErrorContainerDark,
-    background = backgroundDark,
-    onBackground = onBackgroundDark,
-    surface = surfaceDark,
-    onSurface = onSurfaceDark,
-    surfaceVariant = surfaceDark,
-    onSurfaceVariant = onSurfaceVariantDark,
-    outline = outlineDark,
-    inverseOnSurface = inverseOnSurfaceDark,
-    inverseSurface = inverseSurfaceDark,
-    inversePrimary = inversePrimaryDark,
-    surfaceTint = surfaceDark,
-    outlineVariant = outlineVariantDark,
-    scrim = scrimDark,
-)
-
-internal val LocalThemeIsDark = compositionLocalOf { mutableStateOf(true) }
+internal val LocalThemeIsDark = compositionLocalOf { true }
+internal val LocalAppColors = staticCompositionLocalOf { lightModeAppColors }
+internal val LocalAppTypography =
+    staticCompositionLocalOf<AppTypography> { error("Typography not provided") }
+internal val LocalAppSpacing = staticCompositionLocalOf { AppSpacing() }
 
 @Composable
 internal fun AppTheme(
+    isDarkMode: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val systemIsDark = isSystemInDarkTheme()
-    val isDarkState = remember(systemIsDark) { mutableStateOf(systemIsDark) }
     CompositionLocalProvider(
-        LocalThemeIsDark provides isDarkState
+        LocalThemeIsDark provides isDarkMode,
+        LocalAppColors provides if (isDarkMode) darkModeAppColors else lightModeAppColors,
+        LocalAppTypography provides appTypography,
+        LocalAppSpacing provides appSpacing
     ) {
-        val isDark by isDarkState
-        SystemAppearance(isDark)
+
+
+        SystemAppearance(isDarkMode)
         MaterialTheme(
-            colorScheme = if (isDark) DarkColorScheme else LightColorScheme,
-            typography = AppTypography,
-            content = { Surface(content = content) }
+            colorScheme = LocalAppColors.current.asMaterialColorScheme(isDarkMode),
+            typography = MaterialThemAppTypography,
+            content = {
+                Surface(
+                    content = content,
+                    color = AppTheme.colors.background
+                )
+            }
         )
+
     }
+}
+
+
+object AppTheme {
+
+    val colors: AppColors
+        @Composable @ReadOnlyComposable get() = LocalAppColors.current
+
+    val typography: AppTypography
+        @Composable @ReadOnlyComposable get() = LocalAppTypography.current
+
+    val spacing: AppSpacing
+        @Composable @ReadOnlyComposable get() = LocalAppSpacing.current
 }
 
 @Composable

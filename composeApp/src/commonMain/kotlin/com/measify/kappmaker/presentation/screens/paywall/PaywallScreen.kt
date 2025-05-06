@@ -3,6 +3,7 @@ package com.measify.kappmaker.presentation.screens.paywall
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,23 +13,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,13 +32,26 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.measify.kappmaker.generated.resources.Res
 import com.measify.kappmaker.generated.resources.btn_restore_purchase
+import com.measify.kappmaker.generated.resources.ic_check
+import com.measify.kappmaker.generated.resources.ic_close
 import com.measify.kappmaker.presentation.components.AgreePrivacyPolicyTermsConditionsText
+import com.measify.kappmaker.presentation.components.AppButton
 import com.measify.kappmaker.presentation.components.AppToolbar
-import com.measify.kappmaker.presentation.components.FullScreenLoading
-import com.measify.kappmaker.presentation.components.MessageDialog
+import com.measify.kappmaker.presentation.components.ButtonStyle
+import com.measify.kappmaker.presentation.components.LoadingProgress
+import com.measify.kappmaker.presentation.components.LoadingProgressMode
+import com.measify.kappmaker.presentation.components.ScreenTitle
+import com.measify.kappmaker.presentation.components.modals.AppDialog
+import com.measify.kappmaker.presentation.components.modals.DialogType
+import com.measify.kappmaker.presentation.components.premium.PremiumFeatureUiState
+import com.measify.kappmaker.presentation.components.premium.PremiumFeaturesList
+import com.measify.kappmaker.presentation.components.premium.SuccessfulPurchaseView
+import com.measify.kappmaker.presentation.theme.AppTheme
+import com.measify.kappmaker.util.extensions.asFormattedDate
 import com.measify.kappmaker.util.extensions.productDescription
 import com.measify.kappmaker.util.extensions.productName
 import com.revenuecat.purchases.kmp.models.Package
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -52,10 +59,34 @@ fun PaywallScreen(
     modifier: Modifier = Modifier,
     uiStateHolder: PaywallUiStateHolder,
     onDismiss: () -> Unit,
+    onSignInRequired: () -> Unit,
 ) {
     val uiState by uiStateHolder.uiState.collectAsStateWithLifecycle()
-    uiState.message?.let {
-        MessageDialog(
+
+    if (uiState.signInActionRequired) {
+        LaunchedEffect(uiState.signInActionRequired) {
+            onSignInRequired()
+            uiStateHolder.onSignInActionHandled()
+        }
+    }
+
+    uiState.successfulSubscription?.let { subscription ->
+        SuccessfulPurchaseView(
+            modifier = Modifier.fillMaxSize(),
+            features = PremiumFeatureUiState.ofSubscription(subscription),
+            isRecurring = subscription.willRenew,
+            isLifetime = subscription.isLifetime,
+            expirationDate = subscription.expirationDateInMillis?.asFormattedDate(),
+            onContinue = {
+                onDismiss()
+                uiStateHolder.onSuccessfulPurchaseHandled()
+            }
+        )
+    }
+
+    uiState.errorMessage?.let {
+        AppDialog(
+            type = DialogType.ERROR,
             text = it.value,
             onConfirm = {
                 uiStateHolder.onMessageShown()
@@ -81,15 +112,20 @@ fun PaywallScreen(
     Column(modifier = modifier) {
         AppToolbar(
             title = "",
-            navigationIcon = Icons.Default.Close,
+            navigationIcon = painterResource(Res.drawable.ic_close),
             onNavigationIconClick = { onDismiss() }
         )
 
         if (uiState.isLoading) {
-            FullScreenLoading()
+            LoadingProgress(mode = LoadingProgressMode.FULLSCREEN)
         } else
             PaywallScreenData(
-                modifier = modifier.padding(20.dp),
+                modifier = modifier.padding(
+                    start = AppTheme.spacing.outerSpacing,
+                    end = AppTheme.spacing.outerSpacing,
+                    top = AppTheme.spacing.defaultSpacing,
+                    bottom = AppTheme.spacing.outerSpacing
+                ),
                 uiState = uiState,
                 onUiEvent = onUiEvent
             )
@@ -105,89 +141,54 @@ private fun PaywallScreenData(
     onUiEvent: (PaywallUiEvent) -> Unit
 ) {
 
-    Column(modifier = modifier) {
-        LazyColumn(modifier = Modifier.fillMaxWidth().weight(1f)) {
-            item { PaywallTitle(text = uiState.title) }
-            item { Spacer(modifier = Modifier.height(16.dp)) }
-            items(uiState.features.size) {
-                PaywallFeature(
-                    text = uiState.features[it],
-                    modifier = Modifier.padding(bottom = 4.dp)
-                )
-            }
-            item { Spacer(modifier = Modifier.height(8.dp)) }
-            items(uiState.packages.size) {
-                val rcPackage = uiState.packages[it]
-                PackageItem(
-                    rcPackage = rcPackage,
-                    isSelected = rcPackage == uiState.selectedPackage,
-                    onPackageSelected = {
-                        onUiEvent(PaywallUiEvent.OnSelectPackage(uiState.packages[it]))
-                    },
-                )
-            }
-
-        }
-        ElevatedButton(
-            enabled = uiState.buyButtonEnabled,
-            onClick = { onUiEvent(PaywallUiEvent.OnClickBuy) },
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(vertical = 8.dp)
-                .fillMaxWidth(),
-            colors = ButtonDefaults.elevatedButtonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            ),
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.sectionSpacing)) {
+        Column(
+            modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.sectionSpacing)
         ) {
-            Text(
-                text = uiState.buyButtonText,
-                modifier = Modifier.padding(horizontal = 40.dp, vertical = 6.dp),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Medium
+
+            ScreenTitle(text = uiState.title)
+            PremiumFeaturesList(
+                features = uiState.features.map { PremiumFeatureUiState(it) }
             )
+            Column(verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.verticalListItemSpacing)) {
+                uiState.packages.forEach { rcPackage ->
+                    PackageItem(
+                        rcPackage = rcPackage,
+                        isSelected = rcPackage == uiState.selectedPackage,
+                        onPackageSelected = {
+                            onUiEvent(PaywallUiEvent.OnSelectPackage(rcPackage))
+                        },
+                    )
+                }
+
+            }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Column {
+            AppButton(
+                text = uiState.buyButtonText,
+                style = ButtonStyle.PRIMARY,
+                enabled = uiState.buyButtonEnabled,
+                onClick = { onUiEvent(PaywallUiEvent.OnClickBuy) },
+                modifier = Modifier.align(Alignment.CenterHorizontally).fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(AppTheme.spacing.groupedVerticalElementSpacing))
+            AppButton(
+                onClick = { onUiEvent(PaywallUiEvent.OnClickRestore) },
+                text = stringResource(Res.string.btn_restore_purchase),
+                style = ButtonStyle.TEXT,
+                modifier = Modifier.fillMaxWidth()
+            )
 
-        OutlinedButton(
-            onClick = { onUiEvent(PaywallUiEvent.OnClickRestore) },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(stringResource(Res.string.btn_restore_purchase))
+            Spacer(modifier = Modifier.height(AppTheme.spacing.defaultSpacing))
+            AgreePrivacyPolicyTermsConditionsText(modifier = Modifier.fillMaxWidth())
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
-        AgreePrivacyPolicyTermsConditionsText(modifier = Modifier.fillMaxWidth())
-    }
-}
 
-@Composable
-private fun PaywallTitle(modifier: Modifier = Modifier, text: String) {
-    Text(
-        text = text,
-        fontWeight = FontWeight.SemiBold,
-        style = MaterialTheme.typography.headlineMedium
-    )
-}
-
-@Composable
-private fun PaywallFeature(
-    modifier: Modifier = Modifier,
-    text: String
-) {
-    Row {
-        Icon(
-            Icons.Default.Check,
-            contentDescription = "Check",
-            tint = MaterialTheme.colorScheme.primary
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(text = text, modifier = modifier)
     }
 
 }
-
 
 @Composable
 fun PackageItem(
@@ -196,42 +197,56 @@ fun PackageItem(
     isSelected: Boolean,
     onPackageSelected: () -> Unit
 ) {
+
+
     val shape = RoundedCornerShape(10.dp)
-    val borderColor =
-        if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+    val borderColor = if (isSelected) AppTheme.colors.primary else AppTheme.colors.outline
     val containerColor =
-        if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
+        if (isSelected) AppTheme.colors.alternative else AppTheme.colors.surfaceContainer
 
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp)
             .clip(shape)
             .clickable { onPackageSelected() },
         border = BorderStroke(2.dp, borderColor),
-        colors = CardDefaults.cardColors(
-            containerColor = containerColor,
-            contentColor = MaterialTheme.colorScheme.contentColorFor(containerColor)
-        )
+        colors = CardDefaults.cardColors(containerColor = containerColor)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row {
+        Column(
+            modifier = Modifier.padding(AppTheme.spacing.cardContentSpacing),
+            verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.defaultSpacing)
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(AppTheme.spacing.inputIconTextSpacing),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Box(
-                    modifier = Modifier.size(24.dp).border(1.dp, borderColor, CircleShape)
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .border(1.dp, borderColor, CircleShape)
                         .padding(4.dp)
                 ) {
-                    if (isSelected) Icon(Icons.Default.Check, contentDescription = "Check")
+                    if (isSelected) Icon(
+                        painter = painterResource(Res.drawable.ic_check),
+                        tint = AppTheme.colors.text.primary,
+                        contentDescription = "Check"
+                    )
                 }
-                Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = rcPackage.productName,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = AppTheme.typography.bodyExtraLarge,
+                    color = AppTheme.colors.text.primary,
                     fontWeight = FontWeight.SemiBold
                 )
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = rcPackage.productDescription, style = MaterialTheme.typography.bodyMedium)
+            Text(
+                text = rcPackage.productDescription,
+                style = AppTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Medium,
+                color = AppTheme.colors.text.primary
+            )
         }
     }
 }

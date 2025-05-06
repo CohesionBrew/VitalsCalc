@@ -1,24 +1,14 @@
 package com.measify.kappmaker.presentation.screens.profile
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ExitToApp
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,19 +16,29 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.measify.kappmaker.domain.model.User
-import com.measify.kappmaker.presentation.components.DeleteUserConfirmationDialog
-import com.measify.kappmaker.presentation.components.ErrorDialog
-import com.measify.kappmaker.presentation.components.FullScreenLoading
 import com.measify.kappmaker.generated.resources.Res
 import com.measify.kappmaker.generated.resources.btn_delete_account
-import com.measify.kappmaker.generated.resources.btn_logout
-import org.jetbrains.compose.resources.stringResource
+import com.measify.kappmaker.generated.resources.ic_delete
+import com.measify.kappmaker.generated.resources.ic_profile_img_placeholder
+import com.measify.kappmaker.presentation.components.LoadingProgress
+import com.measify.kappmaker.presentation.components.LoadingProgressMode
+import com.measify.kappmaker.presentation.components.SettingItemListContainer
+import com.measify.kappmaker.presentation.components.SettingsItemUiState
+import com.measify.kappmaker.presentation.components.UserInput
+import com.measify.kappmaker.presentation.components.modals.AppDialog
+import com.measify.kappmaker.presentation.components.modals.DeleteUserConfirmation
+import com.measify.kappmaker.presentation.components.modals.DialogType
+import com.measify.kappmaker.presentation.theme.AppTheme
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun ProfileScreen(
@@ -54,14 +54,18 @@ fun ProfileScreen(
         }
     }
     if (uiState.deleteUserDialogShown) {
-        DeleteUserConfirmationDialog(
+        DeleteUserConfirmation(
             onConfirm = uiStateHolder::onConfirmDeleteAccount,
             onDismiss = uiStateHolder::onDismissDeleteUserConfirmationDialog
         )
     }
-    ErrorDialog(text = uiState.errorMessage, onClickOk = { uiStateHolder.onErrorMessageShown() })
+    AppDialog(
+        type = DialogType.ERROR,
+        text = uiState.errorMessage,
+        onConfirm = { uiStateHolder.onErrorMessageShown() }
+    )
     if (uiState.isLoading) {
-        FullScreenLoading()
+        LoadingProgress(mode = LoadingProgressMode.FULLSCREEN)
     } else {
         val currentUser = uiState.user
         currentUser?.let {
@@ -84,79 +88,81 @@ fun ProfileScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
+            .padding(horizontal = AppTheme.spacing.outerSpacing)
+            .verticalScroll(rememberScrollState())
+            .padding(top = AppTheme.spacing.defaultSpacing, bottom = AppTheme.spacing.outerSpacing),
+        verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.sectionSpacing),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Email Address
-        Text(
-            text = currentUser.email ?: "",
-            style = MaterialTheme.typography.titleMedium,
-            textAlign = TextAlign.Center
+
+        // Profile Picture
+        AsyncImage(
+            model = ImageRequest.Builder(LocalPlatformContext.current)
+                .data(currentUser.photoUrl)
+                .crossfade(true)
+                .build(),
+            placeholder = painterResource(Res.drawable.ic_profile_img_placeholder),
+            error = painterResource(Res.drawable.ic_profile_img_placeholder),
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
+            modifier = Modifier.size(100.dp).clip(CircleShape),
         )
-        // User action buttons
-        Spacer(modifier = Modifier.height(16.dp))
-        UserActionButtonsContainer(onUiEvent = onUiEvent)
+
+        // Full Name
+        UserInputWithLabel(label = "Display Name"){
+            UserInput(
+                value = currentUser.displayName ?: "",
+                readOnly = true,
+                onValueChange = {}
+            )
+        }
+
+        // Email
+        UserInputWithLabel(label = "Email"){
+            UserInput(
+                value = currentUser.email ?: "",
+                readOnly = true,
+                onValueChange = {}
+            )
+        }
+
+        SettingItemListContainer(
+            onClick = { onUiEvent(ProfileScreenUiEvent.OnClickDeleteAccount) },
+            itemTextStyle = AppTheme.typography.h5.copy(fontWeight = FontWeight.SemiBold),
+            itemList = listOf(
+                SettingsItemUiState(
+                    textRes = Res.string.btn_delete_account,
+                    startIcon = Res.drawable.ic_delete,
+                    showEndIcon = false,
+                    textIconColor = AppTheme.colors.status.error
+                )
+            )
+        )
     }
 
 
 }
 
 @Composable
-private fun UserActionButtonsContainer(onUiEvent: (ProfileScreenUiEvent) -> Unit) {
-    Column(
-        modifier = Modifier.fillMaxWidth().padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        UserActionButton(
-            text = stringResource(Res.string.btn_logout),
-            icon = Icons.AutoMirrored.Filled.ExitToApp,
-            onClick = {
-                onUiEvent(ProfileScreenUiEvent.OnClickLogOut)
-            }
-        )
-
-        UserActionButton(
-            text = stringResource(Res.string.btn_delete_account),
-            icon = Icons.Default.Delete,
-            textColor = MaterialTheme.colorScheme.error,
-            onClick = {
-                onUiEvent(ProfileScreenUiEvent.OnClickDeleteAccount)
-            }
-        )
-
-    }
-}
-
-@Composable
-private fun UserActionButton(
-    text: String,
-    icon: ImageVector,
-    textColor: Color = MaterialTheme.colorScheme.onBackground,
-    onClick: () -> Unit = {}
+fun UserInputWithLabel(
+    label: String,
+    modifier: Modifier = Modifier.fillMaxWidth(),
+    userInput: @Composable () -> Unit
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth().clickable { onClick() },
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.defaultSpacing)
     ) {
-        Icon(
-            imageVector = icon,
-            modifier = Modifier.clip(CircleShape)
-                .background(MaterialTheme.colorScheme.secondaryContainer).padding(8.dp),
-            tint = MaterialTheme.colorScheme.onSecondaryContainer,
-            contentDescription = null,
-        )
         Text(
-            text = text,
-            style = MaterialTheme.typography.titleSmall,
-            color = textColor,
-            modifier = Modifier.weight(1f)
+            text = label,
+            style = AppTheme.typography.bodyExtraLarge,
+            fontWeight = FontWeight.SemiBold,
+            color = AppTheme.colors.text.primary
         )
-
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-            tint = MaterialTheme.colorScheme.onSecondaryContainer,
-            contentDescription = null,
-        )
+        userInput()
     }
 }
+
+
+
+

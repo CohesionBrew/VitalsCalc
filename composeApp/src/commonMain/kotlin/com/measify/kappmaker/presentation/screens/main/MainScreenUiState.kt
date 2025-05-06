@@ -2,7 +2,10 @@ package com.measify.kappmaker.presentation.screens.main
 
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.measify.kappmaker.generated.resources.Res
+import com.measify.kappmaker.generated.resources.ic_back
 import com.measify.kappmaker.presentation.components.bottomnav.BottomNavItem
+import org.jetbrains.compose.resources.DrawableResource
 
 
 data class MainScreenUiState(
@@ -13,6 +16,7 @@ data class MainScreenUiState(
 
 data class ToolbarUiState(
     val isVisible: Boolean = false,
+    val navigationIconRes: DrawableResource? = Res.drawable.ic_back,
     val text: String = "",
 )
 

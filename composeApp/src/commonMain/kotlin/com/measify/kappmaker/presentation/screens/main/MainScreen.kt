@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import com.measify.kappmaker.presentation.components.AppToolbar
 import com.measify.kappmaker.presentation.components.bottomnav.BottomNavItem
 import com.measify.kappmaker.presentation.components.bottomnav.BottomNavigationBar
+import org.jetbrains.compose.resources.painterResource
 
 
 @Composable
@@ -25,6 +26,9 @@ fun MainScreen(
             if (mainScreenUiState.toolbarUiState.isVisible) {
                 AppToolbar(
                     title = mainScreenUiState.toolbarUiState.text,
+                    navigationIcon = mainScreenUiState.toolbarUiState.navigationIconRes?.let {
+                        painterResource(it)
+                    },
                     onNavigationIconClick = { onUiEvent(MainScreenUiEvent.OnToolbarNavItemClick) }
                 )
             }

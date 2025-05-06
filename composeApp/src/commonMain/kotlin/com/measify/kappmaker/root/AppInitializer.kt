@@ -3,6 +3,7 @@ package com.measify.kappmaker.root
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.measify.kappmaker.common.BuildConfig
 import com.measify.kappmaker.data.BackgroundExecutor
+import com.measify.kappmaker.data.repository.SubscriptionRepository
 import com.measify.kappmaker.data.repository.UserRepository
 import com.measify.kappmaker.data.source.featureflag.FeatureFlagManager
 import com.measify.kappmaker.data.source.local.AppDatabase
@@ -11,10 +12,14 @@ import com.measify.kappmaker.data.source.preferences.UserPreferences
 import com.measify.kappmaker.data.source.preferences.UserPreferencesImpl
 import com.measify.kappmaker.data.source.remote.HttpClientFactory
 import com.measify.kappmaker.data.source.remote.apiservices.ApiService
+import com.measify.kappmaker.data.source.remote.apiservices.ai.OpenAiApiService
+import com.measify.kappmaker.data.source.remote.apiservices.ai.ReplicateApiService
 import com.measify.kappmaker.presentation.components.ads.AdsManager
+import com.measify.kappmaker.presentation.screens.account.AccountUiStateHolder
 import com.measify.kappmaker.presentation.screens.onboarding.OnBoardingUiStateHolder
 import com.measify.kappmaker.presentation.screens.paywall.PaywallUiStateHolder
 import com.measify.kappmaker.presentation.screens.profile.ProfileUiStateHolder
+import com.measify.kappmaker.presentation.screens.subscriptions.SubscriptionsUiStateHolder
 import com.measify.kappmaker.util.ApplicationScope
 import com.measify.kappmaker.util.analytics.Analytics
 import com.measify.kappmaker.util.isAndroid
@@ -38,6 +43,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import kotlin.coroutines.CoroutineContext
@@ -166,6 +172,10 @@ private val dataModule = module {
     single { HttpClientFactory.default() }
     factoryOf(::ApiService)
 
+    //AI API services
+    factoryOf(::OpenAiApiService)
+    factoryOf(::ReplicateApiService)
+
     //Local Source
     single<AppDatabase> {
         val databaseProvider = get<DatabaseProvider>()
@@ -178,13 +188,17 @@ private val dataModule = module {
     single { get<AppDatabase>().exampleDao() }
 
     //Repositories
-    single { UserRepository(get(), get()) }
+    single { UserRepository(get(), get(), get(), get()) }
+    single { SubscriptionRepository(get(), get()) }
 }
 
 private val presentationModule = module {
-    factoryOf(::OnBoardingUiStateHolder)
-    factoryOf(::ProfileUiStateHolder)
-    factoryOf(::PaywallUiStateHolder)
+    viewModelOf(::OnBoardingUiStateHolder)
+    viewModelOf(::ProfileUiStateHolder)
+    viewModelOf(::PaywallUiStateHolder)
+    viewModelOf(::AccountUiStateHolder)
+    viewModelOf(::SubscriptionsUiStateHolder)
+
 }
 private val appModules: List<Module> get() = platformModule + domainModule + dataModule + presentationModule
         
