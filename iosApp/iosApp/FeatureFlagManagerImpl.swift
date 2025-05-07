@@ -19,9 +19,14 @@ class FeatureFlagManagerImpl: FeatureFlagManager {
         #if targetEnvironment(simulator)
         settings.minimumFetchInterval = 3600
         #endif
-        let defaultValues = FeatureFlagManagerCompanion.shared.DEFAULT_VALUES
         remoteConfig.configSettings = settings
-        remoteConfig.setDefaults(defaultValues)
+
+        let defaultValues = FeatureFlagManagerCompanion.shared.DEFAULT_VALUES
+        let convertedDefaults = convertToNSObjectDictionary(defaultValues)
+
+        remoteConfig.setDefaults(convertedDefaults)
+
+
     }
 
     func syncsFlagsAsync() {
@@ -48,6 +53,24 @@ class FeatureFlagManagerImpl: FeatureFlagManager {
 
     func getDouble(key: String) -> Double {
         return remoteConfig[key].numberValue.doubleValue
+    }
+
+    private func convertToNSObjectDictionary(_ input: [String: Any]) -> [String: NSObject] {
+        var result = [String: NSObject]()
+
+        for (key, value) in input {
+           if let nsValue = value as? NSObject {
+               result[key] = nsValue
+           } else if let boolValue = value as? Bool {
+               result[key] = NSNumber(value: boolValue)
+           } else if let stringValue = value as? String {
+               result[key] = NSString(string: stringValue)
+           } else if let intValue = value as? Int {
+               result[key] = NSNumber(value: intValue)
+           }
+        }
+
+         return result
     }
 
 }
