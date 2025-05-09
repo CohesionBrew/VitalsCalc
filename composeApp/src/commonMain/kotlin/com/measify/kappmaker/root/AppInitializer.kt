@@ -124,22 +124,18 @@ private fun initializeNotification() {
         }
 
         /**
-         * This method is invoked when receiving a data type notification.
+         * This method is invoked when receiving a push notification.
+         * @param title parameter contains the notification title
+         * @param body parameter contains the notification body
          * @param data parameter contains the payload data sent with the notification
          */
-        override fun onPayloadData(data: PayloadData) {
-            super.onPayloadData(data)
-            AppLogger.d("Firebase notification onPayloadData: $data")
-
-        }
-
-        /**
-         * This method is invoked when receiving a notification
-         */
-        override fun onPushNotification(title: String?, body: String?) {
-            super.onPushNotification(title, body)
-            AppLogger.d("Firebase onPushNotification: title: $title, body: $body")
-
+        override fun onPushNotificationWithPayloadData(
+            title: String?,
+            body: String?,
+            data: PayloadData
+        ) {
+            super.onPushNotificationWithPayloadData(title, body, data)
+            AppLogger.d("Firebase onPushNotification: title: $title, body: $body, data: $data")
         }
     })
 }
