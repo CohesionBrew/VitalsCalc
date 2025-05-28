@@ -33,7 +33,7 @@ internal fun App() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             //Set this to true for showing app, or false for ui components gallery
-            val isPreviewComponentsMode = true
+            val isPreviewComponentsMode = false
             if (isPreviewComponentsMode) AllComponentsGallery()
             else AppScaffold()
         }
