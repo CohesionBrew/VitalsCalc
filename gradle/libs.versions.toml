@@ -2,6 +2,7 @@
 
 kotlin = "2.1.21"
 compose = "1.8.1"
+composeMaterialIcons = "1.7.3"
 agp = "8.6.1"
 androidx-activityCompose = "1.10.1"
 androidx-uiTest = "1.8.2"
@@ -20,7 +21,7 @@ composeLifecyleRuntime="2.8.4"
 revenueCat = "1.7.3+13.26.1"
 uuid = "0.8.4"
 multiplatformSettings = "1.1.1"
-ksp = "2.1.20-2.0.1"
+ksp = "2.1.21-2.0.1"
 room="2.7.1"
 sqlite="2.5.1"
 android-inappreview = "2.0.2"
@@ -78,7 +79,7 @@ navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-co
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
-
+compose-material-icons = { module = "org.jetbrains.compose.material:material-icons-core", version.ref = "composeMaterialIcons" }
 
 [plugins]
 
