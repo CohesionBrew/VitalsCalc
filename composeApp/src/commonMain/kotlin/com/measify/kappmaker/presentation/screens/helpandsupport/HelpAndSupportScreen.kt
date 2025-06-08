@@ -1,5 +1,6 @@
 package com.measify.kappmaker.presentation.screens.helpandsupport
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -33,7 +34,9 @@ fun HelpAndSupportScreen(
     val localUriHandler = LocalUriHandler.current
     val appUtil = koinInject<AppUtil>()
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
+            .background(AppTheme.colors.background)
             .padding(horizontal = AppTheme.spacing.outerSpacing)
             .verticalScroll(rememberScrollState())
             .padding(
@@ -50,6 +53,7 @@ fun HelpAndSupportScreen(
                     Res.string.item_contact_support -> {
                         appUtil.openFeedbackMail()
                     }
+
                     Res.string.privacy_policy -> {
                         localUriHandler.openUri(Constants.URL_PRIVACY_POLICY)
                     }

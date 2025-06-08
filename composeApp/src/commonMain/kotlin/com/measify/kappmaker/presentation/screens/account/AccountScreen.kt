@@ -1,5 +1,6 @@
 package com.measify.kappmaker.presentation.screens.account
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -68,7 +69,9 @@ fun AccountScreen(
     }
 
     AccountScreen(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(AppTheme.colors.background),
         uiState = uiState,
         onUiEvent = {
             when (it) {

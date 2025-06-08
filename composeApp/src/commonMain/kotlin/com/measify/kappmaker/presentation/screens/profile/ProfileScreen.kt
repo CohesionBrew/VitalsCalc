@@ -1,5 +1,6 @@
 package com.measify.kappmaker.presentation.screens.profile
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -88,6 +89,7 @@ fun ProfileScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .background(AppTheme.colors.background)
             .padding(horizontal = AppTheme.spacing.outerSpacing)
             .verticalScroll(rememberScrollState())
             .padding(top = AppTheme.spacing.defaultSpacing, bottom = AppTheme.spacing.outerSpacing),
