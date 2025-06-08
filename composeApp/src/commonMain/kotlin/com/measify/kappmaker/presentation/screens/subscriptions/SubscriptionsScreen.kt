@@ -1,5 +1,6 @@
 package com.measify.kappmaker.presentation.screens.subscriptions
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,7 +35,7 @@ fun SubscriptionsScreen(
     if (uiState.isLoading) LoadingProgress(mode = LoadingProgressMode.FULLSCREEN)
     else {
         SubscriptionsScreen(
-            modifier = modifier.fillMaxSize(),
+            modifier = modifier.fillMaxSize().background(AppTheme.colors.background),
             uiState = uiState,
             onUiEvent = uiStateHolder::onUiEvent,
             onClickUpgradePremium = { onNavigatePaywall() }

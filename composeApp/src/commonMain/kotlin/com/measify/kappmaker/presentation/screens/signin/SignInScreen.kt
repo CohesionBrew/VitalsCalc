@@ -1,6 +1,7 @@
 package com.measify.kappmaker.presentation.screens.signin
 
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -57,6 +58,7 @@ fun SignInScreen(modifier: Modifier = Modifier, onSuccessfulSignIn: () -> Unit) 
     Scaffold(
         modifier = modifier
             .fillMaxSize()
+            .background(AppTheme.colors.background)
             .padding(
                 start = AppTheme.spacing.outerSpacing,
                 end = AppTheme.spacing.outerSpacing,

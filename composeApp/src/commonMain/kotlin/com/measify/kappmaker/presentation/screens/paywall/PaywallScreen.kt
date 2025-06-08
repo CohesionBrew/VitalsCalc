@@ -1,6 +1,7 @@
 package com.measify.kappmaker.presentation.screens.paywall
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -95,7 +96,9 @@ fun PaywallScreen(
         )
     }
     PaywallScreen(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(AppTheme.colors.background),
         uiState = uiState,
         onUiEvent = uiStateHolder::onUiEvent,
         onDismiss = onDismiss
