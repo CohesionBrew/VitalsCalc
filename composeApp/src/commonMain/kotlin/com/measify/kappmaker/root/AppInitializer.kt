@@ -25,6 +25,9 @@ import com.measify.kappmaker.util.analytics.Analytics
 import com.measify.kappmaker.util.isAndroid
 import com.measify.kappmaker.util.isDebug
 import com.measify.kappmaker.util.logging.AppLogger
+import com.measify.kappmaker.util.logging.Logger
+import com.measify.kappmaker.util.logging.NapierLogger
+import com.measify.kappmaker.util.logging.TelegramLogger
 import com.measify.kappmaker.util.onApplicationStartPlatformSpecific
 import com.measify.kappmaker.util.platformModule
 import com.mmk.kmpauth.google.GoogleAuthCredentials
@@ -83,7 +86,8 @@ private fun KoinApplication.refreshFeatureFlags() {
 private fun KoinApplication.initializeAnalytics() {
     val featureFlagManager by this.koin.inject<FeatureFlagManager>()
     val analytics by this.koin.inject<Analytics>()
-    val isAnalyticsEnabled = featureFlagManager.getBoolean(FeatureFlagManager.Keys.IS_ANALYTICS_ENABLED)
+    val isAnalyticsEnabled =
+        featureFlagManager.getBoolean(FeatureFlagManager.Keys.IS_ANALYTICS_ENABLED)
     analytics.setEnabled(enabled = isAnalyticsEnabled)
 }
 
@@ -186,6 +190,10 @@ private val dataModule = module {
     //Repositories
     single { UserRepository(get(), get(), get(), get()) }
     single { SubscriptionRepository(get(), get()) }
+
+    //Loggers
+    factory { TelegramLogger(get(), get(), get()) } bind Logger::class
+    factory { NapierLogger() } bind Logger::class
 }
 
 private val presentationModule = module {

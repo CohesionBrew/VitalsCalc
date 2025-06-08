@@ -29,7 +29,7 @@ class AppUtilImpl(private val context: Context) : AppUtil {
 
     override fun openFeedbackMail() {
         try {
-            val appName = context.packageManager.getApplicationLabel(context.applicationInfo).toString()
+            val appName = getAppName()
             val subject = "$appName Feedback/Bug Report"
             val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
                 putExtra(Intent.EXTRA_EMAIL, arrayOf(Constants.CONTACT_EMAIL))
@@ -41,6 +41,10 @@ class AppUtilImpl(private val context: Context) : AppUtil {
         } catch (e: ActivityNotFoundException) {
             AppLogger.e("Activity not found to send email")
         }
+    }
+
+    override fun getAppName(): String {
+        return context.packageManager.getApplicationLabel(context.applicationInfo).toString()
     }
 
     private fun getPlayStoreLink(): String {
