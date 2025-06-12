@@ -6,11 +6,8 @@ import com.measify.kappmaker.data.source.local.DatabaseProviderImpl
 import com.measify.kappmaker.presentation.components.ads.AdsManager
 import com.measify.kappmaker.presentation.components.ads.IosAdsDisplayer
 import com.measify.kappmaker.util.analytics.Analytics
-import com.measify.kappmaker.util.inappreview.InAppReviewManager
-import com.measify.kappmaker.util.inappreview.InAppReviewManagerImpl
 import com.mmk.kmpnotifier.notification.NotifierManager
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
-
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -20,7 +17,6 @@ import kotlin.experimental.ExperimentalNativeApi
 
 internal actual val platformModule: Module = module {
     singleOf(::DatabaseProviderImpl) bind DatabaseProvider::class
-    factoryOf(::InAppReviewManagerImpl) bind InAppReviewManager::class
     factoryOf(::AppUtilImpl) bind AppUtil::class
 }
 

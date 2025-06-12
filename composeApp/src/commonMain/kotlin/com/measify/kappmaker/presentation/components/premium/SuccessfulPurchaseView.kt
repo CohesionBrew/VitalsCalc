@@ -17,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -36,6 +37,7 @@ import com.measify.kappmaker.presentation.components.PreviewHelper
 import com.measify.kappmaker.presentation.components.ScreenTitle
 import com.measify.kappmaker.presentation.components.SectionContainer
 import com.measify.kappmaker.presentation.theme.AppTheme
+import com.measify.kappmaker.util.inappreview.rememberInAppReviewTrigger
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -48,6 +50,11 @@ fun SuccessfulPurchaseView(
     modifier: Modifier = Modifier,
     onContinue: () -> Unit = {}
 ) {
+    val inAppReviewTrigger = rememberInAppReviewTrigger()
+    LaunchedEffect(Unit) {
+        inAppReviewTrigger.triggerAfterSuccessfulPurchase()
+    }
+
     val statusBarHeight = with(LocalDensity.current) {
         WindowInsets.statusBars.getTop(this).toDp()
     }

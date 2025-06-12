@@ -14,6 +14,11 @@ internal class UserPreferencesImpl(private val multiplatformSettings: Settings) 
         return value ?: defaultValue
     }
 
+    override suspend fun getLong(key: String, defaultValue: Long?): Long? {
+        val value = multiplatformSettings.getLongOrNull(key)
+        return value ?: defaultValue
+    }
+
     override suspend fun getBoolean(key: String, defaultValue: Boolean): Boolean {
         return multiplatformSettings.getBoolean(key, defaultValue)
 
@@ -25,6 +30,10 @@ internal class UserPreferencesImpl(private val multiplatformSettings: Settings) 
 
     override suspend fun putInt(key: String, value: Int) {
         multiplatformSettings.putInt(key, value)
+    }
+
+    override suspend fun putLong(key: String, value: Long) {
+        multiplatformSettings.putLong(key, value)
     }
 
     override suspend fun putBoolean(key: String, value: Boolean) {
