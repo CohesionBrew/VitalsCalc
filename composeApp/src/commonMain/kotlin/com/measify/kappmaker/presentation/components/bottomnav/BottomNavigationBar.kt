@@ -1,9 +1,5 @@
 package com.measify.kappmaker.presentation.components.bottomnav
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -17,9 +13,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import com.measify.kappmaker.generated.resources.Res
+import com.measify.kappmaker.generated.resources.ic_favorite
+import com.measify.kappmaker.generated.resources.ic_home
+import com.measify.kappmaker.generated.resources.ic_profile
 import com.measify.kappmaker.presentation.components.PreviewHelper
 import com.measify.kappmaker.presentation.theme.AppTheme
 import com.measify.kappmaker.util.ScreenRoute
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -39,7 +40,7 @@ fun BottomNavigationBar(
                 icon = {
                     item.icon?.let {
                         Icon(
-                            imageVector = it,
+                            painter = painterResource(it),
                             contentDescription = item.label,
                         )
                     }
@@ -79,17 +80,17 @@ fun BottomNavigationBarPreview() {
         val bottomNavItems = listOf(
             BottomNavItem(
                 label = "Home",
-                icon = Icons.Default.Home,
+                icon = Res.drawable.ic_home,
                 destination = emptyScreenRoute,
             ),
             BottomNavItem(
                 label = "Favorite",
-                icon = Icons.Default.Favorite,
+                icon = Res.drawable.ic_favorite,
                 destination = emptyScreenRoute,
             ),
             BottomNavItem(
                 label = "Profile",
-                icon = Icons.Default.AccountCircle,
+                icon = Res.drawable.ic_profile,
                 destination = emptyScreenRoute,
             )
         )

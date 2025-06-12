@@ -1,5 +1,9 @@
 package com.measify.kappmaker.presentation.screens.main
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +14,7 @@ import androidx.compose.ui.Modifier
 import com.measify.kappmaker.presentation.components.AppToolbar
 import com.measify.kappmaker.presentation.components.bottomnav.BottomNavItem
 import com.measify.kappmaker.presentation.components.bottomnav.BottomNavigationBar
+import com.measify.kappmaker.util.extensions.isKeyboardOpen
 import org.jetbrains.compose.resources.painterResource
 
 
@@ -36,8 +41,10 @@ fun MainScreen(
             Box(modifier = Modifier.weight(1f).padding(mainScreenUiState.contentPadding)) {
                 content()
             }
+
             //BottomNavigation Bar
-            if (mainScreenUiState.bottomNavUiState.isVisible) {
+            val isBottomNavVisible = mainScreenUiState.bottomNavUiState.isVisible && !isKeyboardOpen()
+            AnimatedVisibility(isBottomNavVisible, enter = fadeIn(snap()), exit = fadeOut(snap())) {
                 BottomNavigationBar(
                     modifier = Modifier.fillMaxWidth(),
                     items = BottomNavItem.items(),

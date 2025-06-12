@@ -1,11 +1,14 @@
 package com.measify.kappmaker.util.extensions
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.ime
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.util.fastRoundToInt
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -42,4 +45,10 @@ fun <T> ObserveFlowAsEvent(flow: Flow<T>, onEvent: (T) -> Unit) {
             }
         }
     }
+}
+
+@Composable
+fun isKeyboardOpen(): Boolean {
+    val bottomInset = WindowInsets.ime.getBottom(LocalDensity.current)
+    return rememberUpdatedState(bottomInset > 300).value
 }
