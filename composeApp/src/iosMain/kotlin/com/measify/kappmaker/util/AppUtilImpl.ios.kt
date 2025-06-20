@@ -36,6 +36,18 @@ class AppUtilImpl : AppUtil {
             ?: "App Name"
     }
 
+    override fun getAppVersionInfo(): String {
+        val infoDictionary = NSBundle.mainBundle.infoDictionary
+        val versionCode = runCatching { infoDictionary?.get("CFBundleVersion") as? String ?: "" }
+            .getOrDefault("")
+
+        val versionName = runCatching {
+            infoDictionary?.get("CFBundleShortVersionString") as? String ?: ""
+        }.getOrDefault("")
+
+        return "$versionName ($versionCode)"
+    }
+
     private fun getAppStoreLink(): String {
         return "https://apps.apple.com/app/id${Constants.APPSTORE_APP_ID}"
     }

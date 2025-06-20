@@ -75,6 +75,9 @@ object AppInitializer {
         initializeInAppPurchase()
         initializeAds()
 
+        val userRepository by this.koin.inject<UserRepository>()
+        userRepository.signInAnonymouslyIfNecessary()
+
     }
 }
 

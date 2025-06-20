@@ -2,6 +2,7 @@ package com.measify.kappmaker.util.logging
 
 import com.measify.kappmaker.util.AppUtil
 import com.measify.kappmaker.util.ApplicationScope
+import com.measify.kappmaker.util.isAndroid
 import io.ktor.client.HttpClient
 import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.request.post
@@ -61,11 +62,14 @@ class TelegramLogger(
     ) = applicationScope.launch {
         try {
             if (message.isEmpty() || TELEGRAM_BOT_TOKEN.isEmpty() || TELEGRAM_CHAT_ID.isEmpty()) return@launch
+            val platform = if (isAndroid) "Android" else "iOS"
 
             val fullMessage = buildString {
                 appendLine("📱 App: ${appUtil.getAppName()}")
                 appendLine(level)
                 appendLine("🕒 Time: ${getCurrentFormattedTime()}")
+                appendLine()
+                appendLine("🤖 Platform and App Version: $platform, ${appUtil.getAppVersionInfo()}")
                 appendLine()
                 appendLine(message)
                 throwable?.let {
