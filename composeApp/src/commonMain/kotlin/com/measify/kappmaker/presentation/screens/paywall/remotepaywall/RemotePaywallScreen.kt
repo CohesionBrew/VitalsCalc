@@ -9,11 +9,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.measify.kappmaker.domain.model.Subscription
-import com.measify.kappmaker.presentation.components.LoadingProgress
-import com.measify.kappmaker.presentation.components.LoadingProgressMode
-import com.measify.kappmaker.presentation.components.modals.AppDialog
-import com.measify.kappmaker.presentation.components.modals.DialogType
-import com.measify.kappmaker.presentation.components.premium.PremiumFeatureUiState
+import com.measify.kappmaker.designsystem.components.LoadingProgress
+import com.measify.kappmaker.designsystem.components.LoadingProgressMode
+import com.measify.kappmaker.designsystem.components.modals.AppDialog
+import com.measify.kappmaker.designsystem.components.modals.DialogType
+import com.measify.kappmaker.designsystem.components.premium.PremiumFeatureUiState
+import com.measify.kappmaker.presentation.components.premium.PremiumFeatureFactory
 import com.measify.kappmaker.presentation.components.premium.SuccessfulPurchaseView
 import com.measify.kappmaker.util.UiMessage
 import com.measify.kappmaker.util.extensions.asFormattedDate
@@ -55,7 +56,7 @@ fun RemotePaywallScreen(onDismiss: () -> Unit) {
     successfulSubscription?.let { subscription ->
         SuccessfulPurchaseView(
             modifier = Modifier.fillMaxSize(),
-            features = PremiumFeatureUiState.ofSubscription(successfulSubscription),
+            features = PremiumFeatureFactory.ofSubscription(successfulSubscription),
             isRecurring = subscription.willRenew,
             isLifetime = subscription.isLifetime,
             expirationDate = subscription.expirationDateInMillis?.asFormattedDate(),

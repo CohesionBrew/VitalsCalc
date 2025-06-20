@@ -44,6 +44,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(projects.designsystem)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(libs.compose.material.icons)
@@ -54,7 +55,6 @@ kotlin {
             api(libs.kmpnotifier)
             implementation(libs.kmpauth.google)
             implementation(libs.kmpauth.firebase)
-            implementation(libs.kmpauth.uihelper)
             implementation(libs.napier)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.ktor.core)

@@ -1,58 +1,30 @@
 <resources>
-    <string name="theme">Theme</string>
     <string name="bottom_nav_label_home">Home</string>
     <string name="bottom_nav_label_profile">Profile</string>
     <string name="bottom_nav_label_favorites">Favorites</string>
-    <string name="title_error_dialog">Error</string>
-    <string name="btn_ok">OK</string>
-    <string name="btn_logout">Log Out</string>
-    <string name="btn_delete_account">Delete Account</string>
-    <string name="title_delete_user_dialog">Delete Account?</string>
-    <string name="subtitle_delete_user_dialog">Are you sure you want to delete your account?</string>
-    <string name="description_delete_user_dialog">This irreversible action will permanently delete the user and associated data. For security, you will need to log in or reauthenticate to proceed. Are you sure?</string>
-    <string name="btn_delete">Delete</string>
-    <string name="btn_cancel">Cancel</string>
-    <string name="privacy_policy">Privacy Policy</string>
-    <string name="terms_conditions">Terms &amp; Conditions</string>
-    <string name="and">and</string>
-    <string name="txt_agree_privacy_policy_and_terms">By continuing, I agree to the </string>
-    <string name="title_sign_in">Sign in</string>
-    <string name="sign_in_to">Sign in to </string>
-    <string name="txt_main_action_to_sign_in">Your account</string>
-    <string name="title_info">Info</string>
-    <string name="msg_successful_payment">Congrats!!! Purchase was successful</string>
-    <string name="msg_successful_restore_payment">Congrats!!! Restore was successful</string>
-    <string name="btn_restore_purchase">Restore Purchase</string>
+
     <string name="title_onboarding_page_1">Amazing Title</string>
     <string name="desc_onboarding_page_1">Amazing Description Text will be here</string>
+
     <string name="btn_get_started">Get Started</string>
+    <string name="btn_restore_purchase">Restore Purchase</string>
     <string name="btn_skip">Skip</string>
     <string name="btn_next">Next</string>
+    <string name="btn_delete_account">Delete Account</string>
+    <string name="btn_cancel">Cancel</string>
+
+    <string name="title_sign_in">Sign in</string>
     <string name="title_screen_home">Home</string>
     <string name="title_screen_favorites">Favorites</string>
     <string name="title_screen_account">Account</string>
+    <string name="title_screen_profile">Profile</string>
+
+    <string name="and">and</string>
+    <string name="sign_in_to">Sign in to </string>
+    <string name="txt_main_action_to_sign_in">Your account</string>
+
     <string name="subscriptions">Subscriptions</string>
     <string name="logout">Logout</string>
     <string name="help_and_support">Help &amp; Support</string>
-    <string name="btn_logout_confirm">Yes, Logout</string>
-    <string name="text_logout_confirmation">Are you sure you want to logout?</string>
     <string name="item_contact_support">Contact Support</string>
-    <string name="item_app_theme">Theme</string>
-    <string name="item_app_language">Language</string>
-    <string name="title_screen_profile">Profile</string>
-    <string name="current_plan">Your current plan</string>
-    <string name="free">Free</string>
-    <string name="lifetime_premium_subscription_renewal_text">Thank you for your one-time purchase. You have access to all premium features with a lifetime license—no renewal required!</string>
-    <string name="premium_subscription_renewal_text">Your subscription is recurring and your next billing date is on %1$s. You can cancel or renew your subscription at any time here.</string>
-    <string name="premium_subscription_non_recurring_text">Your subscription is non-recurring and will expire on %1$s. You can renew your subscription at any time here.</string>
-    <string name="text_here">here</string>
-    <string name="title_successful_purchase">Congratulations!</string>
-    <string name="subtitle_successful_purchase">You now have premium access. Enjoy all the exclusive features!</string>
-    <string name="btn_action_successful_purchase">Explore Premium Benefits</string>
-    <string name="benefits">Benefits</string>
-    <string name="banner_title_upgrade_premium">Upgrade Premium</string>
-    <string name="banner_subtitle_upgrade_premium">Enjoy all premium benefits.</string>
-    <string name="btn_action_upgrade_premium">Upgrade</string>
-
-
 </resources>

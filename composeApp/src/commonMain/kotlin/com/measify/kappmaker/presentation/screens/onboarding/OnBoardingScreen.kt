@@ -6,7 +6,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.measify.kappmaker.presentation.components.LogoImage
+import com.measify.kappmaker.designsystem.components.LogoImage
 
 
 enum class OnBoardingScreenStyle {

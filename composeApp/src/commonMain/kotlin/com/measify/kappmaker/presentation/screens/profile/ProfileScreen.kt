@@ -26,19 +26,19 @@ import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.measify.kappmaker.domain.model.User
-import com.measify.kappmaker.generated.resources.Res
-import com.measify.kappmaker.generated.resources.btn_delete_account
-import com.measify.kappmaker.generated.resources.ic_delete
-import com.measify.kappmaker.generated.resources.ic_profile_img_placeholder
-import com.measify.kappmaker.presentation.components.LoadingProgress
-import com.measify.kappmaker.presentation.components.LoadingProgressMode
-import com.measify.kappmaker.presentation.components.SettingItemListContainer
-import com.measify.kappmaker.presentation.components.SettingsItemUiState
-import com.measify.kappmaker.presentation.components.UserInput
-import com.measify.kappmaker.presentation.components.modals.AppDialog
-import com.measify.kappmaker.presentation.components.modals.DeleteUserConfirmation
-import com.measify.kappmaker.presentation.components.modals.DialogType
-import com.measify.kappmaker.presentation.theme.AppTheme
+import com.measify.kappmaker.designsystem.generated.resources.UiRes
+import com.measify.kappmaker.designsystem.generated.resources.btn_delete_account
+import com.measify.kappmaker.designsystem.generated.resources.ic_delete
+import com.measify.kappmaker.designsystem.generated.resources.ic_profile_img_placeholder
+import com.measify.kappmaker.designsystem.components.LoadingProgress
+import com.measify.kappmaker.designsystem.components.LoadingProgressMode
+import com.measify.kappmaker.designsystem.components.SettingItemListContainer
+import com.measify.kappmaker.designsystem.components.SettingsItemUiState
+import com.measify.kappmaker.designsystem.components.UserInput
+import com.measify.kappmaker.designsystem.components.modals.AppDialog
+import com.measify.kappmaker.designsystem.components.modals.DeleteUserConfirmation
+import com.measify.kappmaker.designsystem.components.modals.DialogType
+import com.measify.kappmaker.designsystem.theme.AppTheme
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -103,8 +103,8 @@ fun ProfileScreen(
                 .data(currentUser.photoUrl)
                 .crossfade(true)
                 .build(),
-            placeholder = painterResource(Res.drawable.ic_profile_img_placeholder),
-            error = painterResource(Res.drawable.ic_profile_img_placeholder),
+            placeholder = painterResource(UiRes.drawable.ic_profile_img_placeholder),
+            error = painterResource(UiRes.drawable.ic_profile_img_placeholder),
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier.size(100.dp).clip(CircleShape),
@@ -133,8 +133,8 @@ fun ProfileScreen(
             itemTextStyle = AppTheme.typography.h5.copy(fontWeight = FontWeight.SemiBold),
             itemList = listOf(
                 SettingsItemUiState(
-                    textRes = Res.string.btn_delete_account,
-                    startIcon = Res.drawable.ic_delete,
+                    textRes = UiRes.string.btn_delete_account,
+                    startIcon = UiRes.drawable.ic_delete,
                     showEndIcon = false,
                     textIconColor = AppTheme.colors.status.error
                 )
@@ -152,7 +152,7 @@ fun UserInputWithLabel(
     userInput: @Composable () -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.defaultSpacing)
     ) {
         Text(

@@ -8,8 +8,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.measify.kappmaker.presentation.components.AppButton
-import com.measify.kappmaker.presentation.theme.AppTheme
+import com.measify.kappmaker.designsystem.components.AppButton
+import com.measify.kappmaker.designsystem.theme.AppTheme
 
 @Composable
 fun FavoriteScreen(modifier: Modifier = Modifier, onPaymentRequired: () -> Unit) {

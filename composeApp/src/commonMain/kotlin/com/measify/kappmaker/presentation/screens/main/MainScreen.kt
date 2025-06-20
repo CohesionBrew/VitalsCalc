@@ -10,10 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.measify.kappmaker.presentation.components.AppToolbar
-import com.measify.kappmaker.presentation.components.bottomnav.BottomNavItem
-import com.measify.kappmaker.presentation.components.bottomnav.BottomNavigationBar
+import com.measify.kappmaker.designsystem.components.AppToolbar
+import com.measify.kappmaker.designsystem.components.bottomnav.BottomNavigationBar
 import com.measify.kappmaker.util.extensions.isKeyboardOpen
 import org.jetbrains.compose.resources.painterResource
 
@@ -43,11 +43,14 @@ fun MainScreen(
             }
 
             //BottomNavigation Bar
-            val isBottomNavVisible = mainScreenUiState.bottomNavUiState.isVisible && !isKeyboardOpen()
+            val isBottomNavVisible =
+                mainScreenUiState.bottomNavUiState.isVisible && !isKeyboardOpen()
+            val bottomNavItems =
+                remember { mainScreenUiState.bottomNavUiState.items.map { it.first } }
             AnimatedVisibility(isBottomNavVisible, enter = fadeIn(snap()), exit = fadeOut(snap())) {
                 BottomNavigationBar(
                     modifier = Modifier.fillMaxWidth(),
-                    items = BottomNavItem.items(),
+                    items = bottomNavItems,
                     selectedIndex = mainScreenUiState.bottomNavUiState.selectedBottomNavIndex
                 ) {
                     onUiEvent(MainScreenUiEvent.OnBottomNavItemClick(it))

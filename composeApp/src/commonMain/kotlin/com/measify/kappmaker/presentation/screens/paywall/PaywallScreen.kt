@@ -31,29 +31,32 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.measify.kappmaker.designsystem.components.AgreePrivacyPolicyTermsConditionsText
+import com.measify.kappmaker.designsystem.components.AppButton
+import com.measify.kappmaker.designsystem.components.AppToolbar
+import com.measify.kappmaker.designsystem.components.ButtonStyle
+import com.measify.kappmaker.designsystem.components.LoadingProgress
+import com.measify.kappmaker.designsystem.components.LoadingProgressMode
+import com.measify.kappmaker.designsystem.components.ScreenTitle
+import com.measify.kappmaker.designsystem.components.modals.AppDialog
+import com.measify.kappmaker.designsystem.components.modals.DialogType
+import com.measify.kappmaker.designsystem.components.premium.PremiumFeatureUiState
+import com.measify.kappmaker.designsystem.components.premium.PremiumFeaturesList
+import com.measify.kappmaker.designsystem.generated.resources.ic_check
+import com.measify.kappmaker.designsystem.generated.resources.ic_close
+import com.measify.kappmaker.designsystem.theme.AppTheme
 import com.measify.kappmaker.generated.resources.Res
 import com.measify.kappmaker.generated.resources.btn_restore_purchase
-import com.measify.kappmaker.generated.resources.ic_check
-import com.measify.kappmaker.generated.resources.ic_close
-import com.measify.kappmaker.presentation.components.AgreePrivacyPolicyTermsConditionsText
-import com.measify.kappmaker.presentation.components.AppButton
-import com.measify.kappmaker.presentation.components.AppToolbar
-import com.measify.kappmaker.presentation.components.ButtonStyle
-import com.measify.kappmaker.presentation.components.LoadingProgress
-import com.measify.kappmaker.presentation.components.LoadingProgressMode
-import com.measify.kappmaker.presentation.components.ScreenTitle
-import com.measify.kappmaker.presentation.components.modals.AppDialog
-import com.measify.kappmaker.presentation.components.modals.DialogType
-import com.measify.kappmaker.presentation.components.premium.PremiumFeatureUiState
-import com.measify.kappmaker.presentation.components.premium.PremiumFeaturesList
+import com.measify.kappmaker.presentation.components.premium.PremiumFeatureFactory
 import com.measify.kappmaker.presentation.components.premium.SuccessfulPurchaseView
-import com.measify.kappmaker.presentation.theme.AppTheme
+import com.measify.kappmaker.util.Constants
 import com.measify.kappmaker.util.extensions.asFormattedDate
 import com.measify.kappmaker.util.extensions.productDescription
 import com.measify.kappmaker.util.extensions.productName
 import com.revenuecat.purchases.kmp.models.Package
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import com.measify.kappmaker.designsystem.generated.resources.UiRes
 
 @Composable
 fun PaywallScreen(
@@ -74,7 +77,7 @@ fun PaywallScreen(
     uiState.successfulSubscription?.let { subscription ->
         SuccessfulPurchaseView(
             modifier = Modifier.fillMaxSize(),
-            features = PremiumFeatureUiState.ofSubscription(subscription),
+            features = PremiumFeatureFactory.ofSubscription(subscription),
             isRecurring = subscription.willRenew,
             isLifetime = subscription.isLifetime,
             expirationDate = subscription.expirationDateInMillis?.asFormattedDate(),
@@ -115,7 +118,7 @@ fun PaywallScreen(
     Column(modifier = modifier) {
         AppToolbar(
             title = "",
-            navigationIcon = painterResource(Res.drawable.ic_close),
+            navigationIcon = painterResource(UiRes.drawable.ic_close),
             onNavigationIconClick = { onDismiss() }
         )
 
@@ -185,7 +188,11 @@ private fun PaywallScreenData(
             )
 
             Spacer(modifier = Modifier.height(AppTheme.spacing.defaultSpacing))
-            AgreePrivacyPolicyTermsConditionsText(modifier = Modifier.fillMaxWidth())
+            AgreePrivacyPolicyTermsConditionsText(
+                modifier = Modifier.fillMaxWidth(),
+                privacyPolicyUrl = Constants.URL_PRIVACY_POLICY,
+                termsConditionsUrl = Constants.URL_TERMS_CONDITIONS
+            )
         }
 
 
@@ -231,7 +238,7 @@ fun PackageItem(
                         .padding(4.dp)
                 ) {
                     if (isSelected) Icon(
-                        painter = painterResource(Res.drawable.ic_check),
+                        painter = painterResource(UiRes.drawable.ic_check),
                         tint = AppTheme.colors.text.primary,
                         contentDescription = "Check"
                     )

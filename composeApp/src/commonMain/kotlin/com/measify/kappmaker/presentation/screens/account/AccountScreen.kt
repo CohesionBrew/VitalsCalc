@@ -27,27 +27,28 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.measify.kappmaker.designsystem.components.AppCardContainer
+import com.measify.kappmaker.designsystem.components.SettingItemListContainer
+import com.measify.kappmaker.designsystem.components.SmallTitle
+import com.measify.kappmaker.designsystem.components.modals.AppModalBottomSheet
+import com.measify.kappmaker.designsystem.components.premium.UpgradePremiumBanner
+import com.measify.kappmaker.designsystem.components.premium.UpgradePremiumBannerStyle
+import com.measify.kappmaker.designsystem.generated.resources.btn_cancel
+import com.measify.kappmaker.designsystem.generated.resources.btn_logout_confirm
+import com.measify.kappmaker.designsystem.generated.resources.ic_arrow_right
+import com.measify.kappmaker.designsystem.generated.resources.ic_profile_img_placeholder
+import com.measify.kappmaker.designsystem.generated.resources.logout
+import com.measify.kappmaker.designsystem.generated.resources.text_logout_confirmation
+import com.measify.kappmaker.designsystem.theme.AppTheme
 import com.measify.kappmaker.domain.model.User
 import com.measify.kappmaker.generated.resources.Res
-import com.measify.kappmaker.generated.resources.btn_cancel
-import com.measify.kappmaker.generated.resources.btn_logout_confirm
 import com.measify.kappmaker.generated.resources.help_and_support
-import com.measify.kappmaker.generated.resources.ic_arrow_right
-import com.measify.kappmaker.generated.resources.ic_profile_img_placeholder
-import com.measify.kappmaker.generated.resources.logout
 import com.measify.kappmaker.generated.resources.subscriptions
-import com.measify.kappmaker.generated.resources.text_logout_confirmation
 import com.measify.kappmaker.generated.resources.title_sign_in
-import com.measify.kappmaker.presentation.components.AppCardContainer
-import com.measify.kappmaker.presentation.components.SettingItemListContainer
-import com.measify.kappmaker.presentation.components.SmallTitle
-import com.measify.kappmaker.presentation.components.modals.AppModalBottomSheet
-import com.measify.kappmaker.presentation.components.premium.UpgradePremiumBanner
-import com.measify.kappmaker.presentation.components.premium.UpgradePremiumBannerStyle
-import com.measify.kappmaker.presentation.theme.AppTheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
+import com.measify.kappmaker.designsystem.generated.resources.UiRes
 
 @Composable
 fun AccountScreen(
@@ -149,8 +150,8 @@ private fun ProfileInfoBox(user: User?, onClick: () -> Unit) {
                     .data(user?.photoUrl)
                     .crossfade(true)
                     .build(),
-                placeholder = painterResource(Res.drawable.ic_profile_img_placeholder),
-                error = painterResource(Res.drawable.ic_profile_img_placeholder),
+                placeholder = painterResource(com.measify.kappmaker.designsystem.generated.resources.UiRes.drawable.ic_profile_img_placeholder),
+                error = painterResource(com.measify.kappmaker.designsystem.generated.resources.UiRes.drawable.ic_profile_img_placeholder),
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier.size(60.dp).clip(CircleShape),
@@ -177,7 +178,7 @@ private fun ProfileInfoBox(user: User?, onClick: () -> Unit) {
 
             Icon(
                 modifier = Modifier.size(24.dp),
-                imageVector = vectorResource(Res.drawable.ic_arrow_right),
+                imageVector = vectorResource(UiRes.drawable.ic_arrow_right),
                 contentDescription = null,
                 tint = AppTheme.colors.text.primary
             )
@@ -192,16 +193,16 @@ private fun LogoutModalBottomSheet(
     onDismiss: () -> Unit
 ) {
     AppModalBottomSheet(
-        title = stringResource(Res.string.logout),
+        title = stringResource(UiRes.string.logout),
         titleColor = AppTheme.colors.status.error,
-        btnDismissText = stringResource(Res.string.btn_cancel),
-        btnConfirmText = stringResource(Res.string.btn_logout_confirm),
+        btnDismissText = stringResource(UiRes.string.btn_cancel),
+        btnConfirmText = stringResource(UiRes.string.btn_logout_confirm),
         onConfirm = { onConfirm() },
         onDismiss = { onDismiss() },
         reverseButtonsOrder = true
     ) {
         Text(
-            text = stringResource(Res.string.text_logout_confirmation),
+            text = stringResource(UiRes.string.text_logout_confirmation),
             textAlign = TextAlign.Center,
             color = AppTheme.colors.text.primary,
             style = AppTheme.typography.h5
