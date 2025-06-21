@@ -17,10 +17,8 @@ class AppUtilImpl : AppUtil {
 
 
     override fun openFeedbackMail() {
-
         try {
-            val appName = NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleName") as? String
-                ?: "App Name"
+            val appName = getAppName()
             val mailComposeViewController = MFMailComposeViewController()
             mailComposeViewController.setSubject("$appName Feedback/Bug Report")
             mailComposeViewController.setToRecipients(listOf(Constants.CONTACT_EMAIL))
@@ -31,6 +29,23 @@ class AppUtilImpl : AppUtil {
             UIApplication.sharedApplication.openURL(mailUrl)
         }
 
+    }
+
+    override fun getAppName(): String {
+        return NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleName") as? String
+            ?: "App Name"
+    }
+
+    override fun getAppVersionInfo(): String {
+        val infoDictionary = NSBundle.mainBundle.infoDictionary
+        val versionCode = runCatching { infoDictionary?.get("CFBundleVersion") as? String ?: "" }
+            .getOrDefault("")
+
+        val versionName = runCatching {
+            infoDictionary?.get("CFBundleShortVersionString") as? String ?: ""
+        }.getOrDefault("")
+
+        return "$versionName ($versionCode)"
     }
 
     private fun getAppStoreLink(): String {

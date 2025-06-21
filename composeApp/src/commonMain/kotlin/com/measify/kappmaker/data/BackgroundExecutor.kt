@@ -1,5 +1,6 @@
 package com.measify.kappmaker.data
 
+import com.measify.kappmaker.util.logging.AppLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
@@ -18,8 +19,12 @@ class BackgroundExecutor(val scope: CoroutineContext = Dispatchers.IO) {
         try {
             func.invoke()
         } catch (e: Exception) {
-            if (e is CancellationException) throw e
-            else Result.failure(e)
+            if (e is CancellationException) {
+                throw e
+            } else {
+                AppLogger.e("Error while executing background task: ${e.message}")
+                Result.failure(e)
+            }
         }
     }
 }

@@ -30,13 +30,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.measify.kappmaker.data.repository.UserRepository
+import com.measify.kappmaker.designsystem.components.AgreePrivacyPolicyTermsConditionsText
+import com.measify.kappmaker.designsystem.components.LogoImage
+import com.measify.kappmaker.designsystem.theme.AppTheme
 import com.measify.kappmaker.generated.resources.Res
 import com.measify.kappmaker.generated.resources.sign_in_to
 import com.measify.kappmaker.generated.resources.txt_main_action_to_sign_in
-import com.measify.kappmaker.presentation.components.AgreePrivacyPolicyTermsConditionsText
 import com.measify.kappmaker.presentation.components.AuthUIHelperButtons
-import com.measify.kappmaker.presentation.components.LogoImage
-import com.measify.kappmaker.presentation.theme.AppTheme
+import com.measify.kappmaker.util.Constants
 import com.measify.kappmaker.util.logging.AppLogger
 import dev.gitlive.firebase.auth.FirebaseAuthUserCollisionException
 import kotlinx.coroutines.launch
@@ -103,6 +104,8 @@ fun SignInScreen(modifier: Modifier = Modifier, onSuccessfulSignIn: () -> Unit) 
             }
             AgreePrivacyPolicyTermsConditionsText(
                 modifier = Modifier.padding(top = AppTheme.spacing.largeSpacing).fillMaxWidth(),
+                privacyPolicyUrl = Constants.URL_PRIVACY_POLICY,
+                termsConditionsUrl = Constants.URL_TERMS_CONDITIONS
             )
 
 

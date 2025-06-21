@@ -1,15 +1,16 @@
 package com.measify.kappmaker.util.inappreview
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import platform.StoreKit.SKStoreReviewController
 
-class InAppReviewManagerImpl : InAppReviewManager {
+@Composable
+actual fun rememberInAppReviewManager(): InAppReviewManager {
+    return remember { InAppReviewManagerImpl() }
+}
 
-    @Composable
+private class InAppReviewManagerImpl : InAppReviewManager {
     override fun requestReview() {
-        LaunchedEffect(Unit) {
-            SKStoreReviewController.requestReview()
-        }
+        SKStoreReviewController.requestReview()
     }
 }

@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.core.content.pm.PackageInfoCompat
 import com.measify.kappmaker.util.logging.AppLogger
 
 class AppUtilImpl(private val context: Context) : AppUtil {
@@ -29,7 +30,7 @@ class AppUtilImpl(private val context: Context) : AppUtil {
 
     override fun openFeedbackMail() {
         try {
-            val appName = context.packageManager.getApplicationLabel(context.applicationInfo).toString()
+            val appName = getAppName()
             val subject = "$appName Feedback/Bug Report"
             val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
                 putExtra(Intent.EXTRA_EMAIL, arrayOf(Constants.CONTACT_EMAIL))
@@ -41,6 +42,18 @@ class AppUtilImpl(private val context: Context) : AppUtil {
         } catch (e: ActivityNotFoundException) {
             AppLogger.e("Activity not found to send email")
         }
+    }
+
+    override fun getAppName(): String {
+        return context.packageManager.getApplicationLabel(context.applicationInfo).toString()
+    }
+
+    override fun getAppVersionInfo(): String {
+        val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+        val versionName = runCatching { packageInfo.versionName }.getOrDefault("")
+        val versionCode =
+            runCatching { PackageInfoCompat.getLongVersionCode(packageInfo).toString() }.getOrDefault("")
+        return "$versionName ($versionCode)"
     }
 
     private fun getPlayStoreLink(): String {

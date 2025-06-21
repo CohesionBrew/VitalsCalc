@@ -11,15 +11,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.measify.kappmaker.designsystem.components.LoadingProgress
+import com.measify.kappmaker.designsystem.components.LoadingProgressMode
+import com.measify.kappmaker.designsystem.components.premium.CurrentSubscriptionPlanAndFeatures
+import com.measify.kappmaker.designsystem.components.premium.ManageSubscriptionText
+import com.measify.kappmaker.designsystem.components.premium.UpgradePremiumBanner
+import com.measify.kappmaker.designsystem.components.premium.UpgradePremiumBannerStyle
+import com.measify.kappmaker.designsystem.theme.AppTheme
 import com.measify.kappmaker.domain.model.Subscription
-import com.measify.kappmaker.presentation.components.LoadingProgress
-import com.measify.kappmaker.presentation.components.LoadingProgressMode
-import com.measify.kappmaker.presentation.components.premium.CurrentSubscriptionPlanAndFeatures
-import com.measify.kappmaker.presentation.components.premium.ManageSubscriptionText
-import com.measify.kappmaker.presentation.components.premium.PremiumFeatureUiState
-import com.measify.kappmaker.presentation.components.premium.UpgradePremiumBanner
-import com.measify.kappmaker.presentation.components.premium.UpgradePremiumBannerStyle
-import com.measify.kappmaker.presentation.theme.AppTheme
+import com.measify.kappmaker.presentation.components.premium.PremiumFeatureFactory
+import com.measify.kappmaker.util.Constants.subscriptionUrl
 import com.measify.kappmaker.util.extensions.asFormattedDate
 
 @Composable
@@ -72,7 +73,7 @@ fun SubscriptionsScreen(
 
         CurrentSubscriptionPlanAndFeatures(
             name = uiState.currentPlan?.name ?: "Free",
-            features = PremiumFeatureUiState.ofSubscription(uiState.currentPlan),
+            features = PremiumFeatureFactory.ofSubscription(uiState.currentPlan),
             price = uiState.currentPlan?.formattedPrice,
             duration = when (uiState.currentPlan?.durationType) {
                 Subscription.DurationType.MONTHLY -> "month"
@@ -87,7 +88,8 @@ fun SubscriptionsScreen(
             ManageSubscriptionText(
                 isLifetime = uiState.currentPlan.isLifetime,
                 isRecurring = uiState.currentPlan.willRenew,
-                expirationDate = uiState.currentPlan.expirationDateInMillis?.asFormattedDate()
+                expirationDate = uiState.currentPlan.expirationDateInMillis?.asFormattedDate(),
+                subscriptionUrl = subscriptionUrl
             )
 
     }

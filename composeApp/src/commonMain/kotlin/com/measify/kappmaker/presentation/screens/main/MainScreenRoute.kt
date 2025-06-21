@@ -11,10 +11,18 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.measify.kappmaker.generated.resources.Res
-import com.measify.kappmaker.generated.resources.ic_back
-import com.measify.kappmaker.presentation.components.bottomnav.BottomNavItem
-import com.measify.kappmaker.presentation.screens.paywall.PaywallScreenRoute
+import com.measify.kappmaker.designsystem.components.bottomnav.BottomNavItem
+import com.measify.kappmaker.designsystem.generated.resources.UiRes
+import com.measify.kappmaker.designsystem.generated.resources.ic_back
+import com.measify.kappmaker.designsystem.generated.resources.ic_favorite
+import com.measify.kappmaker.designsystem.generated.resources.ic_home
+import com.measify.kappmaker.designsystem.generated.resources.ic_profile
+import com.measify.kappmaker.generated.resources.bottom_nav_label_favorites
+import com.measify.kappmaker.generated.resources.bottom_nav_label_home
+import com.measify.kappmaker.generated.resources.bottom_nav_label_profile
+import com.measify.kappmaker.presentation.screens.account.AccountScreenRoute
+import com.measify.kappmaker.presentation.screens.favorite.FavoriteScreenRoute
+import com.measify.kappmaker.presentation.screens.home.HomeScreenRoute
 import com.measify.kappmaker.root.LocalNavigator
 import com.measify.kappmaker.util.ScreenRoute
 import kotlinx.coroutines.delay
@@ -28,6 +36,7 @@ class MainScreenRoute : ScreenRoute {
     override fun Content() {
         val navController = rememberNavController()
         CompositionLocalProvider(LocalNavigator provides navController) {
+            val bottomNavItemsWithDestinations = remember { getBottomNavItemsWithDestination() }
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination
             var currentScreenTitle by remember {
@@ -37,7 +46,8 @@ class MainScreenRoute : ScreenRoute {
                 delay(100)
                 currentScreenTitle = (currentDestination?.label ?: "").toString()
             }
-            val bottomNavVisibleScreens = BottomNavItem.items().map { it.route }
+            val bottomNavVisibleScreens =
+                remember(bottomNavItemsWithDestinations) { bottomNavItemsWithDestinations.map { it.first.route } }
             val toolbarHiddenScreens = listOf("PaywallScreenRoute")
             val isBottomNavVisible = bottomNavVisibleScreens.any {
                 currentDestination?.route?.contains(it) == true
@@ -46,16 +56,17 @@ class MainScreenRoute : ScreenRoute {
                 currentDestination?.route?.contains(it) == true
             }
             val selectedBottomNavIndex =
-                getBottomNavPositionByScreenRoute(currentDestination?.route ?: "")
+                bottomNavItemsWithDestinations.getPositionByRouteId(currentDestination?.route)
             val mainScreenUiState = MainScreenUiState(
                 bottomNavUiState = BottomNavUiState(
+                    items = bottomNavItemsWithDestinations,
                     isVisible = isBottomNavVisible,
-                    selectedBottomNavIndex = selectedBottomNavIndex
+                    selectedBottomNavIndex = selectedBottomNavIndex,
                 ),
                 toolbarUiState = ToolbarUiState(
                     isVisible = isToolbarHidden.not(),
                     text = currentScreenTitle,
-                    navigationIconRes = if (isBottomNavVisible) null else Res.drawable.ic_back
+                    navigationIconRes = if (isBottomNavVisible) null else UiRes.drawable.ic_back
                 ),
                 contentPadding = 0.dp
             )
@@ -65,13 +76,14 @@ class MainScreenRoute : ScreenRoute {
                 onUiEvent = { event ->
                     when (event) {
                         is MainScreenUiEvent.OnBottomNavItemClick -> {
-                            //TODO: Check later, for some reason saveState, and restoreState doesn't work
-                            navController.navigate(event.bottomNavItem.destination) {
+                            val screenRoute =
+                                bottomNavItemsWithDestinations.getScreenRouteByRouteId(event.bottomNavItem.route)
+                            navController.navigate(screenRoute) {
                                 popUpTo(navController.graph.findStartDestination().id) {
-//                                    saveState = true
+                                    saveState = true
                                 }
                                 launchSingleTop = true
-//                                restoreState = true
+                                restoreState = true
                             }
                         }
 
@@ -89,9 +101,35 @@ class MainScreenRoute : ScreenRoute {
         }
     }
 
-    @Composable
-    private fun getBottomNavPositionByScreenRoute(screenRoute: String): Int {
-        return BottomNavItem.items()
-            .indexOfFirst { screenRoute.contains(it.route) }
+    private fun getBottomNavItemsWithDestination(): List<Pair<BottomNavItem, ScreenRoute>> {
+
+        //MAKE SURE route strings are same as ScreenRoute class names. Ex: HomeScreenRoute.
+        return listOf(
+            BottomNavItem(
+                label = com.measify.kappmaker.generated.resources.Res.string.bottom_nav_label_home,
+                icon = UiRes.drawable.ic_home,
+                route = "HomeScreenRoute"
+            ) to HomeScreenRoute(),
+            BottomNavItem(
+                label = com.measify.kappmaker.generated.resources.Res.string.bottom_nav_label_favorites,
+                icon = UiRes.drawable.ic_favorite,
+                route = "FavoriteScreenRoute"
+            ) to FavoriteScreenRoute(),
+            BottomNavItem(
+                label = com.measify.kappmaker.generated.resources.Res.string.bottom_nav_label_profile,
+                icon = UiRes.drawable.ic_profile,
+                route = "AccountScreenRoute"
+            ) to AccountScreenRoute()
+        )
+    }
+
+    private fun List<Pair<BottomNavItem, ScreenRoute>>.getPositionByRouteId(route: String?): Int {
+        val index = indexOfFirst { route?.contains(it.first.route) == true }
+        return if (index >= 0) index else 0
+    }
+
+    private fun List<Pair<BottomNavItem, ScreenRoute>>.getScreenRouteByRouteId(route: String?): ScreenRoute {
+        return this.firstOrNull { it.first.route == route }?.second
+            ?: HomeScreenRoute() //Default to Home Screen
     }
 }

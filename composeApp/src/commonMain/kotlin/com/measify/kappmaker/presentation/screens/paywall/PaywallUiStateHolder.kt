@@ -2,7 +2,8 @@ package com.measify.kappmaker.presentation.screens.paywall
 
 import com.measify.kappmaker.data.repository.SubscriptionRepository
 import com.measify.kappmaker.data.repository.UserRepository
-import com.measify.kappmaker.presentation.components.premium.PremiumFeatureUiState
+import com.measify.kappmaker.designsystem.components.premium.PremiumFeatureUiState
+import com.measify.kappmaker.presentation.components.premium.PremiumFeatureFactory
 import com.measify.kappmaker.root.AppGlobalUiState
 import com.measify.kappmaker.util.UiMessage
 import com.measify.kappmaker.util.UiStateHolder
@@ -50,7 +51,7 @@ class PaywallUiStateHolder(
                 val defaultSelectedPackageIndex = 0
                 val selectedPackage = packages.getOrNull(defaultSelectedPackageIndex)
                 // You can change features dynamically based on selected package
-                val features = PremiumFeatureUiState.defaultPremiumFeatures.map { it.text }
+                val features = PremiumFeatureFactory.defaultPremiumFeatures.map { it.text }
                 _uiState.update {
                     it.copy(
                         isLoading = false,

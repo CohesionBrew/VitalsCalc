@@ -31,14 +31,16 @@ import com.measify.kappmaker.generated.resources.Res
 import com.measify.kappmaker.generated.resources.btn_get_started
 import com.measify.kappmaker.generated.resources.btn_next
 import com.measify.kappmaker.generated.resources.btn_skip
-import com.measify.kappmaker.presentation.components.AnimatedHorizontalPager
-import com.measify.kappmaker.presentation.components.AppButton
-import com.measify.kappmaker.presentation.components.HorizontalPagerIndicator
-import com.measify.kappmaker.presentation.components.ScreenTitle
-import com.measify.kappmaker.presentation.theme.AppTheme
+import com.measify.kappmaker.designsystem.components.AnimatedHorizontalPager
+import com.measify.kappmaker.designsystem.components.AppButton
+import com.measify.kappmaker.designsystem.components.HorizontalPagerIndicator
+import com.measify.kappmaker.designsystem.components.HorizontalPagerIndicatorStyle
+import com.measify.kappmaker.designsystem.components.ScreenTitle
+import com.measify.kappmaker.designsystem.theme.AppTheme
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import kotlin.math.min
 
 
 @Composable
@@ -103,7 +105,7 @@ fun OnBoardingScreenVariation1(
             modifier = Modifier.padding(top = AppTheme.spacing.sectionSpacing),
             size = pagerState.pageCount,
             selectedIndex = pagerState.currentPage,
-            style = com.measify.kappmaker.presentation.components.HorizontalPagerIndicatorStyle.STYLE1,
+            style = HorizontalPagerIndicatorStyle.STYLE1,
             onClickIndicator = { index ->
                 coroutineScope.launch {
                     pagerState.animateScrollToPage(
@@ -132,7 +134,7 @@ fun OnBoardingScreenVariation1(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
                             coroutineScope.launch {
-                                val nextPage = kotlin.math.min(
+                                val nextPage = min(
                                     pagerState.currentPage + 1,
                                     uiState.pages.lastIndex
                                 )

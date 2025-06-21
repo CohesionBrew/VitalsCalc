@@ -1,29 +1,30 @@
 package com.measify.kappmaker.presentation.screens.account
 
+import com.measify.kappmaker.designsystem.components.SettingsItemUiState
+import com.measify.kappmaker.designsystem.generated.resources.ic_settings_item_logout
+import com.measify.kappmaker.designsystem.generated.resources.ic_settings_item_subscriptions
+import com.measify.kappmaker.designsystem.generated.resources.ic_settings_item_support_legal
 import com.measify.kappmaker.domain.model.User
 import com.measify.kappmaker.generated.resources.Res
 import com.measify.kappmaker.generated.resources.help_and_support
-import com.measify.kappmaker.generated.resources.ic_settings_item_logout
-import com.measify.kappmaker.generated.resources.ic_settings_item_subscriptions
-import com.measify.kappmaker.generated.resources.ic_settings_item_support_legal
 import com.measify.kappmaker.generated.resources.logout
 import com.measify.kappmaker.generated.resources.subscriptions
-import com.measify.kappmaker.presentation.components.SettingsItemUiState
+import com.measify.kappmaker.designsystem.generated.resources.UiRes
 
 data class AccountUiState(
     val settingsItemList: List<SettingsItemUiState> = listOf(
         SettingsItemUiState(
-            startIcon = Res.drawable.ic_settings_item_subscriptions,
+            startIcon = UiRes.drawable.ic_settings_item_subscriptions,
             textRes = Res.string.subscriptions
         ),
 
         SettingsItemUiState(
-            startIcon = Res.drawable.ic_settings_item_support_legal,
+            startIcon = UiRes.drawable.ic_settings_item_support_legal,
             textRes = Res.string.help_and_support
         ),
 
         SettingsItemUiState(
-            startIcon = Res.drawable.ic_settings_item_logout,
+            startIcon = UiRes.drawable.ic_settings_item_logout,
             textRes = Res.string.logout,
             showEndIcon = false,
         ),

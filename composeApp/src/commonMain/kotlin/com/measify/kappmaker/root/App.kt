@@ -16,10 +16,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.measify.kappmaker.presentation.components.AllComponentsGallery
-import com.measify.kappmaker.presentation.theme.AppTheme
+import com.measify.kappmaker.designsystem.AllComponentsGallery
+import com.measify.kappmaker.designsystem.theme.AppTheme
 import com.measify.kappmaker.util.UiMessage
 import com.measify.kappmaker.util.extensions.ObserveFlowAsEvent
+import com.measify.kappmaker.util.logging.AppLogger
+import com.measify.kappmaker.util.logging.logAppOpened
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 
@@ -46,6 +48,9 @@ private fun AppScaffold() {
     var uiMessage by remember { mutableStateOf<UiMessage?>(null) }
 
     ObserveFlowAsEvent(AppGlobalUiState.uiMessageFlow) { uiMessage = it }
+    LaunchedEffect(Unit) {
+        AppLogger.logAppOpened()
+    }
 
     uiMessage?.value?.let { message ->
         LaunchedEffect(message) {

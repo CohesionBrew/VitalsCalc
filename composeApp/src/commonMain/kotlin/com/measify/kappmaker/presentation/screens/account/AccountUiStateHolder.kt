@@ -2,15 +2,15 @@ package com.measify.kappmaker.presentation.screens.account
 
 import com.measify.kappmaker.data.repository.SubscriptionRepository
 import com.measify.kappmaker.data.repository.UserRepository
+import com.measify.kappmaker.designsystem.components.SettingsItemUiState
+import com.measify.kappmaker.designsystem.generated.resources.ic_settings_item_logout
+import com.measify.kappmaker.designsystem.generated.resources.ic_settings_item_subscriptions
+import com.measify.kappmaker.designsystem.generated.resources.ic_settings_item_support_legal
 import com.measify.kappmaker.domain.model.isFree
 import com.measify.kappmaker.generated.resources.Res
 import com.measify.kappmaker.generated.resources.help_and_support
-import com.measify.kappmaker.generated.resources.ic_settings_item_logout
-import com.measify.kappmaker.generated.resources.ic_settings_item_subscriptions
-import com.measify.kappmaker.generated.resources.ic_settings_item_support_legal
 import com.measify.kappmaker.generated.resources.logout
 import com.measify.kappmaker.generated.resources.subscriptions
-import com.measify.kappmaker.presentation.components.SettingsItemUiState
 import com.measify.kappmaker.util.UiStateHolder
 import com.measify.kappmaker.util.uiStateHolderScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.measify.kappmaker.designsystem.generated.resources.UiRes
 
 class AccountUiStateHolder(
     private val userRepository: UserRepository,
@@ -28,17 +29,17 @@ class AccountUiStateHolder(
 
     private val allSettingsItemList: List<SettingsItemUiState> = listOf(
         SettingsItemUiState(
-            startIcon = Res.drawable.ic_settings_item_subscriptions,
+            startIcon = UiRes.drawable.ic_settings_item_subscriptions,
             textRes = Res.string.subscriptions
         ),
 
         SettingsItemUiState(
-            startIcon = Res.drawable.ic_settings_item_support_legal,
+            startIcon = UiRes.drawable.ic_settings_item_support_legal,
             textRes = Res.string.help_and_support
         ),
 
         SettingsItemUiState(
-            startIcon = Res.drawable.ic_settings_item_logout,
+            startIcon = UiRes.drawable.ic_settings_item_logout,
             textRes = Res.string.logout,
             showEndIcon = false,
         ),
@@ -55,8 +56,8 @@ class AccountUiStateHolder(
             uiState.copy(
                 user = if (user?.isAnonymous == true) null else user,
                 settingsItemList =
-                if (user != null) allSettingsItemList
-                else allSettingsItemList.subList(0, allSettingsItemList.size - 1),
+                    if (user != null) allSettingsItemList
+                    else allSettingsItemList.subList(0, allSettingsItemList.size - 1),
                 showUpgradePremiumBanner = currentSubscription.isFree
             )
         }.stateIn(uiStateHolderScope, WhileSubscribed(5000), _uiState.value)

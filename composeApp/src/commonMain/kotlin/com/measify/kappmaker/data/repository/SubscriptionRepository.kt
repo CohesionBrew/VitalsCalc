@@ -6,6 +6,7 @@ import com.measify.kappmaker.util.ApplicationScope
 import com.measify.kappmaker.util.Constants.PAYWALL_PREMIUM_ENTITLEMENT
 import com.measify.kappmaker.util.extensions.asActiveSubscriptionList
 import com.measify.kappmaker.util.logging.AppLogger
+import com.measify.kappmaker.util.logging.logSuccessfulPurchase
 import com.revenuecat.purchases.kmp.Purchases
 import com.revenuecat.purchases.kmp.PurchasesDelegate
 import com.revenuecat.purchases.kmp.ktx.awaitCustomerInfo
@@ -115,6 +116,7 @@ class SubscriptionRepository(
 
     suspend fun purchase(packageToPurchase: Package) = backgroundExecutor.execute {
         val successfulPurchase = Purchases.sharedInstance.awaitPurchase(packageToPurchase)
+        AppLogger.logSuccessfulPurchase(extraInfo = "Identifier: ${packageToPurchase.identifier}")
         Result.success(successfulPurchase)
     }
 
