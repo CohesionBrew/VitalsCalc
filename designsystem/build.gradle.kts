@@ -13,6 +13,8 @@ plugins {
     alias(libs.plugins.composeHotReload)
 }
 
+apply(from = rootProject.file("gradle/scripts/refactorPackage.gradle.kts"))
+
 kotlin {
     applyDefaultHierarchyTemplate {
         common {
