@@ -28,6 +28,8 @@
 		A6C616C02D7C9029008FE51C /* RewardedAdDisplayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C616BF2D7C9029008FE51C /* RewardedAdDisplayer.swift */; };
 		A6C616C22D7C9038008FE51C /* RewardedAdLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C616C12D7C9038008FE51C /* RewardedAdLoader.swift */; };
 		A6C616C42D7C9050008FE51C /* AdMobBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C616C32D7C9050008FE51C /* AdMobBannerView.swift */; };
+		A6E0F74D2EAAAB2F001BA958 /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = A6E0F74C2EAAAB2F001BA958 /* FacebookCore */; };
+		A6E0F74F2EAAAB2F001BA958 /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = A6E0F74E2EAAAB2F001BA958 /* FacebookLogin */; };
 		A6E617592D415F40009646A5 /* IosNativeViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E617582D415F40009646A5 /* IosNativeViewFactory.swift */; };
 		A93A953B29CC810C00F8E227 /* iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93A953A29CC810C00F8E227 /* iosApp.swift */; };
 		A93A953F29CC810D00F8E227 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A93A953E29CC810D00F8E227 /* Assets.xcassets */; };
@@ -71,9 +73,11 @@
 				A631C8A92C8DE8F10075EE70 /* GoogleSignIn in Frameworks */,
 				A631C8B42C8DE94A0075EE70 /* FirebaseAuth in Frameworks */,
 				A631C8AB2C8DE8F10075EE70 /* GoogleSignInSwift in Frameworks */,
+				A6E0F74D2EAAAB2F001BA958 /* FacebookCore in Frameworks */,
 				A631C8B62C8DE94A0075EE70 /* FirebaseCrashlytics in Frameworks */,
 				A631C8AE2C8DE94A0075EE70 /* FirebaseAnalytics in Frameworks */,
 				A631C8B22C8DE94A0075EE70 /* FirebaseAppCheck in Frameworks */,
+				A6E0F74F2EAAAB2F001BA958 /* FacebookLogin in Frameworks */,
 				A631C8B02C8DE94A0075EE70 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				D10F9A7CECD86BE2EF7542FB /* Pods_iosApp.framework in Frameworks */,
 				A64B10CC2D73E7D7000997FB /* FirebaseRemoteConfig in Frameworks */,
@@ -232,6 +236,8 @@
 				A631C8B52C8DE94A0075EE70 /* FirebaseCrashlytics */,
 				A631C8B92C8DEB220075EE70 /* FirebaseMessaging */,
 				A64B10CB2D73E7D7000997FB /* FirebaseRemoteConfig */,
+				A6E0F74C2EAAAB2F001BA958 /* FacebookCore */,
+				A6E0F74E2EAAAB2F001BA958 /* FacebookLogin */,
 			);
 			productName = iosApp;
 			productReference = A93A953729CC810C00F8E227 /* KAppMakerAllModules.app */;
@@ -263,6 +269,7 @@
 			packageReferences = (
 				A631C8A72C8DE8F10075EE70 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				A631C8AC2C8DE94A0075EE70 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				A6E0F74B2EAAAB2F001BA958 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
 			);
 			productRefGroup = A93A953829CC810C00F8E227 /* Products */;
 			projectDirPath = "";
@@ -295,9 +302,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -334,9 +345,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -650,6 +665,14 @@
 				minimumVersion = 11.1.0;
 			};
 		};
+		A6E0F74B2EAAAB2F001BA958 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/facebook/facebook-ios-sdk";
+			requirement = {
+				kind = exactVersion;
+				version = 18.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -697,6 +720,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A631C8AC2C8DE94A0075EE70 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseRemoteConfig;
+		};
+		A6E0F74C2EAAAB2F001BA958 /* FacebookCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A6E0F74B2EAAAB2F001BA958 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookCore;
+		};
+		A6E0F74E2EAAAB2F001BA958 /* FacebookLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A6E0F74B2EAAAB2F001BA958 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookLogin;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

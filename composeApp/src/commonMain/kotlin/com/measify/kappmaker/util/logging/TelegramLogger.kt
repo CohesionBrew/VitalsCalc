@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalTime::class)
+
 package com.measify.kappmaker.util.logging
 
 import com.measify.kappmaker.util.AppUtil
@@ -11,8 +13,9 @@ import io.ktor.http.ContentType
 import io.ktor.http.Parameters
 import io.ktor.http.contentType
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.time.ExperimentalTime
 
 class TelegramLogger(
     private val httpClient: HttpClient,

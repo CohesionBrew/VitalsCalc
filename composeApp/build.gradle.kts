@@ -31,7 +31,6 @@ kotlin {
     }
 
     listOf(
-        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
@@ -115,11 +114,11 @@ compose.resources {
 
 android {
     namespace = "com.measify.kappmaker"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
 
         applicationId = "com.measify.kappmaker"
         versionCode = 1
@@ -180,7 +179,6 @@ dependencies {
     }
 
     add("kspAndroid",libs.room.compiler)
-    add("kspIosX64",libs.room.compiler)
     add("kspIosArm64",libs.room.compiler)
     add("kspIosSimulatorArm64",libs.room.compiler)
 }

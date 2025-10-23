@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalTime::class)
+
 package com.measify.kappmaker.data.repository
 
 import com.measify.kappmaker.data.BackgroundExecutor
@@ -17,7 +19,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 class UserRepository(
     private val subscriptionRepository: SubscriptionRepository,

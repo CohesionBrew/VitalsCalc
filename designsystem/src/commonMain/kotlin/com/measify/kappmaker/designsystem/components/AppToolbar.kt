@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -57,8 +58,8 @@ fun AppToolbar(
     val actionsEndPadding = contentPadding.calculateEndPadding(LocalLayoutDirection.current)
 
     CenterAlignedTopAppBar(
-        modifier = modifier.defaultMinSize(minHeight = 72.dp),
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+        modifier = modifier.heightIn(min = 72.dp, max = 72.dp),
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = AppTheme.colors.background,
             titleContentColor = AppTheme.colors.text.primary,
             navigationIconContentColor = AppTheme.colors.text.primary,

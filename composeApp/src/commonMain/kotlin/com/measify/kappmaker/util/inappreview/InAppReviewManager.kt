@@ -1,12 +1,15 @@
+@file:OptIn(ExperimentalTime::class)
+
 package com.measify.kappmaker.util.inappreview
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.measify.kappmaker.data.source.preferences.UserPreferences
 import com.measify.kappmaker.util.logging.AppLogger
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import org.koin.compose.koinInject
 import kotlin.time.Duration.Companion.days
+import kotlin.time.ExperimentalTime
 
 
 @Composable
