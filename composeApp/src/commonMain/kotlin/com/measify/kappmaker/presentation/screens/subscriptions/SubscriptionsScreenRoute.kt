@@ -16,6 +16,7 @@ class SubscriptionsScreenRoute : ScreenRoute {
         val navigator = LocalNavigator.current
         SubscriptionsScreen(
             uiStateHolder = uiStateHolder,
+            onClickBack = { navigator.popBackStack() },
             onNavigatePaywall = {
                 navigator.navigate(PaywallScreenRoute())
             })

@@ -64,6 +64,12 @@ tasks.register("generateNewScreen") {
             class $viewModelClassName() : UiStateHolder() {
                 private val _uiState = MutableStateFlow($uiStateClassName())
                 val uiState: StateFlow<$uiStateClassName> = _uiState.asStateFlow()
+                
+                fun onUiEvent(event: $uiEventClassName){
+                    when(event){
+                        $uiEventClassName.OnClick -> TODO()
+                    }
+                }
             }
         """.trimIndent()
         )
@@ -74,12 +80,16 @@ tasks.register("generateNewScreen") {
             """
             package $screensPackageName.$lowerScreenName
 
-            import androidx.compose.foundation.layout.Box
+            import androidx.compose.foundation.layout.Arrangement
+            import androidx.compose.foundation.layout.Column
             import androidx.compose.foundation.layout.fillMaxSize
+            import androidx.compose.material3.Text
             import androidx.compose.runtime.Composable
             import androidx.compose.runtime.getValue
             import androidx.compose.ui.Modifier
             import androidx.lifecycle.compose.collectAsStateWithLifecycle
+            import com.measify.kappmaker.designsystem.components.ScreenWithToolbar
+            import com.measify.kappmaker.designsystem.theme.AppTheme
 
             @Composable
             fun $screenClassName(
@@ -91,7 +101,7 @@ tasks.register("generateNewScreen") {
                 $screenClassName(
                     modifier = modifier.fillMaxSize(),
                     uiState = uiState,
-                    onUiEvent = {}
+                    onUiEvent = uiStateHolder::onUiEvent
                 )
             }
 
@@ -101,8 +111,15 @@ tasks.register("generateNewScreen") {
                 uiState: $uiStateClassName,
                 onUiEvent: ($uiEventClassName) -> Unit
             ) {
-                Box(modifier = modifier) {
-                    // UI components go here
+                ScreenWithToolbar(
+                    modifier = modifier,
+                    isScrollableContent = true, // Set to false if content itself has scrollable content such as LazyColumn
+                    title = "$screenClassName",
+                    includeBottomInsets = false // Set to true if bottom nav is not visible
+                ) {
+                    Column(verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.sectionSpacing)) {
+                        Text("$screenClassName")
+                    }
                 }
             }
         """.trimIndent()
@@ -117,7 +134,9 @@ tasks.register("generateNewScreen") {
             import androidx.compose.runtime.Composable
             import $defaultPackageName.util.ScreenRoute
             import $defaultPackageName.util.uiStateHolder
+            import kotlinx.serialization.Serializable
 
+            @Serializable
             class $screenRouteClassName : ScreenRoute {
 
                 @Composable

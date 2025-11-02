@@ -24,7 +24,7 @@ val Color.Companion.BLACK_5_HEX_35: Color get() = Color(0xFF35383F)
  * https://mui.com/material-ui/customization/color/
  * Below list are 500 shades of material colors hex codes.
  */
-private object MaterialColor {
+internal object MaterialColor {
     const val RED = 0xFFF44336
     const val PINK = 0xFFE91E63
     const val PURPLE = 0xFF9C27B0

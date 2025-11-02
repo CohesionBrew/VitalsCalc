@@ -33,15 +33,16 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.measify.kappmaker.designsystem.components.AgreePrivacyPolicyTermsConditionsText
 import com.measify.kappmaker.designsystem.components.AppButton
-import com.measify.kappmaker.designsystem.components.AppToolbar
 import com.measify.kappmaker.designsystem.components.ButtonStyle
 import com.measify.kappmaker.designsystem.components.LoadingProgress
 import com.measify.kappmaker.designsystem.components.LoadingProgressMode
 import com.measify.kappmaker.designsystem.components.ScreenTitle
+import com.measify.kappmaker.designsystem.components.ScreenWithToolbar
 import com.measify.kappmaker.designsystem.components.modals.AppDialog
 import com.measify.kappmaker.designsystem.components.modals.DialogType
 import com.measify.kappmaker.designsystem.components.premium.PremiumFeatureUiState
 import com.measify.kappmaker.designsystem.components.premium.PremiumFeaturesList
+import com.measify.kappmaker.designsystem.generated.resources.UiRes
 import com.measify.kappmaker.designsystem.generated.resources.ic_check
 import com.measify.kappmaker.designsystem.generated.resources.ic_close
 import com.measify.kappmaker.designsystem.theme.AppTheme
@@ -56,7 +57,6 @@ import com.measify.kappmaker.util.extensions.productName
 import com.revenuecat.purchases.kmp.models.Package
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import com.measify.kappmaker.designsystem.generated.resources.UiRes
 
 @Composable
 fun PaywallScreen(
@@ -65,79 +65,70 @@ fun PaywallScreen(
     onDismiss: () -> Unit,
     onSignInRequired: () -> Unit,
 ) {
-    val uiState by uiStateHolder.uiState.collectAsStateWithLifecycle()
+    ScreenWithToolbar(
+        modifier = modifier.fillMaxSize().background(AppTheme.colors.background),
+        title = "",
+        includeBottomInsets = true,
+        navigationIcon = UiRes.drawable.ic_close,
+        onNavigationIconClick = { onDismiss() }
+    ) {
+        val uiState by uiStateHolder.uiState.collectAsStateWithLifecycle()
 
-    if (uiState.signInActionRequired) {
-        LaunchedEffect(uiState.signInActionRequired) {
-            onSignInRequired()
-            uiStateHolder.onSignInActionHandled()
+        if (uiState.signInActionRequired) {
+            LaunchedEffect(uiState.signInActionRequired) {
+                onSignInRequired()
+                uiStateHolder.onSignInActionHandled()
+            }
         }
-    }
 
-    uiState.successfulSubscription?.let { subscription ->
-        SuccessfulPurchaseView(
+        uiState.successfulSubscription?.let { subscription ->
+            SuccessfulPurchaseView(
+                modifier = Modifier.fillMaxSize(),
+                features = PremiumFeatureFactory.ofSubscription(subscription),
+                isRecurring = subscription.willRenew,
+                isLifetime = subscription.isLifetime,
+                expirationDate = subscription.expirationDateInMillis?.asFormattedDate(),
+                onContinue = {
+                    onDismiss()
+                    uiStateHolder.onSuccessfulPurchaseHandled()
+                }
+            )
+        }
+
+        if (uiState.errorMessage?.value.isNullOrEmpty().not()) {
+            AppDialog(
+                type = DialogType.ERROR,
+                text = uiState.errorMessage?.value,
+                onConfirm = {
+                    uiStateHolder.onMessageShown()
+                    onDismiss()
+                }
+            )
+        }
+        PaywallScreen(
             modifier = Modifier.fillMaxSize(),
-            features = PremiumFeatureFactory.ofSubscription(subscription),
-            isRecurring = subscription.willRenew,
-            isLifetime = subscription.isLifetime,
-            expirationDate = subscription.expirationDateInMillis?.asFormattedDate(),
-            onContinue = {
-                onDismiss()
-                uiStateHolder.onSuccessfulPurchaseHandled()
-            }
+            uiState = uiState,
+            onUiEvent = uiStateHolder::onUiEvent,
         )
     }
-
-    uiState.errorMessage?.let {
-        AppDialog(
-            type = DialogType.ERROR,
-            text = it.value,
-            onConfirm = {
-                uiStateHolder.onMessageShown()
-                onDismiss()
-            }
-        )
-    }
-    PaywallScreen(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background),
-        uiState = uiState,
-        onUiEvent = uiStateHolder::onUiEvent,
-        onDismiss = onDismiss
-    )
 }
 
 @Composable
 fun PaywallScreen(
     modifier: Modifier = Modifier,
     uiState: PaywallUiState,
-    onUiEvent: (PaywallUiEvent) -> Unit,
-    onDismiss: () -> Unit,
+    onUiEvent: (PaywallUiEvent) -> Unit
 ) {
     Column(modifier = modifier) {
-        AppToolbar(
-            title = "",
-            navigationIcon = painterResource(UiRes.drawable.ic_close),
-            onNavigationIconClick = { onDismiss() }
-        )
-
         if (uiState.isLoading) {
             LoadingProgress(mode = LoadingProgressMode.FULLSCREEN)
         } else
             PaywallScreenData(
-                modifier = modifier.padding(
-                    start = AppTheme.spacing.outerSpacing,
-                    end = AppTheme.spacing.outerSpacing,
-                    top = AppTheme.spacing.defaultSpacing,
-                    bottom = AppTheme.spacing.outerSpacing
-                ),
+                modifier = modifier,
                 uiState = uiState,
                 onUiEvent = onUiEvent
             )
     }
-
-
 }
 
 @Composable
@@ -201,7 +192,7 @@ private fun PaywallScreenData(
 }
 
 @Composable
-fun PackageItem(
+private fun PackageItem(
     modifier: Modifier = Modifier,
     rcPackage: Package,
     isSelected: Boolean,

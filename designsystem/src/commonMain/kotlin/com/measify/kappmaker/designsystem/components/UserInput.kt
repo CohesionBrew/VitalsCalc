@@ -59,6 +59,7 @@ fun UserInput(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = false,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
+    minLines: Int = 1,
 ) {
 
     val interactionSource = remember { MutableInteractionSource() }
@@ -116,6 +117,7 @@ fun UserInput(
                 modifier = Modifier.weight(1f),
                 singleLine = singleLine,
                 maxLines = maxLines,
+                minLines = minLines,
                 readOnly = readOnly,
                 enabled = enabled,
                 keyboardOptions = keyboardOptions,

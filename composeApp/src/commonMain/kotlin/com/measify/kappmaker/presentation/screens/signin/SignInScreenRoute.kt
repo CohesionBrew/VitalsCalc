@@ -6,13 +6,26 @@ import com.measify.kappmaker.util.ScreenRoute
 import kotlinx.serialization.Serializable
 
 @Serializable
-class SignInScreenRoute : ScreenRoute {
+class SignInScreenRoute(private val isSignIn: Boolean = false) : ScreenRoute {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
-        SignInScreen(onSuccessfulSignIn = {
-            navigator.popBackStack()
-        })
+        SignInScreen(
+            isSignIn = isSignIn,
+            onSuccessfulSignIn = {
+                navigator.popBackStack()
+            },
+            onNavigateBack = {
+                navigator.popBackStack()
+            },
+            onNavigateSignIn = {
+                navigator.navigate(SignInScreenRoute(isSignIn = true)) {
+                    popUpTo(SignInScreenRoute()) {
+                        inclusive = true
+                    }
+                }
+            }
+        )
     }
 }

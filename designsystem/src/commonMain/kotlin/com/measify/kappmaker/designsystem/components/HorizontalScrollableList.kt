@@ -1,11 +1,15 @@
 package com.measify.kappmaker.designsystem.components
 
+import androidx.compose.foundation.gestures.FlingBehavior
+import androidx.compose.foundation.gestures.ScrollableDefaults
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,6 +29,8 @@ fun HorizontalScrollableList(
         horizontal = if (ignoreParentHorizontalPadding) AppTheme.spacing.outerSpacing
         else 0.dp
     ),
+    state: LazyListState = rememberLazyListState(),
+    flingBehavior: FlingBehavior = ScrollableDefaults.flingBehavior(),
     horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(AppTheme.spacing.horizontalItemSpacing),
     content: LazyListScope.() -> Unit
 ) {
@@ -41,7 +47,9 @@ fun HorizontalScrollableList(
     } else modifier
 
     LazyRow(
+        state = state,
         modifier = updatedModifier,
+        flingBehavior = flingBehavior,
         contentPadding = contentPadding,
         horizontalArrangement = horizontalArrangement,
         content = content

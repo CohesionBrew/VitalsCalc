@@ -29,9 +29,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 internal fun App() {
     AppTheme() {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .windowInsetsPadding(WindowInsets.safeDrawing),
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             //Set this to true for showing app, or false for ui components gallery

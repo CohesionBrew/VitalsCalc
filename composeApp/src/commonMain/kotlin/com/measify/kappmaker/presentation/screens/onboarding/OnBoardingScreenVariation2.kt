@@ -14,7 +14,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContent
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,6 +44,7 @@ import com.measify.kappmaker.designsystem.components.HorizontalPagerIndicator
 import com.measify.kappmaker.designsystem.components.HorizontalPagerIndicatorStyle
 import com.measify.kappmaker.designsystem.components.ScreenTitle
 import com.measify.kappmaker.designsystem.theme.AppTheme
+import com.measify.kappmaker.designsystem.util.defaultScreenPadding
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -62,16 +67,12 @@ fun OnBoardingScreenVariation2(
     val pagerOffset = pagerState.currentPageOffsetFraction.absoluteValue
 
     Box(modifier = modifier.fillMaxSize()) {
-        val statusBarHeight = with(LocalDensity.current) {
-            WindowInsets.systemBars.getTop(this).toDp()
-        }
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .offset(y = -statusBarHeight)
                 .background(AppTheme.colors.primary)
-                .padding(AppTheme.spacing.outerSpacing)
-                .padding(top = statusBarHeight)
+                .safeDrawingPadding()
+                .defaultScreenPadding(AppTheme.spacing)
         ) {
 
             val imageAnimationOffset = lerp(0.dp, 400.dp, pagerOffset)
@@ -92,6 +93,7 @@ fun OnBoardingScreenVariation2(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .background(AppTheme.colors.background)
+                .windowInsetsPadding(WindowInsets.safeContent)
                 .padding(bottom = AppTheme.spacing.outerSpacing),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {

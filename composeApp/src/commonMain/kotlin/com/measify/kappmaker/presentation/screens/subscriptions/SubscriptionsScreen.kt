@@ -10,60 +10,70 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.measify.kappmaker.designsystem.components.LoadingProgress
 import com.measify.kappmaker.designsystem.components.LoadingProgressMode
+import com.measify.kappmaker.designsystem.components.ScreenWithToolbar
 import com.measify.kappmaker.designsystem.components.premium.CurrentSubscriptionPlanAndFeatures
 import com.measify.kappmaker.designsystem.components.premium.ManageSubscriptionText
 import com.measify.kappmaker.designsystem.components.premium.UpgradePremiumBanner
 import com.measify.kappmaker.designsystem.components.premium.UpgradePremiumBannerStyle
+import com.measify.kappmaker.designsystem.generated.resources.UiRes
+import com.measify.kappmaker.designsystem.generated.resources.ic_back
 import com.measify.kappmaker.designsystem.theme.AppTheme
 import com.measify.kappmaker.domain.model.Subscription
+import com.measify.kappmaker.generated.resources.Res
+import com.measify.kappmaker.generated.resources.subscriptions
 import com.measify.kappmaker.presentation.components.premium.PremiumFeatureFactory
 import com.measify.kappmaker.util.Constants.subscriptionUrl
 import com.measify.kappmaker.util.extensions.asFormattedDate
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SubscriptionsScreen(
     modifier: Modifier = Modifier,
     uiStateHolder: SubscriptionsUiStateHolder,
     onNavigatePaywall: () -> Unit,
-
-    ) {
+    onClickBack: () -> Unit
+) {
 
     val uiState by uiStateHolder.uiState.collectAsStateWithLifecycle()
 
     if (uiState.isLoading) LoadingProgress(mode = LoadingProgressMode.FULLSCREEN)
     else {
-        SubscriptionsScreen(
+        ScreenWithToolbar(
             modifier = modifier.fillMaxSize().background(AppTheme.colors.background),
-            uiState = uiState,
-            onUiEvent = uiStateHolder::onUiEvent,
-            onClickUpgradePremium = { onNavigatePaywall() }
-        )
+            title = stringResource(Res.string.subscriptions),
+            navigationIcon = UiRes.drawable.ic_back,
+            includeBottomInsets = true,
+            isScrollableContent = true,
+            onNavigationIconClick = onClickBack,
+        ) {
+            SubscriptionsScreen(
+                modifier = Modifier.fillMaxSize(),
+                uiState = uiState,
+                onUiEvent = uiStateHolder::onUiEvent,
+                onClickUpgradePremium = { onNavigatePaywall() }
+            )
+        }
     }
 }
 
 @Composable
-fun SubscriptionsScreen(
+private fun SubscriptionsScreen(
     modifier: Modifier = Modifier,
     uiState: SubscriptionsUiState,
     onUiEvent: (SubscriptionsUiEvent) -> Unit,
     onClickUpgradePremium: () -> Unit = {},
 ) {
     val topPadding =
-        if (uiState.showUpgradePremiumBanner) AppTheme.spacing.cardContentSpacing
-        else AppTheme.spacing.defaultSpacing
+        if (uiState.showUpgradePremiumBanner) AppTheme.spacing.defaultSpacing
+        else 0.dp
     Column(
-        modifier = modifier
-            .padding(horizontal = AppTheme.spacing.outerSpacing)
-            .verticalScroll(rememberScrollState())
-            .padding(
-                top = topPadding,
-                bottom = AppTheme.spacing.outerSpacing
-            ),
+        modifier = modifier.padding(top = topPadding),
         verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.sectionSpacing)
-    ) {
+    ){
 
         if (uiState.showUpgradePremiumBanner) {
             UpgradePremiumBanner(

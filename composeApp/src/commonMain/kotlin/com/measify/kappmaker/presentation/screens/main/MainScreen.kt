@@ -27,18 +27,8 @@ fun MainScreen(
 ) {
     Box(modifier = modifier) {
         Column(modifier = Modifier.fillMaxSize()) {
-            //AppBar
-            if (mainScreenUiState.toolbarUiState.isVisible) {
-                AppToolbar(
-                    title = mainScreenUiState.toolbarUiState.text,
-                    navigationIcon = mainScreenUiState.toolbarUiState.navigationIconRes?.let {
-                        painterResource(it)
-                    },
-                    onNavigationIconClick = { onUiEvent(MainScreenUiEvent.OnToolbarNavItemClick) }
-                )
-            }
             //Main Content
-            Box(modifier = Modifier.weight(1f).padding(mainScreenUiState.contentPadding)) {
+            Box(modifier = Modifier.weight(1f)) {
                 content()
             }
 

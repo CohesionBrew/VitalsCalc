@@ -32,20 +32,26 @@ import com.measify.kappmaker.designsystem.generated.resources.ic_delete
 import com.measify.kappmaker.designsystem.generated.resources.ic_profile_img_placeholder
 import com.measify.kappmaker.designsystem.components.LoadingProgress
 import com.measify.kappmaker.designsystem.components.LoadingProgressMode
+import com.measify.kappmaker.designsystem.components.ScreenWithToolbar
 import com.measify.kappmaker.designsystem.components.SettingItemListContainer
 import com.measify.kappmaker.designsystem.components.SettingsItemUiState
 import com.measify.kappmaker.designsystem.components.UserInput
 import com.measify.kappmaker.designsystem.components.modals.AppDialog
 import com.measify.kappmaker.designsystem.components.modals.DeleteUserConfirmation
 import com.measify.kappmaker.designsystem.components.modals.DialogType
+import com.measify.kappmaker.designsystem.generated.resources.ic_back
 import com.measify.kappmaker.designsystem.theme.AppTheme
+import com.measify.kappmaker.generated.resources.Res
+import com.measify.kappmaker.generated.resources.title_screen_profile
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
     uiStateHolder: ProfileUiStateHolder,
-    onSignInRequired: () -> Unit
+    onSignInRequired: () -> Unit,
+    onNavigateToBack: () -> Unit
 ) {
     val uiState by uiStateHolder.uiState.collectAsStateWithLifecycle()
 
@@ -60,21 +66,33 @@ fun ProfileScreen(
             onDismiss = uiStateHolder::onDismissDeleteUserConfirmationDialog
         )
     }
-    AppDialog(
-        type = DialogType.ERROR,
-        text = uiState.errorMessage,
-        onConfirm = { uiStateHolder.onErrorMessageShown() }
-    )
+
+    if (uiState.errorMessage.isNullOrEmpty().not()) {
+        AppDialog(
+            type = DialogType.ERROR,
+            text = uiState.errorMessage,
+            onConfirm = { uiStateHolder.onErrorMessageShown() }
+        )
+    }
     if (uiState.isLoading) {
         LoadingProgress(mode = LoadingProgressMode.FULLSCREEN)
     } else {
         val currentUser = uiState.user
         currentUser?.let {
-            ProfileScreen(
-                modifier = modifier,
-                currentUser = it,
-                onUiEvent = uiStateHolder::onUiEvent
-            )
+            ScreenWithToolbar(
+                modifier = modifier.fillMaxSize().background(AppTheme.colors.background),
+                title = stringResource(Res.string.title_screen_profile),
+                navigationIcon = UiRes.drawable.ic_back,
+                onNavigationIconClick = onNavigateToBack,
+                isScrollableContent = true,
+                includeBottomInsets = true
+            ) {
+                ProfileScreen(
+                    modifier = Modifier.fillMaxSize(),
+                    currentUser = it,
+                    onUiEvent = uiStateHolder::onUiEvent
+                )
+            }
         }
     }
 }
@@ -87,12 +105,7 @@ fun ProfileScreen(
 ) {
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background)
-            .padding(horizontal = AppTheme.spacing.outerSpacing)
-            .verticalScroll(rememberScrollState())
-            .padding(top = AppTheme.spacing.defaultSpacing, bottom = AppTheme.spacing.outerSpacing),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.sectionSpacing),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

@@ -1,9 +1,11 @@
 package com.measify.kappmaker.designsystem.components.modals
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -27,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -66,18 +69,24 @@ fun AppDialog(
     text: String? = "",
     image: @Composable (() -> Unit)? = { AppDialogImage(dialogType = type) },
     btnConfirmText: String = stringResource(UiRes.string.btn_ok),
+    contentPaddingSpacing: Dp = AppTheme.spacing.dialogContentSpacing,
     btnDismissText: String = "",
+    hideButtons: Boolean = false,
     onConfirm: () -> Unit = {},
-    onDismiss: () -> Unit = {}
+    onDismiss: () -> Unit = {},
+    content: @Composable () -> Unit = {}
 ) = AppDialog(
     title = title,
     titleColor = titleColor,
     text = text,
     image = image,
+    hideButtons = hideButtons,
+    contentPaddingSpacing = contentPaddingSpacing,
     btnConfirmText = btnConfirmText,
     btnDismissText = btnDismissText,
     onConfirm = onConfirm,
-    onDismiss = onDismiss
+    onDismiss = onDismiss,
+    content = content
 )
 
 
@@ -89,11 +98,12 @@ fun AppDialog(
     image: @Composable (() -> Unit)? = null,
     btnConfirmText: String = stringResource(UiRes.string.btn_ok),
     btnDismissText: String = "",
+    hideButtons: Boolean = false,
+    contentPaddingSpacing: Dp = AppTheme.spacing.dialogContentSpacing,
     onConfirm: () -> Unit = {},
-    onDismiss: () -> Unit = {}
+    onDismiss: () -> Unit = {},
+    content: @Composable () -> Unit = {}
 ) {
-    if (text.isNullOrEmpty()) return
-
     Dialog(
         onDismissRequest = { onDismiss() },
         properties = DialogProperties(usePlatformDefaultWidth = false)
@@ -108,7 +118,7 @@ fun AppDialog(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(AppTheme.spacing.dialogContentSpacing)
+                    .padding(contentPaddingSpacing)
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.dialogContentSpacing)
@@ -119,14 +129,46 @@ fun AppDialog(
                 }
                 Column(
                     verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.groupedVerticalElementSpacing),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = if (hideButtons) Alignment.Start else Alignment.CenterHorizontally
                 ) {
-                    DialogOrBottomSheetTitle(
-                        color = titleColor,
-                        text = title,
-                        textAlign = TextAlign.Center
-                    )
-                    if (text.isEmpty().not()) {
+
+                    if (hideButtons) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(AppTheme.spacing.horizontalItemSpacing),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            DialogOrBottomSheetTitle(
+                                modifier = Modifier.weight(1f),
+                                color = titleColor,
+                                text = title,
+                                textAlign = TextAlign.Start
+                            )
+
+                            Icon(
+                                painter = painterResource(UiRes.drawable.ic_close),
+                                contentDescription = "Close",
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .clip(CircleShape)
+                                    .background(AppTheme.colors.outline)
+                                    .clickable {
+                                        onDismiss()
+                                    }
+                                    .padding(6.dp),
+                                tint = AppTheme.colors.text.primary
+                            )
+                        }
+
+
+                    } else {
+                        DialogOrBottomSheetTitle(
+                            color = titleColor,
+                            text = title,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                    if (text.isNullOrEmpty().not()) {
                         Text(
                             text = text,
                             style = AppTheme.typography.bodyLarge,
@@ -134,8 +176,10 @@ fun AppDialog(
                             textAlign = TextAlign.Center
                         )
                     }
-
+                    content()
                 }
+
+                if (hideButtons) return@Column
                 Column(verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.groupedVerticalElementSpacing)) {
                     AppButton(
                         text = btnConfirmText.ifEmpty { stringResource(UiRes.string.btn_ok) },
@@ -246,4 +290,3 @@ internal fun AppDialogPreview() {
         }
     }
 }
-

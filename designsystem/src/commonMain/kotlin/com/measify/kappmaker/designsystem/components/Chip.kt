@@ -33,6 +33,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 enum class ChipStyle {
     FILLED,
+    FILLED_ALPHA,
     INVERSE_FILLED,
     OUTLINE,
 }
@@ -82,6 +83,7 @@ fun Chip(
             ChipStyle.FILLED -> AppTheme.colors.onPrimary
             ChipStyle.OUTLINE -> AppTheme.colors.text.primary
             ChipStyle.INVERSE_FILLED -> AppTheme.colors.primary
+            ChipStyle.FILLED_ALPHA -> AppTheme.colors.primary
         },
         animationSpec = tween()
     )
@@ -91,6 +93,7 @@ fun Chip(
             ChipStyle.FILLED -> AppTheme.colors.onPrimary
             ChipStyle.OUTLINE -> AppTheme.colors.primary
             ChipStyle.INVERSE_FILLED -> AppTheme.colors.primary
+            ChipStyle.FILLED_ALPHA -> AppTheme.colors.primary
         },
         animationSpec = tween()
     )
@@ -100,6 +103,7 @@ fun Chip(
             ChipStyle.FILLED -> AppTheme.colors.primary
             ChipStyle.OUTLINE -> Color.Transparent
             ChipStyle.INVERSE_FILLED -> AppTheme.colors.onPrimary
+            ChipStyle.FILLED_ALPHA -> AppTheme.colors.primary.copy(alpha = 0.1f)
         },
         animationSpec = tween()
     )
@@ -108,6 +112,7 @@ fun Chip(
             ChipStyle.FILLED -> Color.Transparent
             ChipStyle.OUTLINE -> AppTheme.colors.outline
             ChipStyle.INVERSE_FILLED -> Color.Transparent
+            ChipStyle.FILLED_ALPHA -> AppTheme.colors.primary.copy(alpha = 0.1f)
         },
         animationSpec = tween()
     )
@@ -167,19 +172,27 @@ internal fun ChipPreview() {
         )
 
         Chip(
-            "Outlined",
+            "Filled Alpha",
             onClick = {
                 selectedIndex.value = 1
             },
-            style = if (selectedIndex.value == 1) ChipStyle.FILLED else ChipStyle.OUTLINE
+            style = if (selectedIndex.value == 1) ChipStyle.FILLED_ALPHA else ChipStyle.OUTLINE
+        )
+
+        Chip(
+            "Outlined",
+            onClick = {
+                selectedIndex.value = 2
+            },
+            style = if (selectedIndex.value == 2) ChipStyle.FILLED else ChipStyle.OUTLINE
         )
 
         Chip(
             "Inverse Filled",
             onClick = {
-                selectedIndex.value = 2
+                selectedIndex.value = 3
             },
-            style = if (selectedIndex.value == 2) ChipStyle.INVERSE_FILLED else ChipStyle.OUTLINE
+            style = if (selectedIndex.value == 3) ChipStyle.INVERSE_FILLED else ChipStyle.OUTLINE
         )
     }
 }

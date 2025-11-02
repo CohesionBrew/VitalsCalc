@@ -2,18 +2,13 @@ package com.measify.kappmaker.presentation.screens.main
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.measify.kappmaker.designsystem.components.bottomnav.BottomNavItem
 import com.measify.kappmaker.designsystem.generated.resources.UiRes
-import com.measify.kappmaker.designsystem.generated.resources.ic_back
 import com.measify.kappmaker.designsystem.generated.resources.ic_favorite
 import com.measify.kappmaker.designsystem.generated.resources.ic_home
 import com.measify.kappmaker.designsystem.generated.resources.ic_profile
@@ -25,7 +20,6 @@ import com.measify.kappmaker.presentation.screens.favorite.FavoriteScreenRoute
 import com.measify.kappmaker.presentation.screens.home.HomeScreenRoute
 import com.measify.kappmaker.root.LocalNavigator
 import com.measify.kappmaker.util.ScreenRoute
-import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -39,22 +33,12 @@ class MainScreenRoute : ScreenRoute {
             val bottomNavItemsWithDestinations = remember { getBottomNavItemsWithDestination() }
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination
-            var currentScreenTitle by remember {
-                mutableStateOf((currentDestination?.label ?: "").toString())
-            }
-            LaunchedEffect(currentDestination) {
-                delay(100)
-                currentScreenTitle = (currentDestination?.label ?: "").toString()
-            }
             val bottomNavVisibleScreens =
                 remember(bottomNavItemsWithDestinations) { bottomNavItemsWithDestinations.map { it.first.route } }
-            val toolbarHiddenScreens = listOf("PaywallScreenRoute")
             val isBottomNavVisible = bottomNavVisibleScreens.any {
                 currentDestination?.route?.contains(it) == true
             }
-            val isToolbarHidden = toolbarHiddenScreens.any {
-                currentDestination?.route?.contains(it) == true
-            }
+
             val selectedBottomNavIndex =
                 bottomNavItemsWithDestinations.getPositionByRouteId(currentDestination?.route)
             val mainScreenUiState = MainScreenUiState(
@@ -62,13 +46,7 @@ class MainScreenRoute : ScreenRoute {
                     items = bottomNavItemsWithDestinations,
                     isVisible = isBottomNavVisible,
                     selectedBottomNavIndex = selectedBottomNavIndex,
-                ),
-                toolbarUiState = ToolbarUiState(
-                    isVisible = isToolbarHidden.not(),
-                    text = currentScreenTitle,
-                    navigationIconRes = if (isBottomNavVisible) null else UiRes.drawable.ic_back
-                ),
-                contentPadding = 0.dp
+                )
             )
 
             MainScreen(

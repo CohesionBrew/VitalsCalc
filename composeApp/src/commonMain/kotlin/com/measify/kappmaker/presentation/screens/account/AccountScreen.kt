@@ -28,6 +28,7 @@ import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.measify.kappmaker.designsystem.components.AppCardContainer
+import com.measify.kappmaker.designsystem.components.ScreenWithToolbar
 import com.measify.kappmaker.designsystem.components.SettingItemListContainer
 import com.measify.kappmaker.designsystem.components.SmallTitle
 import com.measify.kappmaker.designsystem.components.modals.AppModalBottomSheet
@@ -49,6 +50,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import com.measify.kappmaker.designsystem.generated.resources.UiRes
+import com.measify.kappmaker.generated.resources.title_screen_account
 
 @Composable
 fun AccountScreen(
@@ -108,30 +110,31 @@ fun AccountScreen(
     uiState: AccountUiState,
     onUiEvent: (AccountUiEvent) -> Unit
 ) {
-    Column(
-        modifier = modifier
-            .padding(horizontal = AppTheme.spacing.outerSpacing)
-            .verticalScroll(rememberScrollState())
-            .padding(top = AppTheme.spacing.defaultSpacing, bottom = AppTheme.spacing.outerSpacing),
-        verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.sectionSpacing)
+    ScreenWithToolbar(
+        modifier = modifier,
+        isScrollableContent = true,
+        title = stringResource(Res.string.title_screen_account)
     ) {
 
-        if (uiState.showUpgradePremiumBanner) {
-            UpgradePremiumBanner(
-                style = UpgradePremiumBannerStyle.SMALL,
-                onClick = { onUiEvent(AccountUiEvent.OnClickUpgradePremium) })
+        Column(verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.sectionSpacing)) {
+
+            if (uiState.showUpgradePremiumBanner) {
+                UpgradePremiumBanner(
+                    style = UpgradePremiumBannerStyle.SMALL,
+                    onClick = { onUiEvent(AccountUiEvent.OnClickUpgradePremium) })
+            }
+
+            ProfileInfoBox(user = uiState.user, onClick = {
+                if (uiState.user == null) onUiEvent(AccountUiEvent.OnClickSignIn)
+                else onUiEvent(AccountUiEvent.OnClickProfile)
+
+            })
+            SettingItemListContainer(
+                itemList = uiState.settingsItemList,
+                onClick = { onUiEvent(AccountUiEvent.OnSettingsItemClick(it)) }
+            )
+
         }
-
-        ProfileInfoBox(user = uiState.user, onClick = {
-            if (uiState.user == null) onUiEvent(AccountUiEvent.OnClickSignIn)
-            else onUiEvent(AccountUiEvent.OnClickProfile)
-
-        })
-        SettingItemListContainer(
-            itemList = uiState.settingsItemList,
-            onClick = { onUiEvent(AccountUiEvent.OnSettingsItemClick(it)) }
-        )
-
     }
 }
 

@@ -17,12 +17,16 @@ class ProfileScreenRoute : ScreenRoute {
             val uiStateHolder = uiStateHolder<ProfileUiStateHolder>()
          */
         val uiStateHolder = navigator.navigatorUiStateHolder<ProfileUiStateHolder>()
-        ProfileScreen(uiStateHolder = uiStateHolder, onSignInRequired = {
-            navigator.navigate(SignInScreenRoute()){
-                popUpTo(ProfileScreenRoute()){
-                    inclusive = true
+        ProfileScreen(
+            uiStateHolder = uiStateHolder,
+            onSignInRequired = {
+                navigator.navigate(SignInScreenRoute()) {
+                    popUpTo(ProfileScreenRoute()) {
+                        inclusive = true
+                    }
                 }
-            }
-        })
+            },
+            onNavigateToBack = { navigator.popBackStack() }
+        )
     }
 }

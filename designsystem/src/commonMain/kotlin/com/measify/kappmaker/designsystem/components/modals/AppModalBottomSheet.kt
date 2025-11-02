@@ -1,5 +1,7 @@
 package com.measify.kappmaker.designsystem.components.modals
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,15 +9,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,8 +37,11 @@ import com.measify.kappmaker.designsystem.components.Divider
 import com.measify.kappmaker.designsystem.generated.resources.UiRes
 import com.measify.kappmaker.designsystem.generated.resources.btn_cancel
 import com.measify.kappmaker.designsystem.generated.resources.btn_ok
+import com.measify.kappmaker.designsystem.generated.resources.ic_close
 import com.measify.kappmaker.designsystem.theme.AppTheme
 import com.measify.kappmaker.designsystem.util.PreviewHelper
+import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -40,6 +50,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun AppModalBottomSheet(
     title: String,
+    subTitle: String? = null,
+    isDismissable: Boolean = true,
     titleColor: Color = AppTheme.colors.text.primary,
     btnConfirmText: String = stringResource(UiRes.string.btn_ok),
     btnDismissText: String = stringResource(UiRes.string.btn_cancel),
@@ -49,9 +61,17 @@ fun AppModalBottomSheet(
     onDismiss: () -> Unit = {},
     content: @Composable () -> Unit
 ) {
+    val sheetState =
+        rememberModalBottomSheetState(skipPartiallyExpanded = true, confirmValueChange = {
+            isDismissable
+        })
+    val coroutineScope = rememberCoroutineScope()
     ModalBottomSheet(
-        onDismissRequest = { onDismiss() },
-        shape = RoundedCornerShape(10.dp),
+        sheetState = sheetState,
+        onDismissRequest = {
+            if (isDismissable) onDismiss()
+        },
+        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         dragHandle = {
             Column {
                 Spacer(modifier = Modifier.height(AppTheme.spacing.defaultSpacing))
@@ -71,13 +91,49 @@ fun AppModalBottomSheet(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.sectionSpacing)
         ) {
+            if (hideButtons) {
+                // Title on left with close icon on right
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(AppTheme.spacing.horizontalItemSpacing),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TitleAndSubtitleColumn(
+                        modifier = Modifier.weight(1f),
+                        title = title,
+                        subtitle = subTitle,
+                        titleColor = titleColor,
+                        textAlign = TextAlign.Start,
+                    )
 
-            DialogOrBottomSheetTitle(
-                text = title,
-                color = titleColor,
-                textAlign = TextAlign.Center,
-            )
-            Divider(modifier = Modifier.fillMaxWidth())
+                    Icon(
+                        painter = painterResource(UiRes.drawable.ic_close),
+                        contentDescription = "Close",
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clip(CircleShape)
+                            .background(AppTheme.colors.outline)
+                            .clickable {
+                                coroutineScope.launch {
+                                    sheetState.hide()
+                                    onDismiss()
+                                }
+                            }
+                            .padding(6.dp),
+                        tint = AppTheme.colors.text.primary
+                    )
+                }
+            } else {
+                // Centered title for button mode
+                TitleAndSubtitleColumn(
+                    title = title,
+                    subtitle = subTitle,
+                    titleColor = titleColor,
+                    textAlign = TextAlign.Center,
+                )
+            }
+
+            if (!hideButtons) Divider(modifier = Modifier.fillMaxWidth())
             content()
 
             if (hideButtons) return@Column
@@ -107,6 +163,32 @@ fun AppModalBottomSheet(
 
     }
 }
+
+@Composable
+private fun TitleAndSubtitleColumn(
+    title: String,
+    titleColor: Color,
+    textAlign: TextAlign,
+    subtitle: String? = null,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        DialogOrBottomSheetTitle(
+            text = title,
+            color = titleColor,
+            textAlign = textAlign
+        )
+        subtitle?.let {
+            Text(
+                text = it,
+                style = AppTheme.typography.bodySmall,
+                textAlign = textAlign,
+                color = AppTheme.colors.text.secondary
+            )
+        }
+    }
+}
+
 
 @Composable
 @Preview

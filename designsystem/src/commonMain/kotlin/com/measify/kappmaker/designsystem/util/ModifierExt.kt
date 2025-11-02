@@ -1,11 +1,18 @@
 package com.measify.kappmaker.designsystem.util
 
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.text.AnnotatedString.Builder
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.withLink
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastRoundToInt
+import com.measify.kappmaker.designsystem.theme.AppSpacing
 
 // This is to force layout to go beyond the borders of its parent
 fun Modifier.fillWidthOfParent(totalParentHorizontalPaddingInPx: Float) =
@@ -34,3 +41,27 @@ inline fun Builder.appendLinkIfNotEmpty(
         append(text)
     }
 }
+
+@Stable
+fun Modifier.defaultScreenPadding(appSpacing: AppSpacing): Modifier =
+    this.then(
+        Modifier.padding(
+            top = appSpacing.defaultSpacing,
+            start = appSpacing.outerSpacing,
+            end = appSpacing.outerSpacing,
+            bottom = appSpacing.outerSpacing
+        )
+    )
+
+@Stable
+fun Modifier.scrollableScreenPadding(
+    scrollState: ScrollState,
+    appSpacing: AppSpacing,
+    innerPadding: PaddingValues = PaddingValues(0.dp)
+): Modifier =
+    this.then(
+        Modifier
+            .verticalScroll(scrollState)
+            .padding(innerPadding)
+            .defaultScreenPadding(appSpacing)
+    )

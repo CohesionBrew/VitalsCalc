@@ -3,9 +3,11 @@ package com.measify.kappmaker.designsystem.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.measify.kappmaker.designsystem.generated.resources.UiRes
 import com.measify.kappmaker.designsystem.generated.resources.ic_logo
@@ -22,7 +24,10 @@ fun LogoImage(modifier: Modifier = Modifier) {
         Image(
             painter = painterResource(UiRes.drawable.ic_logo),
             contentDescription = null,
-            modifier = Modifier.size(140.dp).align(Alignment.Center)
+            modifier = Modifier
+                .size(160.dp)
+                .clip(CircleShape)
+                .align(Alignment.Center)
         )
     }
 }

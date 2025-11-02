@@ -16,6 +16,8 @@ import com.measify.kappmaker.data.source.remote.apiservices.ai.OpenAiApiService
 import com.measify.kappmaker.data.source.remote.apiservices.ai.ReplicateApiService
 import com.measify.kappmaker.presentation.components.ads.AdsManager
 import com.measify.kappmaker.presentation.screens.account.AccountUiStateHolder
+import com.measify.kappmaker.presentation.screens.favorite.FavoriteUiStateHolder
+import com.measify.kappmaker.presentation.screens.home.HomeUiStateHolder
 import com.measify.kappmaker.presentation.screens.onboarding.OnBoardingUiStateHolder
 import com.measify.kappmaker.presentation.screens.paywall.PaywallUiStateHolder
 import com.measify.kappmaker.presentation.screens.profile.ProfileUiStateHolder
@@ -201,6 +203,8 @@ private val dataModule = module {
 
 private val presentationModule = module {
     viewModelOf(::OnBoardingUiStateHolder)
+    viewModelOf(::HomeUiStateHolder)
+    viewModelOf(::FavoriteUiStateHolder)
     viewModelOf(::ProfileUiStateHolder)
     viewModelOf(::PaywallUiStateHolder)
     viewModelOf(::AccountUiStateHolder)

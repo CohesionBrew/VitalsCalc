@@ -1,5 +1,6 @@
 package com.measify.kappmaker.designsystem.components.bottomnav
 
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -13,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.measify.kappmaker.designsystem.generated.resources.UiRes
 import com.measify.kappmaker.designsystem.generated.resources.bottom_nav_label_favorites
 import com.measify.kappmaker.designsystem.generated.resources.bottom_nav_label_home
@@ -43,6 +45,7 @@ fun BottomNavigationBar(
                 icon = {
                     item.icon?.let {
                         Icon(
+                            modifier= Modifier.size(24.dp),
                             painter = painterResource(it),
                             contentDescription = stringResource(item.label),
                         )
