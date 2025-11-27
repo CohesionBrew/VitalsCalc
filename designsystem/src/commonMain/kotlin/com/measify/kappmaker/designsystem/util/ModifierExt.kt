@@ -18,12 +18,20 @@ import com.measify.kappmaker.designsystem.theme.AppSpacing
 fun Modifier.fillWidthOfParent(totalParentHorizontalPaddingInPx: Float) =
     this.layout { measurable, constraints ->
         val placeable = measurable.measure(
-            constraints.copy(
-                maxWidth = constraints.maxWidth + totalParentHorizontalPaddingInPx.fastRoundToInt()
-            )
+            constraints.copy(maxWidth = constraints.maxWidth + totalParentHorizontalPaddingInPx.fastRoundToInt())
         )
+
+        val startOffset = if (placeable.width <= constraints.maxWidth) {
+            // Few items: shift left to ignore parent padding
+            -totalParentHorizontalPaddingInPx.toInt() / 2
+        } else {
+            // Many items: no shift
+            0
+        }
+
         layout(placeable.width, placeable.height) {
-            placeable.place(0, 0)
+            // Shift the content to ignore parent's horizontal padding
+            placeable.place(startOffset, 0)
         }
     }
 
