@@ -34,7 +34,15 @@ class OnBoardingUiStateHolder(private val userPreferences: UserPreferences) : Ui
             OnBoardingUiEvent.OnClickStart -> {
                 onBoardShown()
             }
+            OnBoardingUiEvent.OnClickGetPremiumAccess -> {
+                _uiState.update { it.copy(isPremiumRequired = true) }
+            }
         }
+    }
+
+    fun onPaywallEventHandled() = uiStateHolderScope.launch {
+        _uiState.update { it.copy(isPremiumRequired = false) }
+        onBoardShown()
     }
 
     private suspend fun onBoardShown() {

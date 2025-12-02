@@ -17,9 +17,10 @@ enum class OnBoardingScreenStyle {
 @Composable
 fun OnBoardingScreen(
     modifier: Modifier = Modifier,
-    style: OnBoardingScreenStyle = OnBoardingScreenStyle.STYLE2,
+    style: OnBoardingScreenStyle,
     uiStateHolder: OnBoardingUiStateHolder,
     onNavigateMain: () -> Unit,
+    onNavigatePaywall: () -> Unit
 ) {
     val uiState by uiStateHolder.uiState.collectAsStateWithLifecycle()
 
@@ -28,6 +29,14 @@ fun OnBoardingScreen(
             onNavigateMain()
         }
     }
+
+    if (uiState.isPremiumRequired) {
+        LaunchedEffect(uiState.isPremiumRequired) {
+            onNavigatePaywall()
+            uiStateHolder.onPaywallEventHandled()
+        }
+    }
+
     if (uiState.isLoading) {
         LogoImage(modifier = modifier.fillMaxSize())
     } else {
