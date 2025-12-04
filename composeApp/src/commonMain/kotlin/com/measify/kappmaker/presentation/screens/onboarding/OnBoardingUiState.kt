@@ -13,7 +13,8 @@ import com.measify.kappmaker.designsystem.generated.resources.UiRes
 data class OnBoardingScreenData(
     val title: StringResource,
     val description: StringResource,
-    val imageRes: DrawableResource
+    val imageRes: DrawableResource,
+    val isGetPremiumButtonVisible: Boolean = false
 )
 
 data class OnBoardingUiState(
@@ -32,14 +33,18 @@ data class OnBoardingUiState(
         OnBoardingScreenData(
             Res.string.title_onboarding_page_1,
             Res.string.desc_onboarding_page_1,
-            UiRes.drawable.ic_logo
+            UiRes.drawable.ic_logo,
+            isGetPremiumButtonVisible = true
         ),
     ),
     val onBoardIsShown: Boolean = false,
+    val isPremiumRequired: Boolean = false,
     val isLoading: Boolean = true
 )
 
 sealed class OnBoardingUiEvent {
     data object OnClickStart : OnBoardingUiEvent()
+    data object OnClickGetPremiumAccess : OnBoardingUiEvent()
+
 }
 

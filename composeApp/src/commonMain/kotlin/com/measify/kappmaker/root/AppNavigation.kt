@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.measify.kappmaker.presentation.screens.main.MainScreenRoute
 import com.measify.kappmaker.presentation.screens.onboarding.OnBoardingScreenRoute
+import com.measify.kappmaker.presentation.screens.paywall.PaywallScreenRoute
 
 val LocalNavigator = compositionLocalOf<NavHostController> {
     error("No LocalNavController provided")
@@ -28,6 +29,9 @@ fun AppNavigation(){
             }
             composable<MainScreenRoute> { navBackStackEntry ->
                 navBackStackEntry.toRoute<MainScreenRoute>().Content()
+            }
+            composable<PaywallScreenRoute> { navBackStackEntry ->
+                navBackStackEntry.toRoute<PaywallScreenRoute>().Content()
             }
         }
     }

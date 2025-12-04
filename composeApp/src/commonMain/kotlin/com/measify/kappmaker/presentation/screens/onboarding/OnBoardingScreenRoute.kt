@@ -2,6 +2,7 @@ package com.measify.kappmaker.presentation.screens.onboarding
 
 import androidx.compose.runtime.Composable
 import com.measify.kappmaker.presentation.screens.main.MainScreenRoute
+import com.measify.kappmaker.presentation.screens.paywall.PaywallScreenRoute
 import com.measify.kappmaker.root.LocalNavigator
 import com.measify.kappmaker.util.ScreenRoute
 import com.measify.kappmaker.util.uiStateHolder
@@ -15,7 +16,7 @@ class OnBoardingScreenRoute : ScreenRoute {
         val uiStateHolder = uiStateHolder<OnBoardingUiStateHolder>()
         val navigator = LocalNavigator.current
         OnBoardingScreen(
-            style = OnBoardingScreenStyle.STYLE2,
+            style = OnBoardingScreenStyle.STYLE1,
             uiStateHolder = uiStateHolder,
             onNavigateMain = {
                 navigator.navigate(MainScreenRoute()) {
@@ -23,6 +24,9 @@ class OnBoardingScreenRoute : ScreenRoute {
                         inclusive = true
                     }
                 }
+            },
+            onNavigatePaywall = {
+                navigator.navigate(PaywallScreenRoute())
             }
         )
     }
