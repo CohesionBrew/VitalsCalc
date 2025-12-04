@@ -3,6 +3,7 @@ package com.measify.kappmaker.root
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.measify.kappmaker.common.BuildConfig
 import com.measify.kappmaker.data.BackgroundExecutor
+import com.measify.kappmaker.data.repository.CreditRepository
 import com.measify.kappmaker.data.repository.SubscriptionRepository
 import com.measify.kappmaker.data.repository.UserRepository
 import com.measify.kappmaker.data.source.featureflag.FeatureFlagManager
@@ -14,8 +15,10 @@ import com.measify.kappmaker.data.source.remote.HttpClientFactory
 import com.measify.kappmaker.data.source.remote.apiservices.ApiService
 import com.measify.kappmaker.data.source.remote.apiservices.ai.OpenAiApiService
 import com.measify.kappmaker.data.source.remote.apiservices.ai.ReplicateApiService
+import com.measify.kappmaker.domain.model.credit.creditSystemConfig
 import com.measify.kappmaker.presentation.components.ads.AdsManager
 import com.measify.kappmaker.presentation.screens.account.AccountUiStateHolder
+import com.measify.kappmaker.presentation.screens.creditbalance.CreditBalanceUiStateHolder
 import com.measify.kappmaker.presentation.screens.favorite.FavoriteUiStateHolder
 import com.measify.kappmaker.presentation.screens.home.HomeUiStateHolder
 import com.measify.kappmaker.presentation.screens.onboarding.OnBoardingUiStateHolder
@@ -159,6 +162,46 @@ private fun initializeInAppPurchase() {
     Purchases.configure(PurchasesConfiguration(apiKey = revenueCatApiKey))
 }
 
+private fun Module.initializeCreditSystem() {
+    single {
+        val subscriptionRepository = get<SubscriptionRepository>()
+        val appCreditSystemConfig = creditSystemConfig {
+
+            //Give 2 credits to new users one time
+//            oneTimeBonus("welcome_bonus", 2)
+//
+//            //Give 2 credits per week for free users
+//            recurringWeekly(
+//                id = "free_plan_weekly",
+//                amount = 2,
+//                condition = {
+//                    !subscriptionRepository.hasPremiumAccess()
+//                }
+//            )
+//
+//            // Give 10 credits per week for premium users
+//            recurringWeekly(
+//                id = "premium_plan_weekly",
+//                amount = 10,
+//                condition = {
+//                    subscriptionRepository.hasPremiumAccess()
+//                }
+//            )
+//
+//            // Give 1 credit per day for premium users
+//            recurringDaily(
+//                id = "premium_plan_daily",
+//                amount = 1,
+//                condition = {
+//                    subscriptionRepository.hasPremiumAccess()
+//                }
+//            )
+        }
+
+        CreditRepository(appCreditSystemConfig, get(), get(), get())
+    }
+}
+
 private val domainModule = module {
 
 }
@@ -191,6 +234,8 @@ private val dataModule = module {
             .build()
     }
     single { get<AppDatabase>().exampleDao() }
+    single { get<AppDatabase>().creditTransactionDao() }
+
 
     //Repositories
     single { UserRepository(get(), get(), get(), get()) }
@@ -199,6 +244,8 @@ private val dataModule = module {
     //Loggers
     factory { TelegramLogger(get(), get(), get()) } bind Logger::class
     factory { NapierLogger() } bind Logger::class
+
+    initializeCreditSystem()
 }
 
 private val presentationModule = module {
@@ -209,6 +256,7 @@ private val presentationModule = module {
     viewModelOf(::PaywallUiStateHolder)
     viewModelOf(::AccountUiStateHolder)
     viewModelOf(::SubscriptionsUiStateHolder)
+    viewModelOf(::CreditBalanceUiStateHolder)
 
 }
 private val appModules: List<Module> get() = platformModule + domainModule + dataModule + presentationModule

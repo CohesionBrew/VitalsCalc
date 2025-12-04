@@ -53,18 +53,6 @@ fun FavoriteScreen(
         isScrollableContent = true,
         title = "FavoriteScreen",
         includeBottomInsets = false, // Set to true if bottom nav is not visible
-        toolbarExtraContent = {
-            val nbCredits = "2" //TODO get this from uistate
-            Chip(
-                text = nbCredits,
-                style = ChipStyle.FILLED_ALPHA,
-                size = ChipSize.SMALL,
-                startIconRes = UiRes.drawable.ic_coin_credits,
-                onClick = {
-                    AppGlobalUiState.showUiMessage(UiMessage.Message("Clicked on Credits"))
-                }
-            )
-        }
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.sectionSpacing)) {
             Text("FavoriteScreen")

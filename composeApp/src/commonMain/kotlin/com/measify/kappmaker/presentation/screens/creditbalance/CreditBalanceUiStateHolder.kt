@@ -1,0 +1,75 @@
+package com.measify.kappmaker.presentation.screens.creditbalance
+
+import com.measify.kappmaker.data.repository.CreditRepository
+import com.measify.kappmaker.data.repository.SubscriptionRepository
+import com.measify.kappmaker.util.UiStateHolder
+import com.measify.kappmaker.util.uiStateHolderScope
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+
+class CreditBalanceUiStateHolder(
+    private val creditRepository: CreditRepository,
+    private val subscriptionRepository: SubscriptionRepository,
+) : UiStateHolder() {
+    private val _uiState = MutableStateFlow(CreditBalanceUiState())
+    val uiState: StateFlow<CreditBalanceUiState> = _uiState.asStateFlow()
+
+    init {
+        observeChanges()
+    }
+
+
+    private fun observeChanges() {
+        creditRepository.balance
+            .onEach { creditBalance ->
+                val recurringCredits = creditRepository.getRecurringCredits()
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        creditBalance = creditBalance,
+                        recurringCredits = recurringCredits
+                    )
+                }
+            }
+            .launchIn(uiStateHolderScope)
+
+        subscriptionRepository.currentSubscriptionFlow
+            .onEach { subscription ->
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        isPremiumUser = subscription != null
+                    )
+                }
+            }
+            .launchIn(uiStateHolderScope)
+
+        creditRepository.getRecentTransactionsFlow()
+            .onEach { lastTransactions ->
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(lastTransactions = lastTransactions)
+                }
+            }
+            .launchIn(uiStateHolderScope)
+    }
+
+    fun onUiEvent(event: CreditBalanceUiEvent) = uiStateHolderScope.launch {
+        when (event) {
+            CreditBalanceUiEvent.UpgradeToPremium -> {
+                _uiState.update { it.copy(isPremiumRequired = true) }
+            }
+
+            CreditBalanceUiEvent.BuyCreditPack -> {
+                //TODO set some boolean value to true, so in paywall you know to
+                // show credit pack paywall or subscription paywall
+                _uiState.update { it.copy(isMoreCreditRequired = true) }
+            }
+        }
+    }
+
+    fun onPremiumRequiredHandled() {
+        _uiState.update { it.copy(isPremiumRequired = false) }
+    }
+
+    fun onMoreCreditRequiredHandled() {
+        _uiState.update { it.copy(isMoreCreditRequired = false) }
+    }
+}

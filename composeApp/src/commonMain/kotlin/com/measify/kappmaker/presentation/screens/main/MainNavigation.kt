@@ -9,11 +9,13 @@ import com.measify.kappmaker.generated.resources.Res
 import com.measify.kappmaker.generated.resources.help_and_support
 import com.measify.kappmaker.generated.resources.subscriptions
 import com.measify.kappmaker.generated.resources.title_screen_account
+import com.measify.kappmaker.generated.resources.title_screen_credits
 import com.measify.kappmaker.generated.resources.title_screen_favorites
 import com.measify.kappmaker.generated.resources.title_screen_home
 import com.measify.kappmaker.generated.resources.title_screen_profile
 import com.measify.kappmaker.generated.resources.title_sign_in
 import com.measify.kappmaker.presentation.screens.account.AccountScreenRoute
+import com.measify.kappmaker.presentation.screens.creditbalance.CreditBalanceScreenRoute
 import com.measify.kappmaker.presentation.screens.favorite.FavoriteScreenRoute
 import com.measify.kappmaker.presentation.screens.helpandsupport.HelpAndSupportScreenRoute
 import com.measify.kappmaker.presentation.screens.home.HomeScreenRoute
@@ -66,6 +68,11 @@ fun MainNavigation(navController: NavHostController) {
             navBackStackEntry.destination.label =
                 stringResource(Res.string.subscriptions)
             navBackStackEntry.toRoute<SubscriptionsScreenRoute>().Content()
+        }
+        composable<CreditBalanceScreenRoute> { navBackStackEntry ->
+            navBackStackEntry.destination.label =
+                stringResource(Res.string.title_screen_credits)
+            navBackStackEntry.toRoute<CreditBalanceScreenRoute>().Content()
         }
     }
 }

@@ -20,6 +20,7 @@
     <string name="title_screen_favorites">Favorites</string>
     <string name="title_screen_account">Account</string>
     <string name="title_screen_profile">Profile</string>
+    <string name="title_screen_credits">Credits</string>
 
     <string name="and">and</string>
     <string name="sign_in_to">Sign in to </string>

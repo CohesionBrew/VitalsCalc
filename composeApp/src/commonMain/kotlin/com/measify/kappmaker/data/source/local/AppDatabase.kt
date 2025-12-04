@@ -4,16 +4,19 @@ import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
+import com.measify.kappmaker.data.source.local.dao.CreditTransactionDao
 import com.measify.kappmaker.data.source.local.dao.ExampleDao
+import com.measify.kappmaker.data.source.local.entity.CreditTransactionEntity
 import com.measify.kappmaker.data.source.local.entity.ExampleEntity
 
 @Database(
-    entities = [ExampleEntity::class],
+    entities = [ExampleEntity::class, CreditTransactionEntity::class],
     version = 1
 )
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun exampleDao(): ExampleDao
+    abstract fun creditTransactionDao(): CreditTransactionDao
     //Add other DAOs here
 }
 

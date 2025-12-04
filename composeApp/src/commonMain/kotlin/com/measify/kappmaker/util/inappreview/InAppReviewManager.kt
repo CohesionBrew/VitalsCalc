@@ -4,6 +4,7 @@ package com.measify.kappmaker.util.inappreview
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import com.measify.kappmaker.data.repository.CreditRepository
 import com.measify.kappmaker.data.source.preferences.UserPreferences
 import com.measify.kappmaker.util.logging.AppLogger
 import kotlin.time.Clock
@@ -50,6 +51,22 @@ class InAppReviewTrigger(
         showReviewPromptIfEligible(ignoreCooldownPeriod = true, onShown = {
             AppLogger.i("Tried to show in app review after successful purchase")
         })
+    }
+
+    /**
+     * Shows in app review, if user already generated at least 1, or every 5 credits used.
+     */
+    suspend fun triggerWhileGenerationIsInProgress(
+        minRequiredGeneration: Int = 1,
+        everyXGeneration: Int = 5
+    ) {
+        val usedCredits = userPreferences.getInt(CreditRepository.KEY_NB_TOTAL_USED_CREDIT, 0) ?: 0
+        showReviewPromptIfEligible(
+            condition = { usedCredits == minRequiredGeneration || usedCredits % everyXGeneration == 0 },
+            onShown = {
+                AppLogger.i("Tried to show in app review while generation is in progress")
+            }
+        )
     }
 
     /**
