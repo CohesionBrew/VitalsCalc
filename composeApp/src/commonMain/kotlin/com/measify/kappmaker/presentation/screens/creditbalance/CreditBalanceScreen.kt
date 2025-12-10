@@ -124,6 +124,7 @@ private fun CreditBalanceHeroSection(
         ) {
             // Credit Balance Display
             Column(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.defaultSpacing)
             ) {

@@ -6,7 +6,7 @@ target 'iosApp' do
   use_frameworks!
 
   # Pods for iosAp
-  pod 'PurchasesHybridCommonUI', '16.2.0'
+  pod 'PurchasesHybridCommonUI', '17.21.2'
   pod 'Google-Mobile-Ads-SDK', '11.13.0'
 
 
