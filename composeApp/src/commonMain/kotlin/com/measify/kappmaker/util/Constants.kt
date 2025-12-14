@@ -23,5 +23,9 @@ object Constants {
         if (isAndroid) "https://play.google.com/store/account/subscriptions"
         else "https://apps.apple.com/account/subscriptions"
 
+    // If true app supports login with Apple/Google, otherwise only anonymous login
+    const val HAS_AUTH_LOGIN_SYSTEM = true
+
+
 }
 

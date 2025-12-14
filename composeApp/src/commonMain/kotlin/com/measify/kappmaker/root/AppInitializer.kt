@@ -198,7 +198,7 @@ private fun Module.initializeCreditSystem() {
 //            )
         }
 
-        CreditRepository(appCreditSystemConfig, get(), get(), get())
+        CreditRepository(appCreditSystemConfig, get(), get(), get(), get())
     }
 }
 

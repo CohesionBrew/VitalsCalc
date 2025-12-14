@@ -6,11 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -34,23 +33,27 @@ import com.measify.kappmaker.designsystem.components.SmallTitle
 import com.measify.kappmaker.designsystem.components.modals.AppModalBottomSheet
 import com.measify.kappmaker.designsystem.components.premium.UpgradePremiumBanner
 import com.measify.kappmaker.designsystem.components.premium.UpgradePremiumBannerStyle
+import com.measify.kappmaker.designsystem.generated.resources.UiRes
 import com.measify.kappmaker.designsystem.generated.resources.btn_cancel
 import com.measify.kappmaker.designsystem.generated.resources.btn_logout_confirm
 import com.measify.kappmaker.designsystem.generated.resources.ic_arrow_right
 import com.measify.kappmaker.designsystem.generated.resources.ic_profile_img_placeholder
 import com.measify.kappmaker.designsystem.generated.resources.logout
 import com.measify.kappmaker.designsystem.generated.resources.text_logout_confirmation
+import com.measify.kappmaker.designsystem.generated.resources.ic_copy_content
 import com.measify.kappmaker.designsystem.theme.AppTheme
 import com.measify.kappmaker.domain.model.User
 import com.measify.kappmaker.generated.resources.Res
 import com.measify.kappmaker.generated.resources.help_and_support
 import com.measify.kappmaker.generated.resources.subscriptions
+import com.measify.kappmaker.generated.resources.title_screen_account
 import com.measify.kappmaker.generated.resources.title_sign_in
+import com.measify.kappmaker.root.AppGlobalUiState
+import com.measify.kappmaker.util.Constants
+import com.measify.kappmaker.util.UiMessage
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
-import com.measify.kappmaker.designsystem.generated.resources.UiRes
-import com.measify.kappmaker.generated.resources.title_screen_account
 
 @Composable
 fun AccountScreen(
@@ -141,50 +144,81 @@ fun AccountScreen(
 
 @Composable
 private fun ProfileInfoBox(user: User?, onClick: () -> Unit) {
-    AppCardContainer(modifier = Modifier.fillMaxWidth(), onClick = onClick) {
+    val clipboardManager = LocalClipboardManager.current
+    AppCardContainer(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = {
+            if (Constants.HAS_AUTH_LOGIN_SYSTEM) {
+                onClick()
+            } else {
+                user?.id?.let {
+                    clipboardManager.setText(AnnotatedString(it))
+                    AppGlobalUiState.showUiMessage(UiMessage.Message("User ID is copied to clipboard"))
+                }
+            }
+        }
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(AppTheme.spacing.horizontalItemSpacing)
         ) {
+            if (Constants.HAS_AUTH_LOGIN_SYSTEM) {
 
-            AsyncImage(
-                model = ImageRequest.Builder(LocalPlatformContext.current)
-                    .data(user?.photoUrl)
-                    .crossfade(true)
-                    .build(),
-                placeholder = painterResource(com.measify.kappmaker.designsystem.generated.resources.UiRes.drawable.ic_profile_img_placeholder),
-                error = painterResource(com.measify.kappmaker.designsystem.generated.resources.UiRes.drawable.ic_profile_img_placeholder),
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.size(60.dp).clip(CircleShape),
-            )
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalPlatformContext.current)
+                        .data(user?.photoUrl)
+                        .crossfade(true)
+                        .build(),
+                    placeholder = painterResource(UiRes.drawable.ic_profile_img_placeholder),
+                    error = painterResource(UiRes.drawable.ic_profile_img_placeholder),
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.size(60.dp).clip(CircleShape),
+                )
 
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.groupedVerticalElementSpacingSmall)
-            ) {
-                val displayName =
-                    if (user == null) stringResource(Res.string.title_sign_in) else user.displayName
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.groupedVerticalElementSpacingSmall)
+                ) {
+                    val displayName =
+                        if (user == null) stringResource(Res.string.title_sign_in) else user.displayName
 
-                SmallTitle(text = displayName ?: "User Name")
-                user?.email?.let { email ->
-                    Text(
-                        email,
-                        style = AppTheme.typography.bodyMedium,
-                        color = AppTheme.colors.text.secondary,
-                        fontWeight = FontWeight.Medium
-                    )
+                    SmallTitle(text = displayName ?: "User Name")
+                    user?.email?.let { email ->
+                        Text(
+                            email,
+                            style = AppTheme.typography.bodyMedium,
+                            color = AppTheme.colors.text.secondary,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+
                 }
 
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    imageVector = vectorResource(UiRes.drawable.ic_arrow_right),
+                    contentDescription = null,
+                    tint = AppTheme.colors.text.primary
+                )
             }
+            else {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = "User ID: ${user?.id ?: ""}",
+                    style = AppTheme.typography.bodySmall,
+                    color = AppTheme.colors.text.primary,
+                    fontWeight = FontWeight.Medium
+                )
 
-            Icon(
-                modifier = Modifier.size(24.dp),
-                imageVector = vectorResource(UiRes.drawable.ic_arrow_right),
-                contentDescription = null,
-                tint = AppTheme.colors.text.primary
-            )
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    imageVector = vectorResource(UiRes.drawable.ic_copy_content),
+                    contentDescription = null,
+                    tint = AppTheme.colors.text.primary
+                )
+            }
 
         }
     }

@@ -21,29 +21,38 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.measify.kappmaker.designsystem.generated.resources.UiRes
+import com.measify.kappmaker.util.Constants
 
 class AccountUiStateHolder(
     private val userRepository: UserRepository,
     private val subscriptionRepository: SubscriptionRepository
 ) : UiStateHolder() {
 
-    private val allSettingsItemList: List<SettingsItemUiState> = listOf(
-        SettingsItemUiState(
-            startIcon = UiRes.drawable.ic_settings_item_subscriptions,
-            textRes = Res.string.subscriptions
-        ),
+    private val allSettingsItemList: List<SettingsItemUiState> = buildList {
+        add(
+            SettingsItemUiState(
+                startIcon = UiRes.drawable.ic_settings_item_subscriptions,
+                textRes = Res.string.subscriptions
+            )
+        )
 
-        SettingsItemUiState(
-            startIcon = UiRes.drawable.ic_settings_item_support_legal,
-            textRes = Res.string.help_and_support
-        ),
+        add(
+            SettingsItemUiState(
+                startIcon = UiRes.drawable.ic_settings_item_support_legal,
+                textRes = Res.string.help_and_support
+            )
+        )
 
-        SettingsItemUiState(
-            startIcon = UiRes.drawable.ic_settings_item_logout,
-            textRes = Res.string.logout,
-            showEndIcon = false,
-        ),
-    )
+        if (Constants.HAS_AUTH_LOGIN_SYSTEM) {
+            add(
+                SettingsItemUiState(
+                    startIcon = UiRes.drawable.ic_settings_item_logout,
+                    textRes = Res.string.logout,
+                    showEndIcon = false,
+                )
+            )
+        }
+    }
 
     private val _uiState = MutableStateFlow(AccountUiState())
     val uiState: StateFlow<AccountUiState> =
@@ -54,7 +63,7 @@ class AccountUiStateHolder(
         ) { currentUser, currentSubscription, uiState ->
             val user = currentUser.getOrNull()
             uiState.copy(
-                user = if (user?.isAnonymous == true) null else user,
+                user = if (user?.isAnonymous == true && Constants.HAS_AUTH_LOGIN_SYSTEM) null else user,
                 settingsItemList =
                     if (user != null) allSettingsItemList
                     else allSettingsItemList.subList(0, allSettingsItemList.size - 1),

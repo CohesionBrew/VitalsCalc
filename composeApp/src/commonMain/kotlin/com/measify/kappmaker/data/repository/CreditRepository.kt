@@ -16,6 +16,7 @@ import com.measify.kappmaker.util.logging.AppLogger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -29,6 +30,7 @@ import kotlin.time.Instant
 class CreditRepository(
     private val config: CreditSystemConfig,
     private val creditTransactionDao: CreditTransactionDao,
+    private val subscriptionRepository: SubscriptionRepository,
     private val userPreferences: UserPreferences,
     private val applicationScope: ApplicationScope,
 ) {
@@ -38,7 +40,10 @@ class CreditRepository(
     val balance = _balance.asStateFlow()
 
     init {
-        applicationScope.launch { refreshAndGetBalance() }
+        applicationScope.launch {
+            subscriptionRepository.currentSubscriptionFlow
+                .collectLatest { refreshAndGetBalance() }
+        }
     }
 
 
