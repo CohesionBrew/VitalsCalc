@@ -78,6 +78,12 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.navigation.compose)
 
+            val backend = project.findProperty("SUBSCRIPTION_BACKEND")?.toString()?.uppercase() ?: "ADAPTY"
+
+            when (backend) {
+                "ADAPTY" -> implementation(projects.libs.subscription.subscriptionAdapty)
+                "REVENUECAT" -> implementation(projects.libs.subscription.subscriptionRevenuecat)
+            }
         }
 
         commonTest.dependencies {

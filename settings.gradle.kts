@@ -1,6 +1,8 @@
 rootProject.name = "KAppMakerAllModules"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google {
             content {
@@ -31,9 +33,12 @@ dependencyResolutionManagement {
 
 plugins {
     //Added For compose hot reload support
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 include(":composeApp")
 include(":designsystem")
+include(":libs:subscription:subscription-api")
+include(":libs:subscription:subscription-revenuecat")
+include(":libs:subscription:subscription-adapty")
