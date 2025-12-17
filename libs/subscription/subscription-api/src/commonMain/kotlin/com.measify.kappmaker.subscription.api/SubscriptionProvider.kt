@@ -2,11 +2,11 @@ package com.measify.kappmaker.subscription.api
 
 import kotlinx.coroutines.flow.Flow
 
-typealias SubscriptionProviderFactory = () -> SubscriptionProvider
 
 interface SubscriptionProvider {
     companion object {
-        fun get(factory: SubscriptionProviderFactory): SubscriptionProvider = factory()
+        fun get(factory: SubscriptionProviderFactory): SubscriptionProvider =
+            factory.createProvider()
     }
 
     val currentSubscriptionProviderUserFlow: Flow<SubscriptionProviderUser?>
@@ -24,16 +24,7 @@ interface SubscriptionProvider {
     suspend fun purchase(purchasePackageId: PurchasePackageId): Result<SubscriptionProviderUser>
     suspend fun restorePurchase(): Result<SubscriptionProviderUser>
 
-//
-//    suspend fun getPurchasePackages(placementId: String? = null): List<PurchasePackage>
-//
-//
-//
-//
-
-//
-//    @Composable
-//    fun RemotePaywall(placementId: String? = null, listener: PurchaseEventsListener)
+    suspend fun getPurchasePackages(placementId: String? = null): Result<List<PurchasePackage>>
 }
 
 suspend fun SubscriptionProvider.hasAccess(key: String): Boolean =

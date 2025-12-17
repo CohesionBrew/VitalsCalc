@@ -1,5 +1,7 @@
 plugins {
     id("configure-kmp-library-module")
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.compose)
 }
 
 android {
@@ -9,8 +11,10 @@ android {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.kotlinx.coroutines.core)
             api(projects.libs.subscription.subscriptionApi)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(compose.runtime)
+            implementation(compose.foundation)
         }
         mobileMain.dependencies {
             api(libs.revenuecat.core)

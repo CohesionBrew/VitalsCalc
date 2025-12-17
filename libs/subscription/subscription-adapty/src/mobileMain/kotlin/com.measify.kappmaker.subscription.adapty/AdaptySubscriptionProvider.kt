@@ -4,41 +4,42 @@ import com.adapty.kmp.Adapty
 import com.adapty.kmp.OnProfileUpdatedListener
 import com.adapty.kmp.models.AdaptyConfig
 import com.adapty.kmp.models.AdaptyLogLevel
+import com.adapty.kmp.models.AdaptyPaywallFetchPolicy
 import com.adapty.kmp.models.AdaptyPaywallProduct
 import com.adapty.kmp.models.AdaptyProfile
 import com.adapty.kmp.models.AdaptyProfileParameters
 import com.adapty.kmp.models.AdaptyPurchaseResult
 import com.adapty.kmp.models.AdaptyResult
+import com.adapty.kmp.models.exceptionOrNull
 import com.adapty.kmp.models.fold
+import com.adapty.kmp.models.getOrNull
 import com.measify.kappmaker.subscription.api.GrantedAccess
+import com.measify.kappmaker.subscription.api.Price
+import com.measify.kappmaker.subscription.api.PurchasePackage
 import com.measify.kappmaker.subscription.api.PurchasePackageId
 import com.measify.kappmaker.subscription.api.SubscriptionProvider
-import com.measify.kappmaker.subscription.api.SubscriptionProviderFactory
 import com.measify.kappmaker.subscription.api.SubscriptionProviderUser
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-internal actual val subscriptionProviderFactory: SubscriptionProviderFactory
-    get() = {
-        AdaptySubscriptionProvider()
-    }
+internal class AdaptySubscriptionProvider : SubscriptionProvider {
 
-private class AdaptySubscriptionProvider : SubscriptionProvider {
+    private val paywallProductsCache = mutableMapOf<PurchasePackageId, AdaptyPaywallProduct>()
 
-    private val paywallProductsCache = mutableMapOf<String, AdaptyPaywallProduct>()
-
-    override val currentSubscriptionProviderUserFlow: Flow<SubscriptionProviderUser?> = callbackFlow {
-        val listener = OnProfileUpdatedListener { adaptyProfile ->
-            trySend(adaptyProfile.asSubscriptionProviderUser())
+    override val currentSubscriptionProviderUserFlow: Flow<SubscriptionProviderUser?> =
+        callbackFlow {
+            val listener = OnProfileUpdatedListener { adaptyProfile ->
+                trySend(adaptyProfile.asSubscriptionProviderUser())
+            }
+            Adapty.setOnProfileUpdatedListener(listener)
+            awaitClose {
+                Adapty.setOnProfileUpdatedListener(null)
+            }
         }
-        Adapty.setOnProfileUpdatedListener(listener)
-        awaitClose {
-            Adapty.setOnProfileUpdatedListener(null)
-        }
-    }
 
 
     override suspend fun initialize(apiKey: String): Result<Unit> {
@@ -85,7 +86,7 @@ private class AdaptySubscriptionProvider : SubscriptionProvider {
     }
 
     override suspend fun purchase(purchasePackageId: PurchasePackageId): Result<SubscriptionProviderUser> {
-        val packageToBuy = paywallProductsCache[purchasePackageId.value]
+        val packageToBuy = paywallProductsCache[purchasePackageId]
 
         if (packageToBuy == null) return Result.failure(Exception("Package is not found in Adapty paywall cache. Make sure, you called getPurchasePackages first"))
         val purchaseResult = Adapty.makePurchase(packageToBuy)
@@ -120,6 +121,56 @@ private class AdaptySubscriptionProvider : SubscriptionProvider {
                 else Result.success(adaptyProfile.asSubscriptionProviderUser())
             },
             onError = { error -> Result.failure(error) }
+        )
+    }
+
+    override suspend fun getPurchasePackages(placementId: String?): Result<List<PurchasePackage>> {
+        val currentPlacementId = placementId ?: "default"
+        val paywallResult = Adapty.getPaywall(
+            placementId = currentPlacementId,
+            fetchPolicy = AdaptyPaywallFetchPolicy.ReturnCacheDataIfNotExpiredElseLoad(5.minutes.inWholeMilliseconds)
+        )
+
+        val paywall = paywallResult.getOrNull()
+
+        if (paywall == null) {
+            return Result.failure(
+                paywallResult.exceptionOrNull()
+                    ?: Exception("Paywall is not found for placementId: $currentPlacementId")
+            )
+        }
+
+        val paywallProductsResult = Adapty.getPaywallProducts(paywall)
+        val paywallProducts = paywallProductsResult.getOrNull()
+
+        if (paywallProducts == null) {
+            return Result.failure(
+                paywallProductsResult.exceptionOrNull()
+                    ?: Exception("Paywall products are not found for paywall: ${paywall.name}")
+            )
+        }
+
+        paywallProducts.forEach { paywallProduct ->
+            paywallProductsCache[PurchasePackageId(paywallProduct.vendorProductId)] = paywallProduct
+        }
+
+        val purchasePackages = paywallProducts.map { paywallProduct ->
+            paywallProduct.asPurchasePackage()
+        }
+
+        return Result.success(purchasePackages)
+    }
+
+    private fun AdaptyPaywallProduct.asPurchasePackage(): PurchasePackage {
+        return PurchasePackage(
+            id = PurchasePackageId(this.vendorProductId),
+            title = this.localizedTitle,
+            description = localizedDescription,
+            price = Price(
+                amount = this.price.amount,
+                currencyCodeOrSymbol = this.price.currencyCode ?: this.price.currencySymbol,
+                localizedString = this.price.localizedString
+            )
         )
     }
 

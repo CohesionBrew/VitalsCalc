@@ -48,6 +48,11 @@ object NoOpSubscriptionProvider : SubscriptionProvider {
         return Result.failure(Exception("NoOpSubscriptionProvider user doesn't exist"))
     }
 
+    override suspend fun getPurchasePackages(placementId: String?): Result<List<PurchasePackage>> {
+        logMessageIfEnabled { "getPurchasePackages is called for placementId: $placementId" }
+        return Result.success(emptyList())
+    }
+
     private fun logMessageIfEnabled(message: () -> String) {
         if (!isLogEnabled) return
         println("NoOpSubscriptionProvider: ${message()}")
