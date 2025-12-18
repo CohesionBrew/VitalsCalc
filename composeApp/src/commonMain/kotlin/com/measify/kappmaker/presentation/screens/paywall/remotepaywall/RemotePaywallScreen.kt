@@ -8,112 +8,79 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.measify.kappmaker.domain.model.Subscription
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.measify.kappmaker.designsystem.components.LoadingProgress
 import com.measify.kappmaker.designsystem.components.LoadingProgressMode
 import com.measify.kappmaker.designsystem.components.modals.AppDialog
 import com.measify.kappmaker.designsystem.components.modals.DialogType
-import com.measify.kappmaker.designsystem.components.premium.PremiumFeatureUiState
 import com.measify.kappmaker.presentation.components.premium.PremiumFeatureFactory
 import com.measify.kappmaker.presentation.components.premium.SuccessfulPurchaseView
-import com.measify.kappmaker.util.UiMessage
+import com.measify.kappmaker.presentation.screens.paywall.PaywallUiStateHolder
+import com.measify.kappmaker.subscription.api.SubscriptionProviderUi
 import com.measify.kappmaker.util.extensions.asFormattedDate
-import com.measify.kappmaker.util.extensions.asPremiumSubscription
-import com.measify.kappmaker.util.logging.AppLogger
-import com.revenuecat.purchases.kmp.models.CustomerInfo
-import com.revenuecat.purchases.kmp.models.PurchasesError
-import com.revenuecat.purchases.kmp.models.StoreTransaction
-import com.revenuecat.purchases.kmp.ui.revenuecatui.Paywall
-import com.revenuecat.purchases.kmp.ui.revenuecatui.PaywallListener
-import com.revenuecat.purchases.kmp.ui.revenuecatui.PaywallOptions
+import org.koin.compose.koinInject
 
 
 @Composable
-fun RemotePaywallScreen(onDismiss: () -> Unit) {
-    var errorMessage by remember { mutableStateOf<UiMessage?>(null) }
-    var successfulPurchaseCustomerInfo by remember { mutableStateOf<CustomerInfo?>(null) }
-    var successfulSubscription by remember { mutableStateOf<Subscription?>(null) }
-    var isLoading by remember { mutableStateOf(false) }
+fun RemotePaywallScreen(
+    onDismiss: () -> Unit,
+    onSignInRequired: () -> Unit,
+    uiStateHolder: PaywallUiStateHolder,
+) {
 
-    if (successfulPurchaseCustomerInfo != null) {
-        LaunchedEffect(successfulPurchaseCustomerInfo) {
-            isLoading = true
-            successfulSubscription = successfulPurchaseCustomerInfo?.asPremiumSubscription()
-            isLoading = false
+    val subscriptionProviderUi = koinInject<SubscriptionProviderUi>()
+    val uiState by uiStateHolder.uiState.collectAsStateWithLifecycle()
+    var isPaywallVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        uiStateHolder.updatePlacementIdIfNecessary(refreshPackages = false)
+        isPaywallVisible = true
+    }
+
+    LaunchedEffect(uiState.isDismissRequired) {
+        if (uiState.isDismissRequired) {
+            onDismiss()
         }
     }
 
-    errorMessage?.let {
+    LaunchedEffect(uiState.signInActionRequired) {
+        if (uiState.signInActionRequired) {
+            onSignInRequired()
+            uiStateHolder.onSignInActionHandled()
+        }
+    }
+
+    if (uiState.errorMessage?.value.isNullOrEmpty().not()){
         AppDialog(
             type = DialogType.ERROR,
-            text = it.value,
+            text = uiState.errorMessage?.value,
             onConfirm = {
-                errorMessage = null
+                uiStateHolder.onMessageShown()
                 onDismiss()
             }
         )
     }
-    successfulSubscription?.let { subscription ->
+
+    uiState.successfulSubscription?.let { subscription ->
         SuccessfulPurchaseView(
             modifier = Modifier.fillMaxSize(),
-            features = PremiumFeatureFactory.ofSubscription(successfulSubscription),
+            features = PremiumFeatureFactory.ofSubscription(subscription),
             isRecurring = subscription.willRenew,
             isLifetime = subscription.isLifetime,
             expirationDate = subscription.expirationDateInMillis?.asFormattedDate(),
             onContinue = {
                 onDismiss()
-                successfulPurchaseCustomerInfo = null
-                successfulSubscription = null
+                uiStateHolder.onSuccessfulPurchaseHandled()
             }
         )
     }
 
-    val paywallOptions = remember {
-        PaywallOptions(dismissRequest = {
-            if (successfulPurchaseCustomerInfo == null) onDismiss()
-        }) {
-            this.shouldDisplayDismissButton = true
-            this.listener = object : PaywallListener {
-                override fun onPurchaseCompleted(
-                    customerInfo: CustomerInfo,
-                    storeTransaction: StoreTransaction
-                ) {
-                    //Successful payment
-                    super.onPurchaseCompleted(customerInfo, storeTransaction)
-                    AppLogger.d("Successful payment, onPurchaseCompleted")
-                    successfulPurchaseCustomerInfo = customerInfo
-
-                }
-
-                override fun onPurchaseError(error: PurchasesError) {
-                    super.onPurchaseError(error)
-                    AppLogger.e("There was an error with purchase: $error")
-                    errorMessage =
-                        UiMessage.Message("There was an error with purchase: ${error.message}")
-                }
-
-                override fun onRestoreCompleted(customerInfo: CustomerInfo) {
-                    super.onRestoreCompleted(customerInfo)
-                    AppLogger.d("Successful restore, onRestoreCompleted")
-                    val isSuccessfulRestore =
-                        customerInfo.entitlements.all.any { it.value.isActive }
-
-                    if (!isSuccessfulRestore) {
-                        errorMessage =
-                            UiMessage.Message("There was an error with restoring purchase")
-                    } else
-                        successfulPurchaseCustomerInfo = customerInfo
-                }
-
-                override fun onRestoreError(error: PurchasesError) {
-                    super.onRestoreError(error)
-                    AppLogger.e("There was an error with restore purchase: $error")
-                    errorMessage =
-                        UiMessage.Message("There was an error with restore purchase: ${error.message}")
-                }
-            }
-        }
+    if (isPaywallVisible) {
+        subscriptionProviderUi.RemotePaywall(
+            listener = uiStateHolder.remotePaywallPurchaseEventsListener,
+            placementId = uiState.currentPlacementId
+        )
     }
-    Paywall(options = paywallOptions)
-    if (isLoading) LoadingProgress(mode = LoadingProgressMode.FULLSCREEN)
+
+    if (uiState.isLoading || !isPaywallVisible) LoadingProgress(mode = LoadingProgressMode.FULLSCREEN)
 }

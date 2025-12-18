@@ -2,9 +2,15 @@ package com.measify.kappmaker.presentation.screens.creditbalance
 
 import com.measify.kappmaker.data.repository.CreditRepository
 import com.measify.kappmaker.data.repository.SubscriptionRepository
+import com.measify.kappmaker.util.Constants
 import com.measify.kappmaker.util.UiStateHolder
 import com.measify.kappmaker.util.uiStateHolderScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class CreditBalanceUiStateHolder(
@@ -58,8 +64,7 @@ class CreditBalanceUiStateHolder(
             }
 
             CreditBalanceUiEvent.BuyCreditPack -> {
-                //TODO set some boolean value to true, so in paywall you know to
-                // show credit pack paywall or subscription paywall
+                subscriptionRepository.currentPlacementId = Constants.PAYWALL_PLACEMENT_CREDITS_PACK
                 _uiState.update { it.copy(isMoreCreditRequired = true) }
             }
         }

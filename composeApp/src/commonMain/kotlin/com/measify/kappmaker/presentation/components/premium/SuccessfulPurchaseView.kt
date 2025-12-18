@@ -7,6 +7,8 @@ import com.measify.kappmaker.designsystem.components.premium.PremiumFeatureUiSta
 import com.measify.kappmaker.designsystem.components.premium.SuccessfulPurchaseContent
 import com.measify.kappmaker.util.Constants.subscriptionUrl
 import com.measify.kappmaker.util.inappreview.rememberInAppReviewTrigger
+import com.measify.kappmaker.util.logging.AppLogger
+import com.measify.kappmaker.util.logging.logSuccessfulPurchase
 
 @Composable
 fun SuccessfulPurchaseView(
@@ -20,6 +22,7 @@ fun SuccessfulPurchaseView(
 
     val inAppReviewTrigger = rememberInAppReviewTrigger()
     LaunchedEffect(Unit) {
+        AppLogger.logSuccessfulPurchase()
         inAppReviewTrigger.triggerAfterSuccessfulPurchase()
     }
 

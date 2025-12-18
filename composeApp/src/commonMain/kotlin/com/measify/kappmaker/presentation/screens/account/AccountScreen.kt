@@ -148,7 +148,7 @@ private fun ProfileInfoBox(user: User?, onClick: () -> Unit) {
     AppCardContainer(
         modifier = Modifier.fillMaxWidth(),
         onClick = {
-            if (Constants.HAS_AUTH_LOGIN_SYSTEM) {
+            if (Constants.AUTH_SOCIAL_LOGIN_ENABLED) {
                 onClick()
             } else {
                 user?.id?.let {
@@ -163,7 +163,7 @@ private fun ProfileInfoBox(user: User?, onClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(AppTheme.spacing.horizontalItemSpacing)
         ) {
-            if (Constants.HAS_AUTH_LOGIN_SYSTEM) {
+            if (Constants.AUTH_SOCIAL_LOGIN_ENABLED) {
 
                 AsyncImage(
                     model = ImageRequest.Builder(LocalPlatformContext.current)

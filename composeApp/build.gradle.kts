@@ -65,8 +65,6 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose.viewmodel.navigation)
             implementation(libs.lifecyle.runtime)
-            implementation(libs.revenuecat.core)
-            implementation(libs.revenuecat.ui)
             implementation(libs.uuid)
             implementation(libs.multiplatformSettings.noargs)
             implementation(libs.room.runtime)

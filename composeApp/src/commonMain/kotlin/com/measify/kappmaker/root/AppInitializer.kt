@@ -247,7 +247,7 @@ private val dataModule = module {
 
     //Repositories
     single { UserRepository(get(), get(), get(), get()) }
-    single { SubscriptionRepository(get(), get()) }
+    single { SubscriptionRepository(get(), get(), get(), get()) }
 
     //Loggers
     factory { TelegramLogger(get(), get(), get()) } bind Logger::class

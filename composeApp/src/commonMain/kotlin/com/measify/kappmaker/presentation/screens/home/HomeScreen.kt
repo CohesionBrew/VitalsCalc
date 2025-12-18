@@ -23,10 +23,6 @@ import com.measify.kappmaker.designsystem.generated.resources.ic_coin_credits
 import com.measify.kappmaker.designsystem.theme.AppTheme
 import com.measify.kappmaker.generated.resources.Res
 import com.measify.kappmaker.generated.resources.title_screen_home
-import com.measify.kappmaker.subscription.adapty.Adapty
-import com.measify.kappmaker.subscription.api.SubscriptionProvider
-import com.measify.kappmaker.subscription.api.SubscriptionProviderFactory
-import com.measify.kappmaker.subscription.api.SubscriptionProviderUi
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

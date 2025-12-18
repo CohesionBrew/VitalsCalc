@@ -6,6 +6,8 @@ interface UserPreferences {
     companion object Keys {
         const val KEY_IS_ONBOARD_SHOWN = "KEY_IS_ONBOARD_SHOWN"
         const val KEY_FIRST_TIME_USER = "KEY_FIRST_TIME_USER"
+        const val KEY_NB_PAYWALL_DISMISSED = "KEY_NB_PAYWALL_DISMISSED"
+
     }
 
     suspend fun getString(key: String, defaultValue: String? = null): String?

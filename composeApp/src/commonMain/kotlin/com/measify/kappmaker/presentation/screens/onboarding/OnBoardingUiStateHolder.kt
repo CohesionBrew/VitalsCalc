@@ -1,6 +1,8 @@
 package com.measify.kappmaker.presentation.screens.onboarding
 
+import com.measify.kappmaker.data.repository.SubscriptionRepository
 import com.measify.kappmaker.data.source.preferences.UserPreferences
+import com.measify.kappmaker.util.Constants
 import com.measify.kappmaker.util.UiStateHolder
 import com.measify.kappmaker.util.uiStateHolderScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,7 +12,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
-class OnBoardingUiStateHolder(private val userPreferences: UserPreferences) : UiStateHolder() {
+class OnBoardingUiStateHolder(
+    private val userPreferences: UserPreferences,
+    private val subscriptionRepository: SubscriptionRepository
+) : UiStateHolder() {
     private val _uiState = MutableStateFlow(OnBoardingUiState(isLoading = true))
     val uiState: StateFlow<OnBoardingUiState> = _uiState.asStateFlow()
 
@@ -28,13 +33,15 @@ class OnBoardingUiStateHolder(private val userPreferences: UserPreferences) : Ui
     }
 
 
-
     fun onUiEvent(event: OnBoardingUiEvent) = uiStateHolderScope.launch {
         when (event) {
             OnBoardingUiEvent.OnClickStart -> {
                 onBoardShown()
             }
+
             OnBoardingUiEvent.OnClickGetPremiumAccess -> {
+                subscriptionRepository.currentPlacementId =
+                    Constants.PAYWALL_PLACEMENT_ONBOARDING
                 _uiState.update { it.copy(isPremiumRequired = true) }
             }
         }
