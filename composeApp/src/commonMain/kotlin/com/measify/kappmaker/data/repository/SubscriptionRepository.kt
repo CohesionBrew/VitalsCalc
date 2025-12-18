@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 
@@ -44,6 +45,9 @@ class SubscriptionRepository(
                     }
                 }
 
+            }
+            .onStart {
+                emit(subscriptionProvider.getUser().getOrNull()?.asPremiumSubscription(retrieveExtraDetails = false))
             }
             .catch { error ->
                 AppLogger.e("Error occurred while getting current subscription", error)

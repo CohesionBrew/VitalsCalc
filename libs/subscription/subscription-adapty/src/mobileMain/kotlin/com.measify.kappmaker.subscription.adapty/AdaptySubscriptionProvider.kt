@@ -6,14 +6,12 @@ import com.adapty.kmp.models.AdaptyConfig
 import com.adapty.kmp.models.AdaptyLogLevel
 import com.adapty.kmp.models.AdaptyPaywallFetchPolicy
 import com.adapty.kmp.models.AdaptyPaywallProduct
-import com.adapty.kmp.models.AdaptyProfile
 import com.adapty.kmp.models.AdaptyProfileParameters
 import com.adapty.kmp.models.AdaptyPurchaseResult
 import com.adapty.kmp.models.AdaptyResult
 import com.adapty.kmp.models.exceptionOrNull
 import com.adapty.kmp.models.fold
 import com.adapty.kmp.models.getOrNull
-import com.measify.kappmaker.subscription.api.GrantedAccess
 import com.measify.kappmaker.subscription.api.Price
 import com.measify.kappmaker.subscription.api.PurchasePackage
 import com.measify.kappmaker.subscription.api.PurchasePackageId
@@ -23,8 +21,6 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.ExperimentalTime
-import kotlin.time.Instant
 
 internal class AdaptySubscriptionProvider : SubscriptionProvider {
 
