@@ -25,7 +25,7 @@ internal fun AdaptyProfile.asSubscriptionProviderUser(): SubscriptionProviderUse
 }
 
 @OptIn(ExperimentalTime::class)
-private fun String?.asTimeInMilliseconds(): Long? = runCatching {
+internal fun String?.asTimeInMilliseconds(): Long? = runCatching {
     if (this == null) return null
 
     val cleaned = this

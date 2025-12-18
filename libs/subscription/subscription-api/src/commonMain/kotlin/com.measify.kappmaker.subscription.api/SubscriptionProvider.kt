@@ -25,6 +25,9 @@ interface SubscriptionProvider {
     suspend fun restorePurchase(): Result<SubscriptionProviderUser>
 
     suspend fun getPurchasePackages(placementId: String? = null): Result<List<PurchasePackage>>
+
+    suspend fun getGrantedAccessesWithDetails(placements: List<String> = emptyList()): Result<List<GrantedAccess>>
+
 }
 
 suspend fun SubscriptionProvider.hasAccess(key: String): Boolean =

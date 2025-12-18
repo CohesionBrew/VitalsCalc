@@ -19,6 +19,7 @@ import com.revenuecat.purchases.kmp.ktx.awaitPurchase
 import com.revenuecat.purchases.kmp.ktx.awaitRestore
 import com.revenuecat.purchases.kmp.models.CustomerInfo
 import com.revenuecat.purchases.kmp.models.Package
+import com.revenuecat.purchases.kmp.models.PackageType
 import com.revenuecat.purchases.kmp.models.PurchasesError
 import com.revenuecat.purchases.kmp.models.StoreProduct
 import com.revenuecat.purchases.kmp.models.StoreTransaction
@@ -120,17 +121,66 @@ internal class RevenueCatSubscriptionProvider : SubscriptionProvider {
             packages.map { it.asPurchasePackage() }
         }
 
+    override suspend fun getGrantedAccessesWithDetails(placements: List<String>): Result<List<GrantedAccess>> =
+        runCatchingSuspend {
+            val purchasesInstance = Purchases.sharedInstance
+
+            val activeEntitlements =
+                purchasesInstance.awaitCustomerInfo().entitlements.active.values
+
+            val grantedAccessWithDetails = activeEntitlements.map { entitlement ->
+                val allOfferings = purchasesInstance.awaitOfferings().all.map { it.value }
+                val allPackages = allOfferings.flatMap { it.availablePackages }
+
+                val entitlementPackage = allPackages.first {
+                    val productPlanIdentifier = entitlement.productPlanIdentifier
+                    it.storeProduct.id == entitlement.productIdentifier ||
+                            (productPlanIdentifier != null && it.storeProduct.id.contains(
+                                productPlanIdentifier
+                            ))
+                }
+
+                GrantedAccess(
+                    id = entitlementPackage.identifier,
+                    productIdentifier = entitlement.productIdentifier,
+                    expirationDateMillis = entitlement.expirationDateMillis,
+                    willRenew = entitlement.willRenew,
+                    isLifetime = entitlement.expirationDateMillis == null && entitlement.willRenew,
+                    details = GrantedAccess.Details(
+                        title = entitlementPackage.asPurchasePackage().title.substringBefore("("),
+                        price = entitlementPackage.storeProduct.price.asGrantedAccessPrice(),
+                        durationType = when (entitlementPackage.packageType) {
+                            PackageType.LIFETIME -> GrantedAccess.DurationType.LIFETIME
+                            PackageType.ANNUAL -> GrantedAccess.DurationType.YEARLY
+                            PackageType.MONTHLY -> GrantedAccess.DurationType.MONTHLY
+                            PackageType.WEEKLY -> GrantedAccess.DurationType.WEEKLY
+                            PackageType.UNKNOWN, PackageType.CUSTOM, PackageType.SIX_MONTH,
+                            PackageType.THREE_MONTH, PackageType.TWO_MONTH -> GrantedAccess.DurationType.UNKNOWN
+                        }
+                    )
+                )
+            }
+            return Result.success(grantedAccessWithDetails)
+
+        }
+
 
     private fun Package.asPurchasePackage(): PurchasePackage {
         return PurchasePackage(
             id = PurchasePackageId(this.identifier),
             title = storeProduct.title,
             description = "${storeProduct.localizedDescription}",
-            price = Price(
-                amount = this.storeProduct.price.amountMicros / 1000000f,
-                currencyCodeOrSymbol = this.storeProduct.price.currencyCode,
-                localizedString = this.storeProduct.price.formatted
-            )
+            price = this.storeProduct.price.asGrantedAccessPrice()
         )
     }
+
+    private fun com.revenuecat.purchases.kmp.models.Price.asGrantedAccessPrice(): Price {
+        return Price(
+            amount = this.amountMicros / 1000000f,
+            currencyCodeOrSymbol = currencyCode,
+            localizedString = formatted
+        )
+    }
+
+
 }

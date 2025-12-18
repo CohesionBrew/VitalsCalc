@@ -3,12 +3,14 @@ package com.measify.kappmaker.data.repository
 import com.measify.kappmaker.data.BackgroundExecutor
 import com.measify.kappmaker.data.source.preferences.UserPreferences
 import com.measify.kappmaker.domain.model.Subscription
+import com.measify.kappmaker.subscription.api.GrantedAccess
 import com.measify.kappmaker.subscription.api.PurchasePackage
 import com.measify.kappmaker.subscription.api.PurchasePackageId
 import com.measify.kappmaker.subscription.api.SubscriptionProvider
 import com.measify.kappmaker.subscription.api.SubscriptionProviderUser
 import com.measify.kappmaker.subscription.api.hasAccess
 import com.measify.kappmaker.util.ApplicationScope
+import com.measify.kappmaker.util.Constants
 import com.measify.kappmaker.util.Constants.PAYWALL_PREMIUM_ACCESS
 import com.measify.kappmaker.util.analytics.Analytics
 import com.measify.kappmaker.util.logging.AppLogger
@@ -47,7 +49,10 @@ class SubscriptionRepository(
 
             }
             .onStart {
-                emit(subscriptionProvider.getUser().getOrNull()?.asPremiumSubscription(retrieveExtraDetails = false))
+                emit(
+                    subscriptionProvider.getUser().getOrNull()
+                        ?.asPremiumSubscription(retrieveExtraDetails = false)
+                )
             }
             .catch { error ->
                 AppLogger.e("Error occurred while getting current subscription", error)
@@ -105,10 +110,33 @@ class SubscriptionRepository(
 
     suspend fun SubscriptionProviderUser.asPremiumSubscription(retrieveExtraDetails: Boolean = true): Subscription? {
         if (retrieveExtraDetails) {
-            //TODO Fix
-            return null
+            val availablePlacements = listOfNotNull(
+                Constants.PAYWALL_PLACEMENT_DEFAULT,
+                Constants.PAYWALL_PLACEMENT_ONBOARDING,
+                //Add more placements if needed
+            )
 
-//            return getActiveSubscriptionList(subscriptionProviderUser = this).find { it.accessId in PREMIUM_ACCESS_ID_LIST }
+            val grantedAccessWithDetails = subscriptionProvider
+                .getGrantedAccessesWithDetails(placements = availablePlacements)
+                .getOrNull()?.find { it.id in PREMIUM_ACCESS_ID_LIST }
+
+            return grantedAccessWithDetails?.let {
+                Subscription(
+                    accessId = grantedAccessWithDetails.id,
+                    expirationDateInMillis = grantedAccessWithDetails.expirationDateMillis,
+                    willRenew = grantedAccessWithDetails.willRenew,
+                    name = grantedAccessWithDetails.details?.title,
+                    formattedPrice = grantedAccessWithDetails.details?.price?.localizedString,
+                    durationType = when (grantedAccessWithDetails.details?.durationType) {
+                        GrantedAccess.DurationType.MONTHLY -> Subscription.DurationType.MONTHLY
+                        GrantedAccess.DurationType.WEEKLY -> Subscription.DurationType.WEEKLY
+                        GrantedAccess.DurationType.YEARLY -> Subscription.DurationType.YEARLY
+                        GrantedAccess.DurationType.LIFETIME -> Subscription.DurationType.LIFETIME
+                        GrantedAccess.DurationType.UNKNOWN -> Subscription.DurationType.UNKNOWN
+                        null -> null
+                    }
+                )
+            }
         } else {
             val grantedAccess = grantedAccesses.values.firstOrNull()
             return grantedAccess?.let {

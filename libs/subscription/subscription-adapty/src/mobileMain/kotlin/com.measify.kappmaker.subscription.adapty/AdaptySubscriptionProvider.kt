@@ -6,12 +6,15 @@ import com.adapty.kmp.models.AdaptyConfig
 import com.adapty.kmp.models.AdaptyLogLevel
 import com.adapty.kmp.models.AdaptyPaywallFetchPolicy
 import com.adapty.kmp.models.AdaptyPaywallProduct
+import com.adapty.kmp.models.AdaptyPeriodUnit
+import com.adapty.kmp.models.AdaptyPrice
 import com.adapty.kmp.models.AdaptyProfileParameters
 import com.adapty.kmp.models.AdaptyPurchaseResult
 import com.adapty.kmp.models.AdaptyResult
 import com.adapty.kmp.models.exceptionOrNull
 import com.adapty.kmp.models.fold
 import com.adapty.kmp.models.getOrNull
+import com.measify.kappmaker.subscription.api.GrantedAccess
 import com.measify.kappmaker.subscription.api.Price
 import com.measify.kappmaker.subscription.api.PurchasePackage
 import com.measify.kappmaker.subscription.api.PurchasePackageId
@@ -157,16 +160,73 @@ internal class AdaptySubscriptionProvider : SubscriptionProvider {
         return Result.success(purchasePackages)
     }
 
+    override suspend fun getGrantedAccessesWithDetails(placements: List<String>): Result<List<GrantedAccess>> {
+        val adaptyProfile = Adapty.getProfile().getOrNull()
+        val activeAccessLevels =
+            adaptyProfile?.accessLevels?.filter { it.value.isActive }?.values ?: emptyList()
+
+        val availablePaywallPlacements = placements.takeIf { it.isNotEmpty() } ?: listOf(adaptyDefaultPlacementId)
+
+        val grantedAccessWithDetails = activeAccessLevels.map { accessLevel ->
+
+            val allPaywalls = availablePaywallPlacements.mapNotNull {
+                Adapty.getPaywall(
+                    placementId = it,
+                    fetchPolicy = AdaptyPaywallFetchPolicy.ReturnCacheDataIfNotExpiredElseLoad(5.minutes.inWholeMilliseconds)
+                ).getOrNull()
+            }
+            val allPaywallProducts = allPaywalls.flatMap {
+                Adapty.getPaywallProducts(it).getOrNull() ?: emptyList()
+            }
+
+            val paywallProduct = allPaywallProducts.first {
+                val basePlanIdOfProduct = it.subscription?.basePlanId
+                it.vendorProductId == accessLevel.vendorProductId ||
+                        (basePlanIdOfProduct != null && accessLevel.vendorProductId.contains(
+                            basePlanIdOfProduct
+                        ))
+            }
+
+            GrantedAccess(
+                id = accessLevel.id,
+                productIdentifier = accessLevel.vendorProductId,
+                expirationDateMillis = accessLevel.expiresAt.asTimeInMilliseconds(),
+                willRenew = accessLevel.willRenew,
+                isLifetime = accessLevel.isLifetime,
+                details = GrantedAccess.Details(
+                    title = paywallProduct.asPurchasePackage().title.substringBefore("("),
+                    price = paywallProduct.price.asGrantedAccessPrice(),
+                    durationType = when (paywallProduct.subscription?.period?.unit) {
+                        AdaptyPeriodUnit.YEAR -> GrantedAccess.DurationType.YEARLY
+                        AdaptyPeriodUnit.MONTH -> GrantedAccess.DurationType.MONTHLY
+                        AdaptyPeriodUnit.WEEK -> GrantedAccess.DurationType.WEEKLY
+                        else -> {
+                            if (accessLevel.isLifetime) GrantedAccess.DurationType.LIFETIME
+                            else GrantedAccess.DurationType.UNKNOWN
+                        }
+                    }
+                )
+            )
+        }
+
+        return Result.success(grantedAccessWithDetails)
+
+    }
+
     private fun AdaptyPaywallProduct.asPurchasePackage(): PurchasePackage {
         return PurchasePackage(
             id = PurchasePackageId(this.vendorProductId),
             title = this.localizedTitle,
             description = localizedDescription,
-            price = Price(
-                amount = this.price.amount,
-                currencyCodeOrSymbol = this.price.currencyCode ?: this.price.currencySymbol,
-                localizedString = this.price.localizedString
-            )
+            price = this.price.asGrantedAccessPrice()
+        )
+    }
+
+    private fun AdaptyPrice.asGrantedAccessPrice(): Price {
+        return Price(
+            amount = amount,
+            currencyCodeOrSymbol = currencyCode ?: currencySymbol,
+            localizedString = localizedString
         )
     }
 

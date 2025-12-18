@@ -53,6 +53,11 @@ object NoOpSubscriptionProvider : SubscriptionProvider {
         return Result.success(emptyList())
     }
 
+    override suspend fun getGrantedAccessesWithDetails(placements: List<String>): Result<List<GrantedAccess>> {
+        logMessageIfEnabled { "getGrantedAccessesWithDetails is called " }
+        return Result.success(emptyList())
+    }
+
     private fun logMessageIfEnabled(message: () -> String) {
         if (!isLogEnabled) return
         println("NoOpSubscriptionProvider: ${message()}")
