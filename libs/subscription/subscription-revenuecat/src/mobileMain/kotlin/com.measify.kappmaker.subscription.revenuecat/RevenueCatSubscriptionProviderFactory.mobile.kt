@@ -1,6 +1,5 @@
 package com.measify.kappmaker.subscription.revenuecat
 
-import com.measify.kappmaker.subscription.api.NoOpSubscriptionProviderUi
 import com.measify.kappmaker.subscription.api.SubscriptionProvider
 import com.measify.kappmaker.subscription.api.SubscriptionProviderFactory
 import com.measify.kappmaker.subscription.api.SubscriptionProviderUi
@@ -12,6 +11,6 @@ internal actual val subscriptionProviderFactory: SubscriptionProviderFactory
         }
 
         override fun createProviderUi(): SubscriptionProviderUi {
-            return NoOpSubscriptionProviderUi
+            return RevenueCatSubscriptionProviderUi()
         }
     }

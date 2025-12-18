@@ -125,7 +125,7 @@ internal class AdaptySubscriptionProvider : SubscriptionProvider {
     }
 
     override suspend fun getPurchasePackages(placementId: String?): Result<List<PurchasePackage>> {
-        val currentPlacementId = placementId ?: "default"
+        val currentPlacementId = placementId ?: adaptyDefaultPlacementId
         val paywallResult = Adapty.getPaywall(
             placementId = currentPlacementId,
             fetchPolicy = AdaptyPaywallFetchPolicy.ReturnCacheDataIfNotExpiredElseLoad(5.minutes.inWholeMilliseconds)
@@ -174,38 +174,9 @@ internal class AdaptySubscriptionProvider : SubscriptionProvider {
         )
     }
 
-    private fun AdaptyProfile.asSubscriptionProviderUser(): SubscriptionProviderUser {
-        val grantedAccesses = accessLevels.filter { it.value.isActive }.mapValues { (id, access) ->
-            GrantedAccess(
-                id = id,
-                expirationDateMillis = access.expiresAt.asTimeInMilliseconds(),
-                willRenew = access.willRenew,
-                productIdentifier = access.vendorProductId,
-                isLifetime = access.isLifetime,
-            )
-        }
-        return SubscriptionProviderUser(
-            grantedAccesses = grantedAccesses,
-            activeSubscriptionIds = subscriptions.keys
-        )
-    }
-
     private inline fun <T, R> AdaptyResult<T>.asResult(onSuccess: (T) -> R): Result<R> = this.fold(
         onSuccess = { resultData -> Result.success(onSuccess(resultData)) },
         onError = { error -> Result.failure(error) }
     )
-
-    @OptIn(ExperimentalTime::class)
-    private fun String?.asTimeInMilliseconds(): Long? = runCatching {
-        if (this == null) return null
-
-        val cleaned = this
-            .replace(Regex("\\.(\\d{3})\\d*"), ".$1") // keep only 3 digits of millis
-            .replace(Regex("([+-]\\d{2})(\\d{2})$"), "$1:$2") // convert +0000 to +00:00
-
-        val instant = Instant.parse(cleaned)
-        instant.toEpochMilliseconds()
-
-    }.getOrNull()
 
 }

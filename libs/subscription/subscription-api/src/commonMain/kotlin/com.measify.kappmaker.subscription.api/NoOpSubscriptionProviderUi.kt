@@ -9,6 +9,6 @@ object NoOpSubscriptionProviderUi: SubscriptionProviderUi {
         placementId: String?,
         listener: PurchaseEventsListener
     ) {
-        Text("NoOpSubscriptionProviderUi")
+        Text("Paywall UI is not supported yet")
     }
 }

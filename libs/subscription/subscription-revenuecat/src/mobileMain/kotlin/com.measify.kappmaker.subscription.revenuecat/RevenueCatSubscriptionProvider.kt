@@ -120,23 +120,6 @@ internal class RevenueCatSubscriptionProvider : SubscriptionProvider {
             packages.map { it.asPurchasePackage() }
         }
 
-    private fun CustomerInfo.asSubscriptionProviderUser(): SubscriptionProviderUser {
-
-        val grantedAccesses = entitlements.active.values.associate { entitlement ->
-            entitlement.identifier to GrantedAccess(
-                id = entitlement.identifier,
-                expirationDateMillis = entitlement.expirationDateMillis,
-                isLifetime = entitlement.expirationDateMillis == null && entitlement.willRenew,
-                willRenew = entitlement.willRenew,
-                productIdentifier = entitlement.productIdentifier,
-            )
-        }
-
-        return SubscriptionProviderUser(
-            grantedAccesses = grantedAccesses,
-            activeSubscriptionIds = activeSubscriptions
-        )
-    }
 
     private fun Package.asPurchasePackage(): PurchasePackage {
         return PurchasePackage(

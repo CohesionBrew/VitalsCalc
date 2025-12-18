@@ -6,5 +6,6 @@ interface PurchaseEventsListener {
     fun onPurchaseFailure(error: PurchaseError)
     fun onRestoreFailure(error: PurchaseError)
     fun onDismiss() {}
+    fun onLoadingStateChanged(isLoading: Boolean) {}
     fun onUnknownError(error: Exception) {}
 }
