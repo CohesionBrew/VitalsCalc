@@ -43,7 +43,7 @@ class AccountUiStateHolder(
             )
         )
 
-        if (Constants.HAS_AUTH_LOGIN_SYSTEM) {
+        if (Constants.AUTH_SOCIAL_LOGIN_ENABLED) {
             add(
                 SettingsItemUiState(
                     startIcon = UiRes.drawable.ic_settings_item_logout,
@@ -63,7 +63,7 @@ class AccountUiStateHolder(
         ) { currentUser, currentSubscription, uiState ->
             val user = currentUser.getOrNull()
             uiState.copy(
-                user = if (user?.isAnonymous == true && Constants.HAS_AUTH_LOGIN_SYSTEM) null else user,
+                user = if (user?.isAnonymous == true && Constants.AUTH_SOCIAL_LOGIN_ENABLED) null else user,
                 settingsItemList =
                     if (user != null) allSettingsItemList
                     else allSettingsItemList.subList(0, allSettingsItemList.size - 1),

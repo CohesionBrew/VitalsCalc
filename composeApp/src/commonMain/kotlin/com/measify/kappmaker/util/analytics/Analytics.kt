@@ -7,6 +7,10 @@ interface Analytics {
     companion object {
         const val EVENT_SCREEN_VIEW = "screen_view"
         const val PARAM_SCREEN_NAME = "screen_name"
+        const val EVENT_PAYWALL_DISMISSED = "paywall_dismissed"
+        const val PARAM_NB_PAYWALL_DISMISSED = "nb_paywall_dismissed"
+
+
     }
 }
 

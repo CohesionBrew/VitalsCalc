@@ -50,11 +50,9 @@ import com.measify.kappmaker.generated.resources.Res
 import com.measify.kappmaker.generated.resources.btn_restore_purchase
 import com.measify.kappmaker.presentation.components.premium.PremiumFeatureFactory
 import com.measify.kappmaker.presentation.components.premium.SuccessfulPurchaseView
+import com.measify.kappmaker.subscription.api.PurchasePackage
 import com.measify.kappmaker.util.Constants
 import com.measify.kappmaker.util.extensions.asFormattedDate
-import com.measify.kappmaker.util.extensions.productDescription
-import com.measify.kappmaker.util.extensions.productName
-import com.revenuecat.purchases.kmp.models.Package
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -78,6 +76,12 @@ fun PaywallScreen(
             LaunchedEffect(uiState.signInActionRequired) {
                 onSignInRequired()
                 uiStateHolder.onSignInActionHandled()
+            }
+        }
+
+        LaunchedEffect(uiState.isDismissRequired) {
+            if (uiState.isDismissRequired) {
+                onDismiss()
             }
         }
 
@@ -149,12 +153,12 @@ private fun PaywallScreenData(
                 features = uiState.features.map { PremiumFeatureUiState(it) }
             )
             Column(verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.verticalListItemSpacing)) {
-                uiState.packages.forEach { rcPackage ->
+                uiState.packages.forEach { purchasePackage ->
                     PackageItem(
-                        rcPackage = rcPackage,
-                        isSelected = rcPackage == uiState.selectedPackage,
+                        purchasePackage = purchasePackage,
+                        isSelected = purchasePackage == uiState.selectedPackage,
                         onPackageSelected = {
-                            onUiEvent(PaywallUiEvent.OnSelectPackage(rcPackage))
+                            onUiEvent(PaywallUiEvent.OnSelectPackage(purchasePackage))
                         },
                     )
                 }
@@ -194,7 +198,7 @@ private fun PaywallScreenData(
 @Composable
 private fun PackageItem(
     modifier: Modifier = Modifier,
-    rcPackage: Package,
+    purchasePackage: PurchasePackage,
     isSelected: Boolean,
     onPackageSelected: () -> Unit
 ) {
@@ -235,7 +239,7 @@ private fun PackageItem(
                     )
                 }
                 Text(
-                    text = rcPackage.productName,
+                    text = purchasePackage.title,
                     style = AppTheme.typography.bodyExtraLarge,
                     color = AppTheme.colors.text.primary,
                     fontWeight = FontWeight.SemiBold
@@ -243,7 +247,7 @@ private fun PackageItem(
             }
 
             Text(
-                text = rcPackage.productDescription,
+                text = purchasePackage.description,
                 style = AppTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Medium,
                 color = AppTheme.colors.text.primary

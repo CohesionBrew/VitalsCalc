@@ -65,8 +65,6 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose.viewmodel.navigation)
             implementation(libs.lifecyle.runtime)
-            implementation(libs.revenuecat.core)
-            implementation(libs.revenuecat.ui)
             implementation(libs.uuid)
             implementation(libs.multiplatformSettings.noargs)
             implementation(libs.room.runtime)
@@ -78,6 +76,11 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.navigation.compose)
 
+            val subscriptionProvider = project.findProperty("SUBSCRIPTION_PROVIDER")?.toString()?.uppercase() ?: "REVENUECAT"
+            when (subscriptionProvider) {
+                "REVENUECAT" -> implementation(projects.libs.subscription.subscriptionRevenuecat)
+                "ADAPTY" -> implementation(projects.libs.subscription.subscriptionAdapty)
+            }
         }
 
         commonTest.dependencies {
@@ -192,8 +195,11 @@ buildConfig {
     // https://github.com/gmazzo/gradle-buildconfig-plugin#usage-in-kts
     packageName("com.measify.kappmaker.common")
     buildConfigField("GOOGLE_WEB_CLIENT_ID", getRequiredProperty(key="GOOGLE_WEB_CLIENT_ID", defaultValue = "testValue"))
-    buildConfigField("REVENUECAT_ANDROID_API_KEY", getRequiredProperty(key="REVENUECAT_ANDROID_API_KEY", defaultValue = "testValue"))
-    buildConfigField("REVENUECAT_IOS_API_KEY", getRequiredProperty(key="REVENUECAT_IOS_API_KEY", defaultValue = "testValue"))
+
+    // Adapty or RevenueCat Api key
+    buildConfigField("SUBSCRIPTION_PROVIDER_ANDROID_API_KEY", getRequiredProperty(key="SUBSCRIPTION_PROVIDER_ANDROID_API_KEY", defaultValue = "testValue"))
+    buildConfigField("SUBSCRIPTION_PROVIDER_IOS_API_KEY", getRequiredProperty(key="SUBSCRIPTION_PROVIDER_IOS_API_KEY", defaultValue = "testValue"))
+
     setupAdmobAdsIds()
 }
 

@@ -1,7 +1,7 @@
 package com.measify.kappmaker.domain.model
 
 data class Subscription(
-    val entitlementId: String? = null,
+    val accessId: String? = null,
     val name: String? = null,
     val formattedPrice: String? = null,
     val durationType: DurationType? = null,

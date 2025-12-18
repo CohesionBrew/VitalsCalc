@@ -24,8 +24,13 @@ class PaywallScreenRoute : ScreenRoute {
         if (featureFlagManager.getBoolean(FeatureFlagManager.Keys.SHOW_REMOTE_PAYWALL)) {
             Box(modifier = Modifier.fillMaxSize().safeDrawingPadding()) {
                 RemotePaywallScreen(
+                    uiStateHolder = uiStateHolder,
                     onDismiss = {
+                        uiStateHolder.onPaywallDismissActionHandled()
                         navigator.popBackStack()
+                    },
+                    onSignInRequired = {
+                        navigator.navigate(SignInScreenRoute())
                     }
                 )
             }
@@ -33,6 +38,7 @@ class PaywallScreenRoute : ScreenRoute {
             PaywallScreen(
                 uiStateHolder = uiStateHolder,
                 onDismiss = {
+                    uiStateHolder.onPaywallDismissActionHandled()
                     navigator.popBackStack()
                 },
                 onSignInRequired = {

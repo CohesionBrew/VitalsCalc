@@ -25,7 +25,11 @@ import com.measify.kappmaker.presentation.screens.onboarding.OnBoardingUiStateHo
 import com.measify.kappmaker.presentation.screens.paywall.PaywallUiStateHolder
 import com.measify.kappmaker.presentation.screens.profile.ProfileUiStateHolder
 import com.measify.kappmaker.presentation.screens.subscriptions.SubscriptionsUiStateHolder
+import com.measify.kappmaker.subscription.api.SubscriptionProvider
+import com.measify.kappmaker.subscription.api.SubscriptionProviderFactory
+import com.measify.kappmaker.subscription.api.SubscriptionProviderUi
 import com.measify.kappmaker.util.ApplicationScope
+import com.measify.kappmaker.util.Constants
 import com.measify.kappmaker.util.analytics.Analytics
 import com.measify.kappmaker.util.isAndroid
 import com.measify.kappmaker.util.isDebug
@@ -39,8 +43,6 @@ import com.mmk.kmpauth.google.GoogleAuthCredentials
 import com.mmk.kmpauth.google.GoogleAuthProvider
 import com.mmk.kmpnotifier.notification.NotifierManager
 import com.mmk.kmpnotifier.notification.PayloadData
-import com.revenuecat.purchases.kmp.Purchases
-import com.revenuecat.purchases.kmp.PurchasesConfiguration
 import com.russhwolf.settings.Settings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -156,10 +158,15 @@ private fun initializeAuthentication() {
     GoogleAuthProvider.create(credentials = GoogleAuthCredentials(serverId = BuildConfig.GOOGLE_WEB_CLIENT_ID))
 }
 
-private fun initializeInAppPurchase() {
-    val revenueCatApiKey =
-        if (isAndroid) BuildConfig.REVENUECAT_ANDROID_API_KEY else BuildConfig.REVENUECAT_IOS_API_KEY
-    Purchases.configure(PurchasesConfiguration(apiKey = revenueCatApiKey))
+private fun KoinApplication.initializeInAppPurchase() {
+    val subscriptionProvider by this.koin.inject<SubscriptionProvider>()
+    val applicationScope by this.koin.inject<ApplicationScope>()
+
+    applicationScope.launch {
+        val subscriptionProviderApiKey =
+            if (isAndroid) BuildConfig.SUBSCRIPTION_PROVIDER_ANDROID_API_KEY else BuildConfig.SUBSCRIPTION_PROVIDER_IOS_API_KEY
+        subscriptionProvider.initialize(subscriptionProviderApiKey)
+    }
 }
 
 private fun Module.initializeCreditSystem() {
@@ -236,10 +243,14 @@ private val dataModule = module {
     single { get<AppDatabase>().exampleDao() }
     single { get<AppDatabase>().creditTransactionDao() }
 
+    //Subscription Provider
+    factory { Constants.subscriptionProviderFactory } bind SubscriptionProviderFactory::class
+    single { get<SubscriptionProviderFactory>().createProvider() } bind SubscriptionProvider::class
+    factory { get<SubscriptionProviderFactory>().createProviderUi() } bind SubscriptionProviderUi::class
 
     //Repositories
     single { UserRepository(get(), get(), get(), get()) }
-    single { SubscriptionRepository(get(), get()) }
+    single { SubscriptionRepository(get(), get(), get(), get()) }
 
     //Loggers
     factory { TelegramLogger(get(), get(), get()) } bind Logger::class
