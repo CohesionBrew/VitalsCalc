@@ -195,8 +195,11 @@ buildConfig {
     // https://github.com/gmazzo/gradle-buildconfig-plugin#usage-in-kts
     packageName("com.measify.kappmaker.common")
     buildConfigField("GOOGLE_WEB_CLIENT_ID", getRequiredProperty(key="GOOGLE_WEB_CLIENT_ID", defaultValue = "testValue"))
-    buildConfigField("REVENUECAT_ANDROID_API_KEY", getRequiredProperty(key="REVENUECAT_ANDROID_API_KEY", defaultValue = "testValue"))
-    buildConfigField("REVENUECAT_IOS_API_KEY", getRequiredProperty(key="REVENUECAT_IOS_API_KEY", defaultValue = "testValue"))
+
+    // Adapty or RevenueCat Api key
+    buildConfigField("SUBSCRIPTION_PROVIDER_ANDROID_API_KEY", getRequiredProperty(key="SUBSCRIPTION_PROVIDER_ANDROID_API_KEY", defaultValue = "testValue"))
+    buildConfigField("SUBSCRIPTION_PROVIDER_IOS_API_KEY", getRequiredProperty(key="SUBSCRIPTION_PROVIDER_IOS_API_KEY", defaultValue = "testValue"))
+
     setupAdmobAdsIds()
 }
 

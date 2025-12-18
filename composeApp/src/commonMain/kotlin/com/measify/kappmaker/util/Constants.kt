@@ -19,6 +19,11 @@ object Constants {
      *   or
      *   SUBSCRIPTION_PROVIDER=ADAPTY
      *
+     *   Also in local.properties add the following:
+     *
+     *   SUBSCRIPTION_PROVIDER_ANDROID_API_KEY=YOUR_API_KEY
+     *   SUBSCRIPTION_PROVIDER_IOS_API_KEY=YOUR_API_KEY
+     *
      * Based on this value, either `SubscriptionProviderFactory.RevenueCat`
      * or `SubscriptionProviderFactory.Adapty` will be available.
      */
