@@ -1,5 +1,8 @@
 package com.measify.kappmaker.util
 
+import com.measify.kappmaker.subscription.api.SubscriptionProviderFactory
+import com.measify.kappmaker.subscription.revenuecat.RevenueCat
+
 object Constants {
     const val URL_PRIVACY_POLICY = ""
     const val URL_TERMS_CONDITIONS = ""
@@ -26,6 +29,7 @@ object Constants {
     // If true app supports login with Apple/Google, otherwise only anonymous login
     const val HAS_AUTH_LOGIN_SYSTEM = true
 
+    val subscriptionProviderFactory get() =  SubscriptionProviderFactory.RevenueCat
 
 }
 

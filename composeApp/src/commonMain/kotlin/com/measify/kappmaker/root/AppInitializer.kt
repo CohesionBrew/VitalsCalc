@@ -25,7 +25,11 @@ import com.measify.kappmaker.presentation.screens.onboarding.OnBoardingUiStateHo
 import com.measify.kappmaker.presentation.screens.paywall.PaywallUiStateHolder
 import com.measify.kappmaker.presentation.screens.profile.ProfileUiStateHolder
 import com.measify.kappmaker.presentation.screens.subscriptions.SubscriptionsUiStateHolder
+import com.measify.kappmaker.subscription.api.SubscriptionProvider
+import com.measify.kappmaker.subscription.api.SubscriptionProviderFactory
+import com.measify.kappmaker.subscription.api.SubscriptionProviderUi
 import com.measify.kappmaker.util.ApplicationScope
+import com.measify.kappmaker.util.Constants
 import com.measify.kappmaker.util.analytics.Analytics
 import com.measify.kappmaker.util.isAndroid
 import com.measify.kappmaker.util.isDebug
@@ -236,6 +240,10 @@ private val dataModule = module {
     single { get<AppDatabase>().exampleDao() }
     single { get<AppDatabase>().creditTransactionDao() }
 
+    //Subscription Provider
+    factory { Constants.subscriptionProviderFactory } bind SubscriptionProviderFactory::class
+    single { get<SubscriptionProviderFactory>().createProvider() } bind SubscriptionProvider::class
+    factory { get<SubscriptionProviderFactory>().createProviderUi() } bind SubscriptionProviderUi::class
 
     //Repositories
     single { UserRepository(get(), get(), get(), get()) }

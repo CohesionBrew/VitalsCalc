@@ -78,11 +78,10 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.navigation.compose)
 
-            val backend = project.findProperty("SUBSCRIPTION_BACKEND")?.toString()?.uppercase() ?: "ADAPTY"
-
-            when (backend) {
-                "ADAPTY" -> implementation(projects.libs.subscription.subscriptionAdapty)
+            val subscriptionProvider = project.findProperty("SUBSCRIPTION_PROVIDER")?.toString()?.uppercase() ?: "REVENUECAT"
+            when (subscriptionProvider) {
                 "REVENUECAT" -> implementation(projects.libs.subscription.subscriptionRevenuecat)
+                "ADAPTY" -> implementation(projects.libs.subscription.subscriptionAdapty)
             }
         }
 
