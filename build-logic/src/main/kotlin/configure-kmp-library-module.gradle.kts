@@ -15,6 +15,9 @@ plugins {
 
 }
 
+apply(from = rootProject.file("gradle/scripts/refactorPackage.gradle.kts"))
+
+
 kotlinMultiplatform {
 
     applyDefaultHierarchyTemplate {

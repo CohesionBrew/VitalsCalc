@@ -32,7 +32,8 @@ tasks.register("refactorPackage") {
         "src/androidMain/kotlin",
         "src/iosMain/kotlin",
         "src/jvmMain/kotlin",
-        "src/nonMobileMain/kotlin"
+        "src/nonMobileMain/kotlin",
+        "src/mobileMain/kotlin"
     )
 
     // File extensions to search within
