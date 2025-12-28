@@ -24,8 +24,8 @@ private val localDataSourceModule = module {
     single { get<AppDatabase>().creditTransactionDao() }
 
     // Impl
-    singleOf(::ExampleLocalDataSourceImpl) bind ExampleLocalDataSource::class
-    singleOf(::CreditTransactionLocalDataSourceImpl) bind CreditTransactionLocalDataSource::class
+    single { ExampleLocalDataSourceImpl(get()) } bind ExampleLocalDataSource::class
+    single { CreditTransactionLocalDataSourceImpl(get()) } bind CreditTransactionLocalDataSource::class
 }
 val nonWebModule = module {
     includes(localDataSourceModule)

@@ -234,7 +234,7 @@ if [ -f "$DI_FILE" ]; then
 
   # Add Impl registration
   sed -i '' "/\/\/ Impl/a\\
-    singleOf(::${IMPL_NAME}) bind ${DATASOURCE_NAME}::class
+    single { ${IMPL_NAME}(get()) } bind ${DATASOURCE_NAME}::class
 " "$DI_FILE"
 
   # Add imports

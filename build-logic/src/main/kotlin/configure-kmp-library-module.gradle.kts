@@ -18,7 +18,7 @@ apply(from = rootProject.file("gradle/scripts/refactorPackage.gradle.kts"))
 
 
 kotlinMultiplatform {
-
+    jvmToolchain(17)
     applyDefaultHierarchyTemplate {
         common {
             group("mobile") {
