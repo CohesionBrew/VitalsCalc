@@ -1,7 +1,13 @@
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.github.gmazzo.buildconfig.BuildConfigExtension
 import org.jetbrains.compose.ExperimentalComposeLibrary
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 import java.util.Properties
 
 plugins {
@@ -25,6 +31,28 @@ apply(from = rootProject.file("gradle/scripts/generateNewScreen.gradle.kts"))
 kotlin {
     task("testClasses")
     jvmToolchain(17)
+
+    applyDefaultHierarchyTemplate {
+        common {
+            group("mobile") {
+                group("ios")
+                withAndroidTarget()
+            }
+
+            group("nonMobile") {
+                withJs()
+                withWasmJs()
+                withJvm()
+            }
+
+            group("nonWeb") {
+                group("ios")
+                withAndroidTarget()
+                withJvm()
+            }
+        }
+    }
+
     androidTarget {
         //https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-test.html
         instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
@@ -41,6 +69,27 @@ kotlin {
         }
     }
 
+    jvm()
+
+    js {
+        browser()
+        binaries.executable()
+    }
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        outputModuleName.set("composeApp")
+        browser {
+            commonWebpackConfig {
+                outputFileName = "composeApp.js"
+                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+                    static(project.projectDir.path)
+                }
+            }
+        }
+        binaries.executable()
+    }
+
     sourceSets {
         commonMain.dependencies {
             implementation(projects.designsystem)
@@ -53,7 +102,6 @@ kotlin {
             implementation(libs.koin.core)
             api(libs.kmpnotifier)
             implementation(libs.kmpauth.google)
-            implementation(libs.kmpauth.firebase)
             implementation(libs.napier)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.ktor.core)
@@ -67,16 +115,16 @@ kotlin {
             implementation(libs.lifecyle.runtime)
             implementation(libs.uuid)
             implementation(libs.multiplatformSettings.noargs)
-            implementation(libs.room.runtime)
-            implementation(libs.sqlite.bundled)
-            implementation(libs.android.inappreview)
             implementation(libs.coil.compose)
             implementation(libs.coil.ktor)
             implementation(libs.kotlinx.datetime)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.navigation.compose)
+            implementation(projects.libs.auth.authFirebase)
 
-            val subscriptionProvider = project.findProperty("SUBSCRIPTION_PROVIDER")?.toString()?.uppercase() ?: "REVENUECAT"
+            val subscriptionProvider =
+                project.findProperty("SUBSCRIPTION_PROVIDER")?.toString()?.uppercase()
+                    ?: "REVENUECAT"
             when (subscriptionProvider) {
                 "REVENUECAT" -> implementation(projects.libs.subscription.subscriptionRevenuecat)
                 "ADAPTY" -> implementation(projects.libs.subscription.subscriptionAdapty)
@@ -102,12 +150,24 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.koin.android)
             implementation(libs.google.admob)
+            implementation(libs.android.inappreview)
         }
 
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
 
+        jvmMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutinesSwing)
+        }
+
+        val nonWebMain by getting {
+            dependencies {
+                implementation(libs.room.runtime)
+                implementation(libs.sqlite.bundled)
+            }
+        }
     }
 }
 
@@ -130,7 +190,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    val keystorePropertiesFile = rootProject.file("distribution/android/keystore/keystore.properties")
+    val keystorePropertiesFile =
+        rootProject.file("distribution/android/keystore/keystore.properties")
     val isSigningKeyExists = keystorePropertiesFile.exists()
     val keystoreProperties = Properties()
     if (isSigningKeyExists) keystorePropertiesFile.inputStream().use { keystoreProperties.load(it) }
@@ -163,7 +224,14 @@ android {
             )
             signingConfig = signingConfigs.getByName(if (isSigningKeyExists) "release" else "debug")
 
-            resValue("string", "admobAppId", getRequiredProperty("ADMOB_APP_ID_ANDROID","ca-app-pub-3940256099942544~3347511713"))
+            resValue(
+                "string",
+                "admobAppId",
+                getRequiredProperty(
+                    "ADMOB_APP_ID_ANDROID",
+                    "ca-app-pub-3940256099942544~3347511713"
+                )
+            )
         }
     }
     buildFeatures {
@@ -181,24 +249,49 @@ dependencies {
         version { strictly("1.6.1") }
     }
 
-    add("kspAndroid",libs.room.compiler)
-    add("kspIosArm64",libs.room.compiler)
-    add("kspIosSimulatorArm64",libs.room.compiler)
+    add("kspAndroid", libs.room.compiler)
+    add("kspIosArm64", libs.room.compiler)
+    add("kspIosSimulatorArm64", libs.room.compiler)
+    add("kspJvm", libs.room.compiler)
 }
 
 room {
     schemaDirectory("$projectDir/schemas")
 }
 
+compose.desktop {
+    application {
+        mainClass = "com.measify.kappmaker.MainKt"
+
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "com.measify.kappmaker"
+            packageVersion = "1.0.0"
+        }
+    }
+}
+
 buildConfig {
     // BuildConfig configuration here.
     // https://github.com/gmazzo/gradle-buildconfig-plugin#usage-in-kts
     packageName("com.measify.kappmaker.common")
-    buildConfigField("GOOGLE_WEB_CLIENT_ID", getRequiredProperty(key="GOOGLE_WEB_CLIENT_ID", defaultValue = "testValue"))
+    buildConfigField(
+        "GOOGLE_WEB_CLIENT_ID",
+        getRequiredProperty(key = "GOOGLE_WEB_CLIENT_ID", defaultValue = "testValue")
+    )
 
     // Adapty or RevenueCat Api key
-    buildConfigField("SUBSCRIPTION_PROVIDER_ANDROID_API_KEY", getRequiredProperty(key="SUBSCRIPTION_PROVIDER_ANDROID_API_KEY", defaultValue = "testValue"))
-    buildConfigField("SUBSCRIPTION_PROVIDER_IOS_API_KEY", getRequiredProperty(key="SUBSCRIPTION_PROVIDER_IOS_API_KEY", defaultValue = "testValue"))
+    buildConfigField(
+        "SUBSCRIPTION_PROVIDER_ANDROID_API_KEY",
+        getRequiredProperty(
+            key = "SUBSCRIPTION_PROVIDER_ANDROID_API_KEY",
+            defaultValue = "testValue"
+        )
+    )
+    buildConfigField(
+        "SUBSCRIPTION_PROVIDER_IOS_API_KEY",
+        getRequiredProperty(key = "SUBSCRIPTION_PROVIDER_IOS_API_KEY", defaultValue = "testValue")
+    )
 
     setupAdmobAdsIds()
 }

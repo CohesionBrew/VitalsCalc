@@ -1,9 +1,8 @@
-@file:OptIn(ExperimentalTime::class)
+@file:OptIn(ExperimentalTime::class, ExperimentalUuidApi::class)
 
 package com.measify.kappmaker.data.repository
 
-import com.measify.kappmaker.data.source.local.dao.CreditTransactionDao
-import com.measify.kappmaker.data.source.local.entity.CreditTransactionEntity
+import com.measify.kappmaker.data.source.local.CreditTransactionLocalDataSource
 import com.measify.kappmaker.data.source.preferences.UserPreferences
 import com.measify.kappmaker.domain.exceptions.CreditRequiredException
 import com.measify.kappmaker.domain.model.credit.CreditRenewableType
@@ -17,7 +16,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -26,10 +24,12 @@ import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 class CreditRepository(
     private val config: CreditSystemConfig,
-    private val creditTransactionDao: CreditTransactionDao,
+    private val creditTransactionLocalDataSource: CreditTransactionLocalDataSource,
     private val subscriptionRepository: SubscriptionRepository,
     private val userPreferences: UserPreferences,
     private val applicationScope: ApplicationScope,
@@ -106,8 +106,7 @@ class CreditRepository(
     }
 
     fun getRecentTransactionsFlow(limit: Int = 100): Flow<List<CreditTransaction>> =
-        creditTransactionDao.getRecentsFlow(limit = limit)
-            .map { transactions -> transactions.map { it.asDomain() } }
+        creditTransactionLocalDataSource.getRecentsFlow(limit = limit)
 
 
     suspend fun getRecurringCredits(): List<RecurringCredit> {
@@ -224,13 +223,14 @@ class CreditRepository(
         amount: Int,
         type: CreditTransaction.Type, description: String?
     ) = applicationScope.launch {
-        val transaction = CreditTransactionEntity(
+        val transaction = CreditTransaction(
+            id = Uuid.random().toString(),
             type = type,
             amount = amount,
             description = description
         )
 
-        creditTransactionDao.upsert(transaction)
+        creditTransactionLocalDataSource.upsert(transaction)
     }
 
     private suspend fun updateTotalUsedCredits(cost: Int) {

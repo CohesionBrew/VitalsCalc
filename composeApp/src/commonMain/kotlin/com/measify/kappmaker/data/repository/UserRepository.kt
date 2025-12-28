@@ -2,6 +2,8 @@
 
 package com.measify.kappmaker.data.repository
 
+import com.measify.kappmaker.auth.api.AuthProviderUser
+import com.measify.kappmaker.auth.api.AuthServiceProvider
 import com.measify.kappmaker.data.BackgroundExecutor
 import com.measify.kappmaker.data.source.preferences.UserPreferences
 import com.measify.kappmaker.data.source.preferences.UserPreferences.Keys.KEY_FIRST_TIME_USER
@@ -9,9 +11,6 @@ import com.measify.kappmaker.domain.exceptions.UnAuthorizedException
 import com.measify.kappmaker.domain.model.User
 import com.measify.kappmaker.util.ApplicationScope
 import com.measify.kappmaker.util.logging.AppLogger
-import dev.gitlive.firebase.Firebase
-import dev.gitlive.firebase.auth.FirebaseUser
-import dev.gitlive.firebase.auth.auth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,6 +22,7 @@ import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
 class UserRepository(
+    private val authServiceProvider: AuthServiceProvider,
     private val subscriptionRepository: SubscriptionRepository,
     private val userPreferences: UserPreferences,
     private val backgroundExecutor: BackgroundExecutor = BackgroundExecutor.IO,
@@ -36,13 +36,13 @@ class UserRepository(
     private val authTrigger = MutableStateFlow(Clock.System.now().toEpochMilliseconds())
 
     val currentUser: SharedFlow<Result<User>> =
-        combine(authTrigger, Firebase.auth.authStateChanged) { _, currentUser -> currentUser }
+        combine(authTrigger, authServiceProvider.currentUserFlow) { _, currentUser -> currentUser }
             .map { currentUser ->
                 AppLogger.d("CUrrent user is updated")
                 if (currentUser == null) {
                     Result.failure(UnAuthorizedException())
                 } else {
-                    subscriptionRepository.login(userId = currentUser.uid)
+                    subscriptionRepository.login(userId = currentUser.id)
                     val user = currentUser.asUser()
                         .copy(hasPremiumAccess = subscriptionRepository.hasPremiumAccess())
                     Result.success(user)
@@ -50,11 +50,12 @@ class UserRepository(
 
             }.shareIn(applicationScope, SharingStarted.Eagerly, 1)
 
+
     fun signInAnonymouslyIfNecessary() = applicationScope.launch {
         backgroundExecutor.execute {
             val isFirstTimeUser = userPreferences.getBoolean(KEY_FIRST_TIME_USER, true)
-            if (Firebase.auth.currentUser == null && isFirstTimeUser) {
-                Firebase.auth.signInAnonymously()
+            if (authServiceProvider.currentUser == null && isFirstTimeUser) {
+                authServiceProvider.signInAnonymously()
                 userPreferences.putBoolean(KEY_FIRST_TIME_USER, false)
                 AppLogger.d("Signed in anonymously")
             }
@@ -71,40 +72,26 @@ class UserRepository(
 
     suspend fun logOut() = backgroundExecutor.execute {
         subscriptionRepository.logOut()
-        Firebase.auth.signOut()
+        authServiceProvider.logOut()
         Result.success(Unit)
     }
 
     suspend fun deleteAccount() = backgroundExecutor.execute {
-        val currentUser = Firebase.auth.currentUser
         //Here you can send delete request to the server if needed
-
-        currentUser?.delete()
+        authServiceProvider.deleteAccount()
         logOut()
         Result.success(Unit)
     }
 
-    private fun FirebaseUser.asUser(): User {
-
-        val emailFromProviders =
-            providerData.firstOrNull { it.email.isNullOrEmpty().not() && it.email != "null" }?.email
-        val displayNameFromProviders = providerData.firstOrNull {
-            it.displayName.isNullOrEmpty().not() && it.displayName != "null"
-        }?.displayName
-        val pictureFromProviders = providerData.firstOrNull {
-            it.photoURL.isNullOrEmpty().not() && it.photoURL != "null"
-        }?.photoURL
-
+    private fun AuthProviderUser.asUser(): User {
         return User(
-            id = uid,
+            id = id,
             isAnonymous = isAnonymous,
-            email = emailFromProviders ?: email,
-            displayName = displayNameFromProviders ?: displayName,
-            photoUrl = pictureFromProviders ?: photoURL
+            email = email,
+            displayName = displayName,
+            photoUrl = photoUrl
         )
     }
-
-
 }
 
 

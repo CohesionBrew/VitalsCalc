@@ -23,7 +23,6 @@ abstract class AppDatabase : RoomDatabase() {
 
 
 
-
 interface DatabaseProvider {
     fun provideAppDatabaseBuilder(): RoomDatabase.Builder<AppDatabase>
 }

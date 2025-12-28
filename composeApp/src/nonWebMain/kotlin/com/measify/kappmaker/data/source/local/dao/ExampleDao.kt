@@ -8,29 +8,29 @@ import com.measify.kappmaker.data.source.local.entity.ExampleEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface ExampleDao {
+interface ExampleDao: BaseRoomDao<String, ExampleEntity> {
     @Query("SELECT * FROM example WHERE id = :id")
-    suspend fun getById(id: Int): ExampleEntity?
+    override suspend fun getById(id: String): ExampleEntity?
 
     @Query("SELECT * FROM example WHERE id = :id")
-    fun getByIdFlow(id: Int): Flow<ExampleEntity?>
+    override fun getByIdFlow(id: String): Flow<ExampleEntity?>
 
     @Query("SELECT * FROM example")
-    fun getAllFlow(): Flow<List<ExampleEntity>>
+    override fun getAllFlow(): Flow<List<ExampleEntity>>
 
     @Query("SELECT * FROM example")
-    suspend fun getAll(): List<ExampleEntity>
+    override suspend fun getAll(): List<ExampleEntity>
 
     //Insert or update if exists
     @Upsert
-    suspend fun upsert(exampleEntity: ExampleEntity)
+    override suspend fun upsert(entity: ExampleEntity)
 
     @Query("DELETE FROM example WHERE id = :id")
-    suspend fun deleteById(id: Int)
+    override suspend fun deleteById(id: String)
 
     @Delete
-    suspend fun delete(exampleEntity: ExampleEntity)
+    override suspend fun delete(entity: ExampleEntity)
 
     @Query("DELETE FROM example")
-    suspend fun deleteAll()
+    override suspend fun deleteAll()
 }

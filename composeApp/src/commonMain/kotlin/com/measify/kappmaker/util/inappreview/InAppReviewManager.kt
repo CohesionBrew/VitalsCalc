@@ -34,6 +34,12 @@ interface InAppReviewManager {
     fun requestReview()
 }
 
+object NoImplInAppReviewManager : InAppReviewManager{
+    override fun requestReview() {
+        println("Implementation is not available in this platform")
+    }
+}
+
 class InAppReviewTrigger(
     private val inAppReviewManager: InAppReviewManager,
     private val userPreferences: UserPreferences

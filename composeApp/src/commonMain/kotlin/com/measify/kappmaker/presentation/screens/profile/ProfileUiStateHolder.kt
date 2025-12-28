@@ -1,11 +1,11 @@
 package com.measify.kappmaker.presentation.screens.profile
 
+import com.measify.kappmaker.auth.api.AuthRecentLoginRequiredException
 import com.measify.kappmaker.data.repository.UserRepository
 import com.measify.kappmaker.domain.exceptions.UnAuthorizedException
 import com.measify.kappmaker.util.UiStateHolder
 import com.measify.kappmaker.util.logging.AppLogger
 import com.measify.kappmaker.util.uiStateHolderScope
-import dev.gitlive.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -58,7 +58,7 @@ class ProfileUiStateHolder(private val userRepository: UserRepository) : UiState
             }
             .onFailure { error ->
                 AppLogger.d("Account deletion failed ${error.message}")
-                if (error is FirebaseAuthRecentLoginRequiredException) {
+                if (error is AuthRecentLoginRequiredException) {
                     _uiState.update { it.copy(isLoading = false, user = null) }
                 } else
                     _uiState.update { it.copy(isLoading = false, errorMessage = error.message) }

@@ -8,18 +8,18 @@ import com.measify.kappmaker.data.source.local.entity.CreditTransactionEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface CreditTransactionDao {
+interface CreditTransactionDao : BaseRoomDao<String, CreditTransactionEntity> {
     @Query("SELECT * FROM credit_transaction WHERE id = :id")
-    suspend fun getById(id: String): CreditTransactionEntity?
+    override suspend fun getById(id: String): CreditTransactionEntity?
 
     @Query("SELECT * FROM credit_transaction WHERE id = :id")
-    fun getByIdFlow(id: String): Flow<CreditTransactionEntity?>
+    override fun getByIdFlow(id: String): Flow<CreditTransactionEntity?>
 
     @Query("SELECT * FROM credit_transaction ORDER BY created_at DESC")
-    fun getAllFlow(): Flow<List<CreditTransactionEntity>>
+    override fun getAllFlow(): Flow<List<CreditTransactionEntity>>
 
     @Query("SELECT * FROM credit_transaction")
-    suspend fun getAll(): List<CreditTransactionEntity>
+    override suspend fun getAll(): List<CreditTransactionEntity>
 
     @Query("SELECT * FROM credit_transaction ORDER BY created_at DESC LIMIT :limit")
     fun getRecentsFlow(limit: Int): Flow<List<CreditTransactionEntity>>
@@ -29,14 +29,14 @@ interface CreditTransactionDao {
 
     //Insert or update if exists
     @Upsert
-    suspend fun upsert(entity: CreditTransactionEntity)
+    override suspend fun upsert(entity: CreditTransactionEntity)
 
     @Query("DELETE FROM credit_transaction WHERE id = :id")
-    suspend fun deleteById(id: String)
+    override suspend fun deleteById(id: String)
 
     @Delete
-    suspend fun delete(entity: CreditTransactionEntity)
+    override suspend fun delete(entity: CreditTransactionEntity)
 
     @Query("DELETE FROM credit_transaction")
-    suspend fun deleteAll()
+    override suspend fun deleteAll()
 }

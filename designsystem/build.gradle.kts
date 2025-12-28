@@ -38,9 +38,13 @@ kotlin {
 
     jvm()
 
-    wasmJs()
-    js {
+    wasmJs {
         browser()
+    }
+    js {
+        nodejs()
+        browser()
+        binaries.library()
     }
 
     sourceSets {

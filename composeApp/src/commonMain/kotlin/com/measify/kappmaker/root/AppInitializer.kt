@@ -1,14 +1,13 @@
 package com.measify.kappmaker.root
 
-import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import com.measify.kappmaker.auth.api.AuthServiceProvider
+import com.measify.kappmaker.auth.api.AuthServiceProviderFactory
 import com.measify.kappmaker.common.BuildConfig
 import com.measify.kappmaker.data.BackgroundExecutor
 import com.measify.kappmaker.data.repository.CreditRepository
 import com.measify.kappmaker.data.repository.SubscriptionRepository
 import com.measify.kappmaker.data.repository.UserRepository
 import com.measify.kappmaker.data.source.featureflag.FeatureFlagManager
-import com.measify.kappmaker.data.source.local.AppDatabase
-import com.measify.kappmaker.data.source.local.DatabaseProvider
 import com.measify.kappmaker.data.source.preferences.UserPreferences
 import com.measify.kappmaker.data.source.preferences.UserPreferencesImpl
 import com.measify.kappmaker.data.source.remote.HttpClientFactory
@@ -31,6 +30,7 @@ import com.measify.kappmaker.subscription.api.SubscriptionProviderUi
 import com.measify.kappmaker.util.ApplicationScope
 import com.measify.kappmaker.util.Constants
 import com.measify.kappmaker.util.analytics.Analytics
+import com.measify.kappmaker.util.defaultAsyncDispatcher
 import com.measify.kappmaker.util.isAndroid
 import com.measify.kappmaker.util.isDebug
 import com.measify.kappmaker.util.logging.AppLogger
@@ -45,8 +45,6 @@ import com.mmk.kmpnotifier.notification.NotifierManager
 import com.mmk.kmpnotifier.notification.PayloadData
 import com.russhwolf.settings.Settings
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
@@ -102,7 +100,7 @@ private fun KoinApplication.initializeAnalytics() {
 }
 
 private fun KoinApplication.initializeAds() {
-    val backgroundScope = CoroutineScope(Dispatchers.IO)
+    val backgroundScope = CoroutineScope(defaultAsyncDispatcher)
     val adsManager by this.koin.inject<AdsManager>()
     val featureFlagManager by this.koin.inject<FeatureFlagManager>()
     val isAdsEnabled = featureFlagManager.getBoolean(FeatureFlagManager.Keys.IS_ADS_ENABLED)
@@ -214,9 +212,8 @@ private val domainModule = module {
 }
 
 private val dataModule = module {
-
     singleOf(::ApplicationScope)
-    factory { Dispatchers.IO } bind CoroutineContext::class
+    factory { defaultAsyncDispatcher } bind CoroutineContext::class
     factory { BackgroundExecutor.IO } bind BackgroundExecutor::class
 
     //Preferences Source
@@ -224,24 +221,17 @@ private val dataModule = module {
     singleOf(::UserPreferencesImpl) bind UserPreferences::class
 
     //Remote source
-    single { HttpClientFactory.default() }
+    single { HttpClientFactory.default(get()) }
     factoryOf(::ApiService)
 
     //AI API services
     factoryOf(::OpenAiApiService)
     factoryOf(::ReplicateApiService)
 
-    //Local Source
-    single<AppDatabase> {
-        val databaseProvider = get<DatabaseProvider>()
-        databaseProvider.provideAppDatabaseBuilder()
-            .fallbackToDestructiveMigration(dropAllTables = true)
-            .setDriver(BundledSQLiteDriver())
-            .setQueryCoroutineContext(Dispatchers.IO)
-            .build()
-    }
-    single { get<AppDatabase>().exampleDao() }
-    single { get<AppDatabase>().creditTransactionDao() }
+
+    //Auth provider
+    factory { Constants.authServiceProviderFactory } bind AuthServiceProviderFactory::class
+    single { get<AuthServiceProviderFactory>().create() } bind AuthServiceProvider::class
 
     //Subscription Provider
     factory { Constants.subscriptionProviderFactory } bind SubscriptionProviderFactory::class
@@ -249,7 +239,7 @@ private val dataModule = module {
     factory { get<SubscriptionProviderFactory>().createProviderUi() } bind SubscriptionProviderUi::class
 
     //Repositories
-    single { UserRepository(get(), get(), get(), get()) }
+    single { UserRepository(get(), get(), get(), get(), get()) }
     single { SubscriptionRepository(get(), get(), get(), get()) }
 
     //Loggers

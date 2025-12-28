@@ -1,5 +1,7 @@
 package com.measify.kappmaker.util
 
+import com.measify.kappmaker.auth.api.AuthServiceProviderFactory
+import com.measify.kappmaker.auth.firebase.Firebase
 import com.measify.kappmaker.subscription.api.SubscriptionProviderFactory
 import com.measify.kappmaker.subscription.revenuecat.RevenueCat
 
@@ -45,7 +47,6 @@ object Constants {
      * - In Adapty, configure the placement with this exact identifier.
      */
     const val PAYWALL_PLACEMENT_CREDITS_PACK = "credits_pack"
-
 
 
     /**
@@ -100,6 +101,8 @@ object Constants {
     val subscriptionUrl =
         if (isAndroid) "https://play.google.com/store/account/subscriptions"
         else "https://apps.apple.com/account/subscriptions"
+
+    val authServiceProviderFactory get() = AuthServiceProviderFactory.Firebase
 
 }
 

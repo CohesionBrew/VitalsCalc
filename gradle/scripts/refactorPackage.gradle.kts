@@ -33,7 +33,10 @@ tasks.register("refactorPackage") {
         "src/iosMain/kotlin",
         "src/jvmMain/kotlin",
         "src/nonMobileMain/kotlin",
-        "src/mobileMain/kotlin"
+        "src/mobileMain/kotlin",
+        "src/webMain/kotlin",
+        "src/jsMain/kotlin",
+        "src/wasmJsMain/kotlin",
     )
 
     // File extensions to search within
@@ -106,7 +109,9 @@ tasks.register("refactorPackage") {
         val gradleFiles = listOf(
             "composeApp/build.gradle.kts",
             "designsystem/build.gradle.kts",
-            "gradle/scripts/generateNewScreen.gradle.kts"
+            "gradle/scripts/generateNewScreen.gradle.kts",
+            "scripts/make_local.sh",
+            "scripts/create_module.sh"
         ) // Add more paths as needed
 
         gradleFiles.forEach { filePath ->
@@ -166,7 +171,10 @@ tasks.register("refactorPackage") {
             "composeApp/src/androidMain/AndroidManifest.xml",
             "settings.gradle.kts",
             "iosApp/iosApp.xcodeproj/project.pbxproj",
-            ".github/workflows/publish_ios_appstore.yml"
+            ".github/workflows/publish_ios_appstore.yml",
+            "composeApp/src/webMain/resources/index.html",
+            "composeApp/src/jvmMain/kotlin/com/measify/kappmaker/main.kt",
+            "composeApp/src/jvmMain/kotlin/com/measify/kappmaker/util/AppUtilImpl.jvm.kt"
         ) // Add more paths as needed
         files.forEach { filePath ->
             val file = project.rootDir.resolve(filePath)

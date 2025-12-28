@@ -18,7 +18,7 @@ SAFE_MODULE_NAME=$(echo "$MODULE_NAME" | tr '-' '.' | tr '[:upper:]' '[:lower:]'
 NAMESPACE=${3:-"com.measify.kappmaker.$SAFE_MODULE_NAME"}
 SAFE_NAMESPACE=$(echo "$NAMESPACE" | tr -d ' ' | tr '[:upper:]' '[:lower:]')
 MODULE_PATH="$TARGET_DIR/$MODULE_NAME"
-COMMON_SRC_PATH="$MODULE_PATH/src/commonMain/kotlin/${SAFE_NAMESPACE}"  # convert dots to slashes safely
+COMMON_SRC_PATH="$MODULE_PATH/src/commonMain/kotlin/$(echo "$SAFE_NAMESPACE" | tr '.' '/')"
 
 
 # -------------------------------
@@ -52,7 +52,8 @@ EOL
 # Add module to settings.gradle.kts
 # -------------------------------
 SETTINGS_FILE="settings.gradle.kts"
-INCLUDE_STATEMENT="include(\":$TARGET_DIR:$MODULE_NAME\")"
+GRADLE_MODULE_PATH=$(echo "$TARGET_DIR/$MODULE_NAME" | tr '/' ':')
+INCLUDE_STATEMENT="include(\":$GRADLE_MODULE_PATH\")"
 
 if ! grep -qF "$INCLUDE_STATEMENT" "$SETTINGS_FILE"; then
     echo "Adding module to $SETTINGS_FILE..."

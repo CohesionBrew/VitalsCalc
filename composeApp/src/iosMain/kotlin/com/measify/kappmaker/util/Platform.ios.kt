@@ -3,11 +3,15 @@ package com.measify.kappmaker.util
 import com.measify.kappmaker.data.source.featureflag.FeatureFlagManager
 import com.measify.kappmaker.data.source.local.DatabaseProvider
 import com.measify.kappmaker.data.source.local.DatabaseProviderImpl
+import com.measify.kappmaker.data.source.local.nonWebModule
 import com.measify.kappmaker.presentation.components.ads.AdsManager
 import com.measify.kappmaker.presentation.components.ads.IosAdsDisplayer
 import com.measify.kappmaker.util.analytics.Analytics
 import com.mmk.kmpnotifier.notification.NotifierManager
 import com.mmk.kmpnotifier.notification.configuration.NotificationPlatformConfiguration
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -16,6 +20,7 @@ import org.koin.dsl.module
 import kotlin.experimental.ExperimentalNativeApi
 
 internal actual val platformModule: Module = module {
+    includes(nonWebModule)
     singleOf(::DatabaseProviderImpl) bind DatabaseProvider::class
     factoryOf(::AppUtilImpl) bind AppUtil::class
 }
@@ -36,3 +41,6 @@ internal actual val isAndroid = false
 
 @OptIn(ExperimentalNativeApi::class)
 internal actual val isDebug = Platform.isDebugBinary
+
+actual val defaultAsyncDispatcher: CoroutineDispatcher = Dispatchers.IO
+

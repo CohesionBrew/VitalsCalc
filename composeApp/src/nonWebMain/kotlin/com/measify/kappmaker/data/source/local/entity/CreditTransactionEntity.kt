@@ -23,28 +23,26 @@ data class CreditTransactionEntity(
     @ColumnInfo(name = "amount") val amount: Int,
     @ColumnInfo(name = "description") val description: String? = null,
     @ColumnInfo("created_at") val createdAt: Long = Clock.System.now().toEpochMilliseconds(),
-) {
+)
 
-    companion object {
-
-        fun of(model: CreditTransaction): CreditTransactionEntity {
-            return CreditTransactionEntity(
-                id = model.id,
-                type = model.type,
-                amount = model.amount,
-                description = model.description,
-                createdAt = model.createdAt,
-            )
-        }
+class CreditTransactionEntityMapper : EntityMapper<CreditTransactionEntity, CreditTransaction> {
+    override fun toEntity(model: CreditTransaction): CreditTransactionEntity {
+        return CreditTransactionEntity(
+            id = model.id,
+            type = model.type,
+            amount = model.amount,
+            description = model.description,
+            createdAt = model.createdAt,
+        )
     }
 
-    fun asDomain(): CreditTransaction {
+    override fun toModel(entity: CreditTransactionEntity): CreditTransaction {
         return CreditTransaction(
-            id = id,
-            type = type,
-            amount = amount,
-            description = description,
-            createdAt = createdAt,
+            id = entity.id,
+            type = entity.type,
+            amount = entity.amount,
+            description = entity.description,
+            createdAt = entity.createdAt,
         )
     }
 }

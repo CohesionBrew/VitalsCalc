@@ -91,7 +91,7 @@ class PaywallUiStateHolder(
 
     //@param refreshPackages is only needed for custom Paywall screens, not for remote paywall
     fun updatePlacementIdIfNecessary(refreshPackages: Boolean) = uiStateHolderScope.launch {
-        _uiState.update { it.copy(currentPlacementId = subscriptionRepository.currentPlacementId) }
+        _uiState.update { it.copy(currentPlacementId = subscriptionRepository.currentPlacementId, isLoading = false) }
         if (refreshPackages) getPackages()
     }
 

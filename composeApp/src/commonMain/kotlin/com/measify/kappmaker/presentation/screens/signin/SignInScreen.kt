@@ -28,6 +28,7 @@ import com.measify.kappmaker.designsystem.components.ScreenWithToolbar
 import com.measify.kappmaker.designsystem.generated.resources.UiRes
 import com.measify.kappmaker.designsystem.generated.resources.ic_back
 import com.measify.kappmaker.designsystem.theme.AppTheme
+import com.measify.kappmaker.domain.exceptions.UserAlreadyExistsException
 import com.measify.kappmaker.generated.resources.Res
 import com.measify.kappmaker.generated.resources.sign_in_to
 import com.measify.kappmaker.generated.resources.title_sign_in
@@ -37,7 +38,6 @@ import com.measify.kappmaker.root.AppGlobalUiState
 import com.measify.kappmaker.util.Constants
 import com.measify.kappmaker.util.UiMessage
 import com.measify.kappmaker.util.logging.AppLogger
-import dev.gitlive.firebase.auth.FirebaseAuthUserCollisionException
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
@@ -88,19 +88,10 @@ fun SignInScreen(
                     userRepository.onSuccessfulOauthSign()
                     onSuccessfulSignIn()
                 }.onFailure { error ->
-
-                    var errorMessage = error.message ?: ""
-                    //TODO check if it is already existing or collision error. Checking with empty message is not reliable
-                    val isUserAlreadyRegistered =
-                        error is FirebaseAuthUserCollisionException || errorMessage.isEmpty()
-
-                    if (isUserAlreadyRegistered) {
-                        errorMessage =
-                            "Looks like you already have an account with this email. Please, try again signing in"
-                    }
+                    val isUserAlreadyRegistered = error is UserAlreadyExistsException
                     coroutineScope.launch {
                         AppGlobalUiState.showUiMessage(
-                            UiMessage.Message(errorMessage)
+                            UiMessage.Message(error.message)
                         )
                     }
                     AppLogger.e("Error occurred while signing in, $error")

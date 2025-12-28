@@ -3,7 +3,6 @@
 import com.android.build.gradle.BaseExtension
 import extensions.isMultiplatformModule
 import extensions.kotlinMultiplatform
-import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -34,7 +33,7 @@ kotlinMultiplatform {
             }
         }
     }
-    
+
     androidTarget {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_17
@@ -45,7 +44,9 @@ kotlinMultiplatform {
     iosSimulatorArm64()
 
     jvm()
-    wasmJs()
+    wasmJs {
+        browser()
+    }
     js(IR) {
         nodejs()
         browser()
