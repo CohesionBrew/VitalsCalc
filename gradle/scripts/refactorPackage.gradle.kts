@@ -35,6 +35,7 @@ tasks.register("refactorPackage") {
         "src/nonMobileMain/kotlin",
         "src/mobileMain/kotlin",
         "src/webMain/kotlin",
+        "src/nonWebMain/kotlin",
         "src/jsMain/kotlin",
         "src/wasmJsMain/kotlin",
     )
