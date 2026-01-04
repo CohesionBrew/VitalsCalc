@@ -6,15 +6,39 @@
  *
  * org.gradle.configuration-cache=false
  *
+ * -------------------- USAGE --------------------
+ *
+ * a) Full refactor (default, package names + applicationId + bundleId + app name):
+ *    ./gradlew refactorPackage -PnewAppId=com.example.newapp -PnewAppName=NewApp
+ *
+ * b) Only update applicationId / bundleId / app name, keep Kotlin package names and directories same:
+ *    ./gradlew refactorPackage -PnewAppId=com.example.newapp -PnewAppName=NewApp -PshouldUpdatePackageName=false
+ *
+ * Parameter explanation:
+ * - newAppId:        The new applicationId / bundleId for the app (required).
+ * - newAppName:      The new display name for the app (required).
+ * - shouldUpdatePackageName:
+ *      true  -> Renames/moves Kotlin packages and directories to match newAppId (default behavior).
+ *      false -> Keeps all Kotlin packages / directories intact, only updates:
+ *               - Android applicationId
+ *               - iOS bundle ID
+ *               - Firebase / Google services references
+ *
+ * Use shouldUpdatePackageName=false to create multiple unique apps from a single base project
+ * without modifying Kotlin packages, reducing merge conflicts.
  */
+
 
 tasks.register("refactorPackage") {
 
-    val newApplicationBundleId =
-        "com.measify.kappmaker" // <-- Change this with new application/bundle ID
-    val newApplicationName =
-        "KAppMakerAllModules"      //  <-- Change this with new application name
+    val newApplicationBundleId: String =
+        project.findProperty("newAppId") as String? ?: "com.measify.kappmaker"
 
+    val newApplicationName: String =
+        project.findProperty("newAppName") as String? ?: "KAppMakerAllModules"
+
+    val shouldUpdatePackageName: Boolean =
+        (project.findProperty("shouldUpdatePackageName") as String?)?.toBoolean() ?: true
 
     val oldApplicationBundleId =
         "com.measify.kappmaker" // <-- Default application/bundle id and package name
@@ -121,6 +145,22 @@ tasks.register("refactorPackage") {
         }
     }
 
+    fun updateBuildGradleForApplicationIdOnly() {
+        val buildGradleFile = project.rootDir.resolve("composeApp/build.gradle.kts")
+        if (!buildGradleFile.exists()) return
+
+        val content = buildGradleFile.readText()
+        var updatedContent = content
+
+        // 1. Update applicationId in defaultConfig
+        updatedContent = updatedContent.replace(
+            Regex("""applicationId\s*=\s*["'][^"']+["']"""),
+            """applicationId = "$newApplicationBundleId""""
+        )
+        buildGradleFile.writeText(updatedContent)
+    }
+
+
     fun updateFirbaseGoogleService() {
         val googleServicesFileAndroid =
             project.layout.projectDirectory.file("google-services.json").asFile
@@ -197,14 +237,25 @@ tasks.register("refactorPackage") {
     doLast {
         println("Starting package refactor from $oldApplicationBundleId to $newApplicationBundleId")
 
-        updatePackageNamesInFiles()
-        movePackageDirectories()
-        updateGradleFiles()
-        updateFirbaseGoogleService()
-        updateIOSFiles()
-        updateGithubActionWorkflow()
-        cleanUpOldDirectories()
-        updateApplicationName()
+        if (shouldUpdatePackageName) {
+            updatePackageNamesInFiles()
+            movePackageDirectories()
+
+            updateGradleFiles()
+            updateFirbaseGoogleService()
+            updateIOSFiles()
+
+            updateGithubActionWorkflow()
+            cleanUpOldDirectories()
+            updateApplicationName()
+        } else {
+
+            updateBuildGradleForApplicationIdOnly()
+            updateFirbaseGoogleService()
+            updateIOSFiles()
+            updateGithubActionWorkflow()
+            updateApplicationName()
+        }
 
         println("Package refactoring completed.")
     }
