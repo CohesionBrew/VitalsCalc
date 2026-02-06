@@ -12,10 +12,12 @@ import com.measify.kappmaker.domain.model.credit.CreditTransaction
 import com.measify.kappmaker.domain.model.credit.RecurringCredit
 import com.measify.kappmaker.util.ApplicationScope
 import com.measify.kappmaker.util.logging.AppLogger
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -37,15 +39,23 @@ class CreditRepository(
 
     private val mutex = Mutex()
     private val _balance = MutableStateFlow(0)
-    val balance = _balance.asStateFlow()
+    val balance = _balance.asStateFlow().onStart {
+        listenForSubscriptionUpdate()
+    }
+
+    var subscriptionUpdateJob: Job? = null
 
     init {
-        applicationScope.launch {
+        listenForSubscriptionUpdate()
+    }
+
+    private fun listenForSubscriptionUpdate() {
+        subscriptionUpdateJob?.cancel()
+        subscriptionUpdateJob = applicationScope.launch {
             subscriptionRepository.currentSubscriptionFlow
                 .collectLatest { refreshAndGetBalance() }
         }
     }
-
 
     suspend fun useCredits(amount: Int = 1, description: String? = null) = mutex.withLock {
         require(amount > 0) { "amount must be > 0" }

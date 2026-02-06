@@ -141,7 +141,7 @@ internal class RevenueCatSubscriptionProvider : SubscriptionProvider {
                 }
 
                 GrantedAccess(
-                    id = entitlementPackage.identifier,
+                    id = entitlement.identifier,
                     productIdentifier = entitlement.productIdentifier,
                     expirationDateMillis = entitlement.expirationDateMillis,
                     willRenew = entitlement.willRenew,

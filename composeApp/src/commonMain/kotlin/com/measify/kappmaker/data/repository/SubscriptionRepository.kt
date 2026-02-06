@@ -58,7 +58,7 @@ class SubscriptionRepository(
                 AppLogger.e("Error occurred while getting current subscription", error)
             }
             .flowOn(backgroundExecutor.scope)
-            .shareIn(applicationScope, SharingStarted.Eagerly, 1)
+            .shareIn(applicationScope, SharingStarted.Lazily, 1)
 
 
     var currentPlacementId: String? = null
