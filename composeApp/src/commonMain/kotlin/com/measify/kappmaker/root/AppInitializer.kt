@@ -45,6 +45,7 @@ import com.mmk.kmpnotifier.notification.NotifierManager
 import com.mmk.kmpnotifier.notification.PayloadData
 import com.russhwolf.settings.Settings
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
@@ -160,7 +161,7 @@ private fun KoinApplication.initializeInAppPurchase() {
     val subscriptionProvider by this.koin.inject<SubscriptionProvider>()
     val applicationScope by this.koin.inject<ApplicationScope>()
 
-    applicationScope.launch {
+    applicationScope.launch(Dispatchers.Main.immediate) {
         val subscriptionProviderApiKey =
             if (isAndroid) BuildConfig.SUBSCRIPTION_PROVIDER_ANDROID_API_KEY else BuildConfig.SUBSCRIPTION_PROVIDER_IOS_API_KEY
         subscriptionProvider.initialize(subscriptionProviderApiKey)
