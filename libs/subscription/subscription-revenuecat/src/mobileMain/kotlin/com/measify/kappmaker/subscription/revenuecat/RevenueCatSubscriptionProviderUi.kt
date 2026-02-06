@@ -73,7 +73,8 @@ class RevenueCatSubscriptionProviderUi : SubscriptionProviderUi {
             if (placementId != null) {
                 try {
                     val offerings = Purchases.sharedInstance.awaitOfferings()
-                    currentOffering = offerings.getCurrentOfferingForPlacement(placementId)
+                    currentOffering = offerings[placementId]
+                    isLoading = false
                 } catch (error: Exception) {
                     coroutineContext.ensureActive()
                     isLoading = false
