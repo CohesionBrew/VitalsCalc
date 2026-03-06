@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git remote:*)",
+      "Bash(git push:*)",
+      "Bash(git submodule:*)",
+      "Bash(xcrun simctl:*)",
+      "Bash(test:*)",
+      "Bash(grep:*)"
+    ]
+  }
+}

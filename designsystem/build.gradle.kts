@@ -57,6 +57,10 @@ kotlin {
             api(compose.components.resources)
             api(compose.components.uiToolingPreview)
             api(libs.coil.compose)
+            api(libs.cupertino)
+            api(libs.cupertino.adaptive)
+            api(libs.cupertino.native)
+            api(libs.cupertino.icons.extended)
             implementation(libs.kmpauth.uihelper)
         }
         androidMain.dependencies {
@@ -69,7 +73,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.measify.kappmaker.designsystem"
+    namespace = "com.cohesionbrew.healthcalculator.designsystem"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
@@ -86,7 +90,7 @@ android {
 compose.resources {
     publicResClass = true
     nameOfResClass = "UiRes"
-    packageOfResClass = "com.measify.kappmaker.designsystem.generated.resources"
+    packageOfResClass = "com.cohesionbrew.healthcalculator.designsystem.generated.resources"
 }
 
 dependencies {

@@ -1,5 +1,5 @@
 import androidx.compose.ui.window.singleWindowApplication
-import com.measify.kappmaker.designsystem.AllComponentsGallery
+import com.cohesionbrew.healthcalculator.designsystem.AllComponentsGallery
 
 //Note: First time run can take a while because of downloading Jetbrains JDK
 fun main() {
