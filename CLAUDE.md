@@ -1,0 +1,1 @@
+.ai/rules/CLAUDE_CONFIG.md

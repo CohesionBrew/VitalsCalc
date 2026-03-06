@@ -1,4 +1,4 @@
-rootProject.name = "KAppMakerAllModules"
+rootProject.name = "VitalsCalc"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -39,6 +39,7 @@ plugins {
 
 include(":composeApp")
 include(":designsystem")
+include(":shared-domain")
 include(":libs:subscription:subscription-api")
 include(":libs:subscription:subscription-revenuecat")
 include(":libs:subscription:subscription-adapty")

@@ -2,18 +2,18 @@ PODS:
   - Google-Mobile-Ads-SDK (11.13.0):
     - GoogleUserMessagingPlatform (>= 1.1)
   - GoogleUserMessagingPlatform (2.7.0)
-  - PurchasesHybridCommon (16.2.0):
-    - RevenueCat (= 5.34.0)
-  - PurchasesHybridCommonUI (16.2.0):
-    - PurchasesHybridCommon (= 16.2.0)
-    - RevenueCatUI (= 5.34.0)
-  - RevenueCat (5.34.0)
-  - RevenueCatUI (5.34.0):
-    - RevenueCat (= 5.34.0)
+  - PurchasesHybridCommon (17.21.2):
+    - RevenueCat (= 5.49.2)
+  - PurchasesHybridCommonUI (17.21.2):
+    - PurchasesHybridCommon (= 17.21.2)
+    - RevenueCatUI (= 5.49.2)
+  - RevenueCat (5.49.2)
+  - RevenueCatUI (5.49.2):
+    - RevenueCat (= 5.49.2)
 
 DEPENDENCIES:
   - Google-Mobile-Ads-SDK (= 11.13.0)
-  - PurchasesHybridCommonUI (= 16.2.0)
+  - PurchasesHybridCommonUI (= 17.21.2)
 
 SPEC REPOS:
   trunk:
@@ -27,11 +27,11 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Google-Mobile-Ads-SDK: 14f57f2dc33532a24db288897e26494640810407
   GoogleUserMessagingPlatform: a8b56893477f67212fbc8411c139e61d463349f5
-  PurchasesHybridCommon: 55e97b4e090015ed138988e6559def2bd4c50ebe
-  PurchasesHybridCommonUI: 25c66f6ddcf8856ecbcffee897b2525eb272a5e7
-  RevenueCat: eb2aa042789d9c99ad5172bd96e28b96286d6ada
-  RevenueCatUI: 03025a80b64ce8ff8e43f47a7eb9dbbb6b4f486e
+  PurchasesHybridCommon: 71c94158ff8985657d37d5f3be05602881227619
+  PurchasesHybridCommonUI: c490142361da500ea8fe2f75cd6d56df0f7e3152
+  RevenueCat: d185cbff8be9425b5835042afd6889389bb756c8
+  RevenueCatUI: 3d17f9f0bf7ed299c1671552378086ceeff308fd
 
-PODFILE CHECKSUM: 96259975cab3ee2918472b33b1909e354f7468fe
+PODFILE CHECKSUM: 0825092c6ef1fa90005b6d52cdff908b20dd2366
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

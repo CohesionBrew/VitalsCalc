@@ -1,7 +1,7 @@
 tasks.register("generateNewScreen") {
 
     // Default values for the task
-    val defaultPackageName = "com.measify.kappmaker"
+    val defaultPackageName = "com.cohesionbrew.healthcalculator"
     var screenSuffix = "Screen"
     var uiStateSuffix = "UiState"
     var uiEventSuffix = "UiEvent"
@@ -88,8 +88,8 @@ tasks.register("generateNewScreen") {
             import androidx.compose.runtime.getValue
             import androidx.compose.ui.Modifier
             import androidx.lifecycle.compose.collectAsStateWithLifecycle
-            import com.measify.kappmaker.designsystem.components.ScreenWithToolbar
-            import com.measify.kappmaker.designsystem.theme.AppTheme
+            import com.cohesionbrew.healthcalculator.designsystem.components.ScreenWithToolbar
+            import com.cohesionbrew.healthcalculator.designsystem.theme.AppTheme
 
             @Composable
             fun $screenClassName(

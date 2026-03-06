@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0208551A15144348BC0CA4B7 /* HeartRateEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43C4536BE0F4F808C6378E8 /* HeartRateEntry.swift */; };
+		5283437F9F454ACFB82D4359 /* BloodPressureWidgetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBEA18505B76425C892D9E0C /* BloodPressureWidgetProvider.swift */; };
+		5A47D223733240369FC90920 /* WidgetConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A87523B6A40841F7B376EEA1 /* WidgetConstants.swift */; };
+		5C5F3ADD4D2849938380B0D2 /* VitalsCalcWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D569733D7E2D4AB29B21E239 /* VitalsCalcWidget.swift */; };
+		679638512AB64179B575C2F3 /* HeartRateWidgetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F04D14C07EC4094A2CC991A /* HeartRateWidgetProvider.swift */; };
+		80CFA1C77F8C4D4FAAF703FA /* BloodPressureEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943EE96242FF4538AA3107FE /* BloodPressureEntry.swift */; };
+		89F8104966D34EE298FD282C /* BmiWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B854FE4850B4B5B9496B636 /* BmiWidgetView.swift */; };
+		8F1E98B84B1D43CB91C6D55B /* BodyFatWidgetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488DFE1438224F379777F851 /* BodyFatWidgetProvider.swift */; };
+		9F34F5BEF0464E4F96581485 /* BmiEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2668F1537554AADAE1489D4 /* BmiEntry.swift */; };
+		A2427DB6FD5A40448396FEC2 /* HeartRateWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDAF24B3EFD4246B62F2B1E /* HeartRateWidgetView.swift */; };
 		A631C8A62C8DE8B50075EE70 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A631C8A52C8DE8B50075EE70 /* ContentView.swift */; };
 		A631C8A92C8DE8F10075EE70 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = A631C8A82C8DE8F10075EE70 /* GoogleSignIn */; };
 		A631C8AB2C8DE8F10075EE70 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A631C8AA2C8DE8F10075EE70 /* GoogleSignInSwift */; };
@@ -34,12 +44,51 @@
 		A93A953B29CC810C00F8E227 /* iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93A953A29CC810C00F8E227 /* iosApp.swift */; };
 		A93A953F29CC810D00F8E227 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A93A953E29CC810D00F8E227 /* Assets.xcassets */; };
 		A93A954229CC810D00F8E227 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A93A954129CC810D00F8E227 /* Preview Assets.xcassets */; };
+		B55998D98476424AAF50711A /* BodyFatEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716D4D6BB397441585AAD726 /* BodyFatEntry.swift */; };
+		BACB273EF3074545B0CEE89D /* BloodPressureWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11163A05C252451F9B9A7D41 /* BloodPressureWidgetView.swift */; };
 		D10F9A7CECD86BE2EF7542FB /* Pods_iosApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11E804D91E514C1CC05254D4 /* Pods_iosApp.framework */; };
+		D35D051C392442ECAC12A79A /* BodyFatWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D41DE8F6B0498DBD0D54E6 /* BodyFatWidgetView.swift */; };
+		EDDD7C15E50D4240AD06D063 /* VitalsCalcWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A315EDAE7D154D94B5BD9536 /* VitalsCalcWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F893F0F167D745D7808A372E /* BmiWidgetProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCF14B1654F44B0983A1E2F1 /* BmiWidgetProvider.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		C3E7D88D2F1C4107BA24CE01 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A93A952F29CC810C00F8E227 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2B2027D2375A408E848906BB;
+			remoteInfo = 2B2027D2375A408E848906BB;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4DED4E8395654C10BC8784D0 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				EDDD7C15E50D4240AD06D063 /* VitalsCalcWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		07D41DE8F6B0498DBD0D54E6 /* BodyFatWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyFatWidgetView.swift; sourceTree = "<group>"; };
+		11163A05C252451F9B9A7D41 /* BloodPressureWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodPressureWidgetView.swift; sourceTree = "<group>"; };
 		11E804D91E514C1CC05254D4 /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		14DCC5A77F18489785D40C47 /* VitalsCalcWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = VitalsCalcWidget.entitlements; sourceTree = "<group>"; };
 		187A68D159882FF205D2BF2D /* Pods-iosApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.debug.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.debug.xcconfig"; sourceTree = "<group>"; };
+		1F04D14C07EC4094A2CC991A /* HeartRateWidgetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateWidgetProvider.swift; sourceTree = "<group>"; };
+		488DFE1438224F379777F851 /* BodyFatWidgetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyFatWidgetProvider.swift; sourceTree = "<group>"; };
+		4B854FE4850B4B5B9496B636 /* BmiWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BmiWidgetView.swift; sourceTree = "<group>"; };
+		4CDAF24B3EFD4246B62F2B1E /* HeartRateWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateWidgetView.swift; sourceTree = "<group>"; };
+		716D4D6BB397441585AAD726 /* BodyFatEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyFatEntry.swift; sourceTree = "<group>"; };
+		943EE96242FF4538AA3107FE /* BloodPressureEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodPressureEntry.swift; sourceTree = "<group>"; };
+		A315EDAE7D154D94B5BD9536 /* VitalsCalcWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = VitalsCalcWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A631C8A52C8DE8B50075EE70 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A631C8B72C8DEAA50075EE70 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		A631C8BB2C8DEBD70075EE70 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -57,14 +106,29 @@
 		A6C616C12D7C9038008FE51C /* RewardedAdLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardedAdLoader.swift; sourceTree = "<group>"; };
 		A6C616C32D7C9050008FE51C /* AdMobBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdMobBannerView.swift; sourceTree = "<group>"; };
 		A6E617582D415F40009646A5 /* IosNativeViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IosNativeViewFactory.swift; sourceTree = "<group>"; };
+		A87523B6A40841F7B376EEA1 /* WidgetConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetConstants.swift; sourceTree = "<group>"; };
 		A93A953729CC810C00F8E227 /* KAppMakerAllModules.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KAppMakerAllModules.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A93A953A29CC810C00F8E227 /* iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iosApp.swift; sourceTree = "<group>"; };
 		A93A953E29CC810D00F8E227 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A93A954129CC810D00F8E227 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		B2668F1537554AADAE1489D4 /* BmiEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BmiEntry.swift; sourceTree = "<group>"; };
+		B386796FB9B84A9B86EB7D0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		BCF14B1654F44B0983A1E2F1 /* BmiWidgetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BmiWidgetProvider.swift; sourceTree = "<group>"; };
+		D43C4536BE0F4F808C6378E8 /* HeartRateEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRateEntry.swift; sourceTree = "<group>"; };
+		D569733D7E2D4AB29B21E239 /* VitalsCalcWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalsCalcWidget.swift; sourceTree = "<group>"; };
+		D6F52CD6A50242048546C2AA /* iosApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iosApp.entitlements; sourceTree = "<group>"; };
+		DBEA18505B76425C892D9E0C /* BloodPressureWidgetProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloodPressureWidgetProvider.swift; sourceTree = "<group>"; };
 		F0175E7EB9E047C296337510 /* Pods-iosApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.release.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		3152E7AD5DD74E2080213CEC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A93A953429CC810C00F8E227 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -87,6 +151,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2E7561E748FE4FA79FABEFCF /* VitalsCalcWidget */ = {
+			isa = PBXGroup;
+			children = (
+				D569733D7E2D4AB29B21E239 /* VitalsCalcWidget.swift */,
+				A87523B6A40841F7B376EEA1 /* WidgetConstants.swift */,
+				B2668F1537554AADAE1489D4 /* BmiEntry.swift */,
+				BCF14B1654F44B0983A1E2F1 /* BmiWidgetProvider.swift */,
+				4B854FE4850B4B5B9496B636 /* BmiWidgetView.swift */,
+				943EE96242FF4538AA3107FE /* BloodPressureEntry.swift */,
+				DBEA18505B76425C892D9E0C /* BloodPressureWidgetProvider.swift */,
+				11163A05C252451F9B9A7D41 /* BloodPressureWidgetView.swift */,
+				716D4D6BB397441585AAD726 /* BodyFatEntry.swift */,
+				488DFE1438224F379777F851 /* BodyFatWidgetProvider.swift */,
+				07D41DE8F6B0498DBD0D54E6 /* BodyFatWidgetView.swift */,
+				D43C4536BE0F4F808C6378E8 /* HeartRateEntry.swift */,
+				1F04D14C07EC4094A2CC991A /* HeartRateWidgetProvider.swift */,
+				4CDAF24B3EFD4246B62F2B1E /* HeartRateWidgetView.swift */,
+				B386796FB9B84A9B86EB7D0F /* Info.plist */,
+				14DCC5A77F18489785D40C47 /* VitalsCalcWidget.entitlements */,
+			);
+			path = VitalsCalcWidget;
+			sourceTree = "<group>";
+		};
 		A6BE5BFE2D7A2B4300E2B823 /* Analytics */ = {
 			isa = PBXGroup;
 			children = (
@@ -147,6 +234,7 @@
 			isa = PBXGroup;
 			children = (
 				A6C616AF2D7C8E75008FE51C /* Configuration */,
+				2E7561E748FE4FA79FABEFCF /* VitalsCalcWidget */,
 				A93A953929CC810C00F8E227 /* iosApp */,
 				A93A953829CC810C00F8E227 /* Products */,
 				C4127409AE3703430489E7BC /* Frameworks */,
@@ -168,6 +256,7 @@
 				A6C616B32D7C8F99008FE51C /* Ads */,
 				A6BE5BFE2D7A2B4300E2B823 /* Analytics */,
 				A631C8BB2C8DEBD70075EE70 /* GoogleService-Info.plist */,
+				D6F52CD6A50242048546C2AA /* iosApp.entitlements */,
 				A631C8B72C8DEAA50075EE70 /* Info.plist */,
 				A631C8A52C8DE8B50075EE70 /* ContentView.swift */,
 				A93A953A29CC810C00F8E227 /* iosApp.swift */,
@@ -208,6 +297,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		2B2027D2375A408E848906BB /* VitalsCalcWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 84443C16D5B74FD78C9B4A74 /* Build configuration list for PBXNativeTarget "VitalsCalcWidgetExtension" */;
+			buildPhases = (
+				BF3F185AF86F4711A1DF83E1 /* Sources */,
+				3152E7AD5DD74E2080213CEC /* Frameworks */,
+				DECF9AE586934604A8AECAFF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VitalsCalcWidgetExtension;
+			productName = VitalsCalcWidgetExtension;
+			productReference = A315EDAE7D154D94B5BD9536 /* VitalsCalcWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		A93A953629CC810C00F8E227 /* iosApp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A93A954529CC810D00F8E227 /* Build configuration list for PBXNativeTarget "iosApp" */;
@@ -217,6 +323,7 @@
 				A93A953329CC810C00F8E227 /* Sources */,
 				A93A953429CC810C00F8E227 /* Frameworks */,
 				A93A953529CC810C00F8E227 /* Resources */,
+				4DED4E8395654C10BC8784D0 /* Embed Foundation Extensions */,
 				0AB67C2303F7EBBC4A06EB38 /* [CP] Embed Pods Frameworks */,
 				A66B50422D08990D00383A48 /* ShellScript */,
 				504EB862A8F20E0E066BC11A /* [CP] Copy Pods Resources */,
@@ -224,6 +331,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				0CED05CB3E64498BAF29E202 /* PBXTargetDependency */,
 			);
 			name = iosApp;
 			packageProductDependencies = (
@@ -276,6 +384,7 @@
 			projectRoot = "";
 			targets = (
 				A93A953629CC810C00F8E227 /* iosApp */,
+				2B2027D2375A408E848906BB /* VitalsCalcWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -291,6 +400,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DECF9AE586934604A8AECAFF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -302,13 +418,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -345,13 +457,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -420,9 +528,64 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BF3F185AF86F4711A1DF83E1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C5F3ADD4D2849938380B0D2 /* VitalsCalcWidget.swift in Sources */,
+				5A47D223733240369FC90920 /* WidgetConstants.swift in Sources */,
+				9F34F5BEF0464E4F96581485 /* BmiEntry.swift in Sources */,
+				F893F0F167D745D7808A372E /* BmiWidgetProvider.swift in Sources */,
+				89F8104966D34EE298FD282C /* BmiWidgetView.swift in Sources */,
+				80CFA1C77F8C4D4FAAF703FA /* BloodPressureEntry.swift in Sources */,
+				5283437F9F454ACFB82D4359 /* BloodPressureWidgetProvider.swift in Sources */,
+				BACB273EF3074545B0CEE89D /* BloodPressureWidgetView.swift in Sources */,
+				B55998D98476424AAF50711A /* BodyFatEntry.swift in Sources */,
+				8F1E98B84B1D43CB91C6D55B /* BodyFatWidgetProvider.swift in Sources */,
+				D35D051C392442ECAC12A79A /* BodyFatWidgetView.swift in Sources */,
+				0208551A15144348BC0CA4B7 /* HeartRateEntry.swift in Sources */,
+				679638512AB64179B575C2F3 /* HeartRateWidgetProvider.swift in Sources */,
+				A2427DB6FD5A40448396FEC2 /* HeartRateWidgetView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		0CED05CB3E64498BAF29E202 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2B2027D2375A408E848906BB /* VitalsCalcWidgetExtension */;
+			targetProxy = C3E7D88D2F1C4107BA24CE01 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		1E5CA4971D564E01A282D1C2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = VitalsCalcWidget/VitalsCalcWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = VitalsCalcWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "VitalsCalc Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cohesionbrew.healthcalculator.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		A93A954329CC810D00F8E227 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A6C616B02D7C8E90008FE51C /* DebugConfig.xcconfig */;
@@ -545,6 +708,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = iosApp/iosApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
@@ -588,6 +752,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = iosApp/iosApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
@@ -625,9 +790,44 @@
 			};
 			name = Release;
 		};
+		B9D3561712DF40B0AC130CE9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = VitalsCalcWidget/VitalsCalcWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = VitalsCalcWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "VitalsCalc Widget";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cohesionbrew.healthcalculator.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		84443C16D5B74FD78C9B4A74 /* Build configuration list for PBXNativeTarget "VitalsCalcWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1E5CA4971D564E01A282D1C2 /* Debug */,
+				B9D3561712DF40B0AC130CE9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A93A953229CC810C00F8E227 /* Build configuration list for PBXProject "iosApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

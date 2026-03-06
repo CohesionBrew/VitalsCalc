@@ -93,6 +93,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.designsystem)
+            implementation(projects.sharedDomain)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(libs.compose.material.icons)
@@ -120,6 +121,10 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.navigation.compose)
+            implementation(libs.cupertino.adaptive)
+            implementation(libs.cupertino.native)
+            implementation(libs.cupertino.icons.extended)
+            implementation(libs.vico.multiplatform)
             implementation(projects.libs.auth.authFirebase)
 
             val subscriptionProvider =
@@ -151,6 +156,8 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.google.admob)
             implementation(libs.android.inappreview)
+            implementation(libs.glance.appwidget)
+            implementation(libs.glance.material3)
         }
 
         iosMain.dependencies {
@@ -172,18 +179,18 @@ kotlin {
 }
 
 compose.resources {
-    packageOfResClass = "com.measify.kappmaker.generated.resources"
+    packageOfResClass = "com.cohesionbrew.healthcalculator.generated.resources"
 }
 
 android {
-    namespace = "com.measify.kappmaker"
+    namespace = "com.cohesionbrew.healthcalculator"
     compileSdk = 36
 
     defaultConfig {
         minSdk = 24
         targetSdk = 36
 
-        applicationId = "com.measify.kappmaker"
+        applicationId = "com.cohesionbrew.healthcalculator"
         versionCode = 1
         versionName = "1.0.0"
 
@@ -219,7 +226,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
-                getDefaultProguardFile("proguard-android.txt"),
+                getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
             signingConfig = signingConfigs.getByName(if (isSigningKeyExists) "release" else "debug")
@@ -261,11 +268,11 @@ room {
 
 compose.desktop {
     application {
-        mainClass = "com.measify.kappmaker.MainKt"
+        mainClass = "com.cohesionbrew.healthcalculator.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.measify.kappmaker"
+            packageName = "com.cohesionbrew.healthcalculator"
             packageVersion = "1.0.0"
         }
     }
@@ -274,7 +281,7 @@ compose.desktop {
 buildConfig {
     // BuildConfig configuration here.
     // https://github.com/gmazzo/gradle-buildconfig-plugin#usage-in-kts
-    packageName("com.measify.kappmaker.common")
+    packageName("com.cohesionbrew.healthcalculator.common")
     buildConfigField(
         "GOOGLE_WEB_CLIENT_ID",
         getRequiredProperty(key = "GOOGLE_WEB_CLIENT_ID", defaultValue = "testValue")

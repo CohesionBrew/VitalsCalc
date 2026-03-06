@@ -9,7 +9,7 @@ if [ -z "$MODEL_NAME" ]; then
   exit 1
 fi
 
-BASE_PACKAGE="com.measify.kappmaker"
+BASE_PACKAGE="com.cohesionbrew.healthcalculator"
 BASE_PATH=$(echo "$BASE_PACKAGE" | tr '.' '/')
 
 LOWER_NAME=$(echo "$MODEL_NAME" | sed 's/\(.[A-Z]\)/_\1/g' | tr '[:upper:]' '[:lower:]' | sed 's/^_//')

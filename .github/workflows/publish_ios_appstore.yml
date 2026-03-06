@@ -14,8 +14,8 @@ jobs:
       contents: write
     env:
       github_token: ${{ secrets.GITHUB_TOKEN }}
-      bundle_id: com.measify.kappmaker
-      app_name: KAppMakerAllModules
+      bundle_id: com.cohesionbrew.healthcalculator
+      app_name: VitalsCalc
 
     steps:
       - uses: actions/checkout@v4
@@ -124,6 +124,12 @@ jobs:
             ${{ env.ipa_path }}
           body_path: distribution/whatsnew/whatsnew-en-US
           token: ${{ env.github_token }}
+
+
+
+
+
+ken }}
 
 
 

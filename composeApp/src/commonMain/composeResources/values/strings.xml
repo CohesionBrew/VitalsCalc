@@ -1,11 +1,42 @@
 <resources>
+    <!-- App -->
+    <string name="app_name">VitalsCalc</string>
+
+    <!-- Navigation -->
     <string name="bottom_nav_label_home">Home</string>
     <string name="bottom_nav_label_profile">Profile</string>
     <string name="bottom_nav_label_favorites">Favorites</string>
+    <string name="bottom_nav_label_calculators">Calculators</string>
+    <string name="bottom_nav_label_history">History</string>
+    <string name="bottom_nav_label_more">More</string>
 
+    <!-- Screen Titles -->
+    <string name="title_screen_home">Home</string>
+    <string name="title_screen_favorites">Favorites</string>
+    <string name="title_screen_account">Account</string>
+    <string name="title_screen_profile">Profile</string>
+    <string name="title_screen_credits">Credits</string>
+    <string name="title_screen_calculators">Calculators</string>
+    <string name="title_screen_history">History</string>
+    <string name="title_screen_more">More</string>
+    <string name="title_screen_settings">Settings</string>
+    <string name="title_screen_user_profile">User Profile</string>
+    <string name="title_screen_about">About</string>
+    <string name="title_screen_references">References</string>
+    <string name="title_screen_bmi">BMI Calculator</string>
+    <string name="title_screen_bmr">BMR/TDEE Calculator</string>
+    <string name="title_screen_heart_rate">Heart Rate Zones</string>
+    <string name="title_screen_body_fat">Body Fat Calculator</string>
+    <string name="title_screen_ideal_weight">Ideal Weight</string>
+    <string name="title_screen_water_intake">Water Intake</string>
+    <string name="title_screen_blood_pressure">Blood Pressure</string>
+    <string name="title_screen_premium">Get Premium</string>
+
+    <!-- Onboarding -->
     <string name="title_onboarding_page_1">Amazing Title</string>
     <string name="desc_onboarding_page_1">Amazing Description Text will be here</string>
 
+    <!-- Buttons -->
     <string name="btn_get_started">Get Started</string>
     <string name="btn_restore_purchase">Restore Purchase</string>
     <string name="btn_skip">Skip</string>
@@ -15,19 +46,230 @@
     <string name="btn_get_premium">Yes, I want Premium</string>
     <string name="btn_maybe_later">Maybe Later</string>
 
+    <!-- Auth -->
     <string name="title_sign_in">Sign in</string>
-    <string name="title_screen_home">Home</string>
-    <string name="title_screen_favorites">Favorites</string>
-    <string name="title_screen_account">Account</string>
-    <string name="title_screen_profile">Profile</string>
-    <string name="title_screen_credits">Credits</string>
-
     <string name="and">and</string>
     <string name="sign_in_to">Sign in to </string>
     <string name="txt_main_action_to_sign_in">Your account</string>
-
     <string name="subscriptions">Subscriptions</string>
     <string name="logout">Logout</string>
     <string name="help_and_support">Help &amp; Support</string>
     <string name="item_contact_support">Contact Support</string>
+
+    <!-- Common Labels -->
+    <string name="height">Height</string>
+    <string name="weight">Weight</string>
+    <string name="calculate">Calculate</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
+    <string name="confirm">Confirm</string>
+    <string name="save">Save</string>
+    <string name="info">Info</string>
+    <string name="got_it">Got it</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+    <string name="results">Results</string>
+
+    <!-- Units -->
+    <string name="unit_cm">cm</string>
+    <string name="unit_in">in</string>
+    <string name="unit_kg">kg</string>
+    <string name="unit_lbs">lbs</string>
+    <string name="unit_years">years</string>
+    <string name="unit_bpm">BPM</string>
+    <string name="unit_mmhg">mmHg</string>
+    <string name="unit_kcal">kcal</string>
+    <string name="unit_kcal_day">kcal/day</string>
+    <string name="unit_kg_m2">kg/m²</string>
+    <string name="unit_fl_oz">fl oz</string>
+    <string name="unit_liters">L</string>
+    <string name="unit_percent">%</string>
+    <string name="measurement_units">Measurement Units</string>
+    <string name="use_metric">Use Metric System</string>
+    <string name="metric_cm_kg">Metric (cm, kg)</string>
+    <string name="imperial_in_lbs">Imperial (in, lbs)</string>
+    <string name="metric_kg_cm">kg, cm</string>
+    <string name="imperial_lb_in">lb, in</string>
+    <string name="label_age">Age</string>
+    <string name="label_method">Method</string>
+    <string name="unit_system">Unit System</string>
+
+    <!-- Gender -->
+    <string name="select_gender">Select Sex</string>
+    <string name="select_sex_helptext">Note: Current formulas support male/female physiological models. If you\'re unsure, choose the option that best reflects your current hormone profile, or consult a healthcare provider.</string>
+
+    <!-- Activity Levels -->
+    <string name="activity_level">Activity Level</string>
+    <string name="sedentary">Sedentary</string>
+    <string name="lightly_active">Lightly Active</string>
+    <string name="moderately_active">Moderately Active</string>
+    <string name="very_active">Very Active</string>
+    <string name="extra_active">Extra Active</string>
+
+    <!-- BMI Calculator -->
+    <string name="bmi">BMI</string>
+    <string name="bmi_calculator">BMI Calculator</string>
+    <string name="body_mass_index">Body Mass Index</string>
+    <string name="calculate_bmi">Calculate BMI</string>
+    <string name="your_bmi">Your BMI</string>
+    <string name="healthy_weight_range">Healthy Weight Range</string>
+    <string name="underweight">Underweight</string>
+    <string name="healthy_weight">Healthy Weight</string>
+    <string name="overweight">Overweight</string>
+    <string name="obese_class_i">Obese Class I</string>
+    <string name="obese_class_ii">Obese Class II</string>
+    <string name="obese_class_iii">Obese Class III</string>
+    <string name="unknown_category">Unknown</string>
+    <string name="bmi_diff_to_lose">%1$s %2$s to lose to reach healthy range</string>
+    <string name="bmi_diff_to_gain">%1$s %2$s to gain to reach healthy range</string>
+
+    <!-- BMR / TDEE Calculator -->
+    <string name="bmr">BMR</string>
+    <string name="bmr_calculator">BMR / TDEE Calculator</string>
+    <string name="tdee">TDEE</string>
+    <string name="average_bmr">Average BMR</string>
+    <string name="goal_calories">Goal Calories</string>
+    <string name="formula_breakdown">Formula Breakdown</string>
+    <string name="calorie_goal">Calorie Goal</string>
+    <string name="calories">Calories</string>
+
+    <!-- Heart Rate -->
+    <string name="heart_rate">Heart Rate Zones</string>
+    <string name="heart_rate_calculator">Heart Rate Zone Calculator</string>
+    <string name="resting_heart_rate">Resting Heart Rate</string>
+    <string name="resting_heart_rate_optional">Resting Heart Rate (optional)</string>
+    <string name="calculate_zones">Calculate Zones</string>
+    <string name="max_heart_rate">Max Heart Rate: %1$d BPM</string>
+    <string name="tanaka_formula">Tanaka Formula</string>
+    <string name="tanaka_formula_desc">208 - 0.7 × age</string>
+    <string name="standard_formula_desc">220 - age</string>
+
+    <!-- Body Fat -->
+    <string name="body_fat">Body Fat</string>
+    <string name="bodyfat_title">Body Fat Calculator</string>
+    <string name="bodyfat_method_navy">US Navy Method</string>
+    <string name="bodyfat_method_rfm">Relative Fat Mass (RFM)</string>
+    <string name="bodyfat_waist">Waist</string>
+    <string name="bodyfat_neck">Neck</string>
+    <string name="bodyfat_hip">Hip</string>
+    <string name="bodyfat_result_title">Body Fat Percentage</string>
+    <string name="bodyfat_category_label">Category: %1$s</string>
+    <string name="bodyfat_category_essential">Essential Fat</string>
+    <string name="bodyfat_category_athletes">Athletes</string>
+    <string name="bodyfat_category_fitness">Fitness</string>
+    <string name="bodyfat_category_average">Average</string>
+    <string name="bodyfat_category_obese">Obese</string>
+
+    <!-- Ideal Weight -->
+    <string name="idealweight_title">Ideal Weight Calculator</string>
+    <string name="idealweight_calculate_button">Calculate</string>
+    <string name="idealweight_result_title">Ideal Weight Range</string>
+    <string name="idealweight_average_kg">%1$s kg (avg)</string>
+    <string name="idealweight_formula_value_kg">%1$s kg</string>
+    <string name="idealweight_robinson">Robinson (1983)</string>
+    <string name="idealweight_miller">Miller (1983)</string>
+    <string name="idealweight_devine">Devine (1974)</string>
+    <string name="idealweight_hamwi">Hamwi (1964)</string>
+
+    <!-- Water Intake -->
+    <string name="water_title">Water Intake Calculator</string>
+    <string name="daily_water_intake">Daily Water Intake</string>
+    <string name="water_calculate_button">Calculate</string>
+    <string name="hot_climate">Hot Climate</string>
+    <string name="hot_climate_description">Increases water needs by 20%</string>
+    <string name="recommended_daily_intake">Recommended Daily Intake</string>
+    <string name="water_result_liters">%1$s L</string>
+    <string name="water_result_fl_oz">≈ %1$s fl oz</string>
+    <string name="water_result_glasses">≈ %1$d glasses (250ml each)</string>
+
+    <!-- Blood Pressure -->
+    <string name="bp_title">Blood Pressure</string>
+    <string name="bp_systolic">Systolic</string>
+    <string name="bp_diastolic">Diastolic</string>
+    <string name="bp_pulse_optional">Pulse (optional)</string>
+    <string name="bp_classify">Classify</string>
+    <string name="bp_reading_format">%1$d / %2$d mmHg</string>
+
+    <!-- Dashboard / Home -->
+    <string name="dashboard">Dashboard</string>
+    <string name="health_dashboard">Health Dashboard</string>
+    <string name="welcome_title">Welcome to VitalsCalc</string>
+    <string name="welcome_message">Start by using any calculator from the Calculators tab. Your results will appear here.</string>
+    <string name="calculations_recorded">%1$d calculations recorded</string>
+
+    <!-- History -->
+    <string name="history">History</string>
+    <string name="history_clear_confirm_title">Clear History</string>
+    <string name="history_clear_confirm_message">Are you sure you want to delete all history entries? This cannot be undone.</string>
+    <string name="history_clear_all">Clear All</string>
+    <string name="history_clear_icon_desc">Clear history</string>
+    <string name="history_limited_banner">Showing last 30 days · Upgrade for full history</string>
+    <string name="history_empty_message">No history entries yet</string>
+
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="settings_clear_data_title">Clear All Data</string>
+    <string name="settings_clear_data_message">This will delete all your calculation history. This cannot be undone.</string>
+    <string name="settings_clear_button">Clear</string>
+    <string name="settings_section_data">Data</string>
+    <string name="settings_clear_all_history">Clear All History</string>
+
+    <!-- More Menu -->
+    <string name="more">More</string>
+    <string name="upgrade_to_pro">Upgrade to Pro</string>
+    <string name="upgrade_to_pro_subtitle">Unlock unlimited history &amp; more</string>
+    <string name="my_profile">My Profile</string>
+    <string name="my_profile_subtitle">Height, weight, and default values</string>
+    <string name="settings_subtitle">Units, theme, and preferences</string>
+    <string name="references">References</string>
+    <string name="references_subtitle">Medical sources and formulas</string>
+    <string name="about">About</string>
+    <string name="about_subtitle">Version info and contact</string>
+
+    <!-- About -->
+    <string name="about_tagline">Your personal health calculator</string>
+    <string name="version">Version %1$s</string>
+    <string name="about_description">VitalsCalc provides health calculators including BMI, BMR, TDEE, Body Fat, Heart Rate Zones, Ideal Weight, Water Intake, and Blood Pressure classification.</string>
+    <string name="about_disclaimer">All calculations are based on peer-reviewed medical formulas. Results are for informational purposes only and should not replace professional medical advice.</string>
+
+    <!-- User Profile -->
+    <string name="profile_defaults_description">Set your defaults so calculators auto-fill with your measurements.</string>
+    <string name="profile_height_metric">Height (cm)</string>
+    <string name="profile_height_imperial">Height (in)</string>
+    <string name="profile_weight_metric">Weight (kg)</string>
+    <string name="profile_weight_imperial">Weight (lb)</string>
+    <string name="profile_resting_hr">Resting Heart Rate (bpm)</string>
+    <string name="profile_saved">Saved!</string>
+    <string name="profile_save_button">Save Profile</string>
+    <string name="privacy_policy">Privacy Policy</string>
+
+    <!-- Calculator Tile Names -->
+    <string name="calc_tile_bmi">BMI Calculator</string>
+    <string name="calc_tile_bmr">BMR / TDEE</string>
+    <string name="calc_tile_heart_rate">Heart Rate Zones</string>
+    <string name="calc_tile_body_fat">Body Fat</string>
+    <string name="calc_tile_ideal_weight">Ideal Weight</string>
+    <string name="calc_tile_water_intake">Water Intake</string>
+    <string name="calc_tile_blood_pressure">Blood Pressure</string>
+
+    <!-- Validation Errors -->
+    <string name="error_height_required">Please enter your height</string>
+    <string name="error_height_too_low">Height seems too low. Please check your input.</string>
+    <string name="error_height_too_high">Height seems too high. Please check your input.</string>
+    <string name="error_weight_required">Please enter your weight</string>
+    <string name="error_weight_too_low">Weight seems too low. Please check your input.</string>
+    <string name="error_weight_too_high">Weight seems too high. Please check your input.</string>
+    <string name="error_age_invalid">Please enter a valid age between 1 and 120</string>
+    <string name="error_body_fat_invalid">Body fat should be between 1%% and 70%%</string>
+    <string name="error_heart_rate_invalid">Heart rate should be between 30 and 200 bpm</string>
+
+    <!-- Data persistence errors -->
+    <string name="error_save_failed">Unable to save. Please try again.</string>
+    <string name="error_load_failed">Unable to load your data.</string>
+    <string name="error_save_profile_failed">Unable to save your profile. Please try again.</string>
+    <string name="error_save_settings_failed">Unable to save settings. Please try again.</string>
+    <string name="error_unknown">An unexpected error occurred.</string>
 </resources>

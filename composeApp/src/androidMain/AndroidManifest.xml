@@ -8,7 +8,7 @@
     <application
         android:name=".AndroidApp"
         android:icon="@mipmap/ic_launcher"
-        android:label="KAppMakerAllModules"
+        android:label="VitalsCalc"
         android:theme="@android:style/Theme.Material.NoActionBar">
         <activity
             android:name=".AppActivity"
@@ -40,6 +40,54 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="DEFAULT_NOTIFICATION_CHANNEL_ID" />
+
+        <receiver
+            android:name="com.cohesionbrew.healthcalculator.widget.BmiWidgetReceiver"
+            android:exported="true"
+            android:label="@string/widget_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/bmi_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.cohesionbrew.healthcalculator.widget.BloodPressureWidgetReceiver"
+            android:exported="true"
+            android:label="@string/widget_bp_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/blood_pressure_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.cohesionbrew.healthcalculator.widget.BodyFatWidgetReceiver"
+            android:exported="true"
+            android:label="@string/widget_bodyfat_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/body_fat_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name="com.cohesionbrew.healthcalculator.widget.HeartRateWidgetReceiver"
+            android:exported="true"
+            android:label="@string/widget_hr_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/heart_rate_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

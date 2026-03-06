@@ -27,3 +27,6 @@ distribution/ios/*.ipa
 distribution/ios/*.zip
 distribution/ios/*.p8
 distribution/ios/appstore-publisher.json
+
+# AI submodule symlinks
+.claude/commands

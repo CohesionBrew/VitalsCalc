@@ -1,40 +1,43 @@
 [versions]
 
-kotlin = "2.2.21"
-compose = "1.9.3"
+kotlin = "2.3.10"
+compose = "1.10.1"
 android-compileSdk="36"
 android-minSdk="24"
 composeMaterialIcons = "1.7.3"
-composeHotReload = "1.0.0-rc02"
-agp = "8.12.3"
-androidx-activityCompose = "1.11.0"
-androidx-uiTest = "1.9.4"
-koin = "4.2.0-beta2"
+composeHotReload = "1.0.0"
+agp = "9.1.0"
+androidx-activityCompose = "1.12.4"
+androidx-uiTest = "1.10.4"
+koin = "4.2.0-RC1"
 googleServices = "4.4.4"
 kmpnotifier = "1.6.1"
-firebase = "34.4.0"
+firebase = "34.10.0"
 kmpauth = "2.4.0-alpha05"
 firebaseCrashlytics = "3.0.6"
 napier = "2.7.1"
-buildConfig = "5.7.0"
+buildConfig = "6.0.7"
 kotlinx-coroutines = "1.10.2"
-ktor = "3.3.1"
-kotlinx-serialization = "1.9.0"
-composeLifecyleRuntime="2.9.5"
-revenueCat = "2.2.12+17.21.2"
-adapty = "3.14.0-beta.0"
+ktor = "3.4.1"
+kotlinx-serialization = "1.10.0"
+composeLifecyleRuntime="2.9.6"
+revenueCat = "2.7.1+17.42.0"
+adapty = "3.16.0"
 uuid = "0.8.4"
 multiplatformSettings = "1.3.0"
-ksp = "2.3.0"
-room="2.8.3"
-sqlite="2.6.1"
+ksp = "2.3.5"
+room="2.8.4"
+sqlite="2.6.2"
 android-inappreview = "2.0.2"
-admob = "24.7.0"
-coil = "3.3.0"
+admob = "25.0.0"
+coil = "3.4.0"
 kotlinx-datetime = "0.7.1"
+cupertino = "3.3.0"
+vico = "2.4.3"
+glance = "1.1.1"
 
-androidxLifecycle = "2.9.4"
-navigationCompose = "2.9.0-rc01"
+androidxLifecycle = "2.10.0"
+navigationCompose = "2.9.2"
 coreKtx = "1.17.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
@@ -99,6 +102,18 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 
+# Compose Cupertino (iOS-native adaptive UI)
+cupertino = { module = "io.github.robinpcrd:cupertino", version.ref = "cupertino" }
+cupertino-adaptive = { module = "io.github.robinpcrd:cupertino-adaptive", version.ref = "cupertino" }
+cupertino-native = { module = "io.github.robinpcrd:cupertino-native", version.ref = "cupertino" }
+cupertino-icons-extended = { module = "io.github.robinpcrd:cupertino-icons-extended", version.ref = "cupertino" }
+
+# Vico (Multiplatform charts)
+vico-multiplatform = { module = "com.patrykandpatrick.vico:multiplatform", version.ref = "vico" }
+
+# Glance (Android widgets)
+glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "glance" }
+glance-material3 = { module = "androidx.glance:glance-material3", version.ref = "glance" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }

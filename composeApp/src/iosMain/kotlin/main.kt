@@ -1,10 +1,10 @@
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.window.ComposeUIViewController
-import com.measify.kappmaker.root.App
-import com.measify.kappmaker.util.LocalNativeViewFactory
-import com.measify.kappmaker.util.NativeViewFactory
-import com.measify.kappmaker.util.SwiftLibDependencyFactory
-import com.measify.kappmaker.util.swiftLibDependenciesModule
+import com.cohesionbrew.healthcalculator.root.App
+import com.cohesionbrew.healthcalculator.util.LocalNativeViewFactory
+import com.cohesionbrew.healthcalculator.util.NativeViewFactory
+import com.cohesionbrew.healthcalculator.util.SwiftLibDependencyFactory
+import com.cohesionbrew.healthcalculator.util.swiftLibDependenciesModule
 import org.koin.core.KoinApplication
 import platform.UIKit.UIViewController
 
