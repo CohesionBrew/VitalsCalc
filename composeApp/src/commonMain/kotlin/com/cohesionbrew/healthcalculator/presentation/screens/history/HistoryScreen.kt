@@ -6,17 +6,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -56,17 +58,23 @@ fun HistoryScreen(uiState: HistoryUiState, onUiEvent: (HistoryUiEvent) -> Unit) 
         toolbarExtraContent = {
             if (uiState.entries.isNotEmpty()) {
                 IconButton(onClick = { onUiEvent(HistoryUiEvent.OnClearHistory) }) {
-                    Icon(Icons.Filled.Delete, contentDescription = stringResource(Res.string.history_clear_icon_desc))
+                    Icon(
+                        imageVector = Icons.Filled.Delete,
+                        contentDescription = stringResource(Res.string.history_clear_icon_desc),
+                        tint = MaterialTheme.colorScheme.error
+                    )
                 }
             }
         }
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
+            // Filter chips
             HistoryFilterChips(
                 selectedType = uiState.selectedFilter,
                 onTypeSelected = { onUiEvent(HistoryUiEvent.OnFilterSelected(it)) }
             )
 
+            // Limited history banner for free users
             if (!uiState.isPro && uiState.selectedFilter == null) {
                 Text(
                     stringResource(Res.string.history_limited_banner),
@@ -76,9 +84,34 @@ fun HistoryScreen(uiState: HistoryUiState, onUiEvent: (HistoryUiEvent) -> Unit) 
                 )
             }
 
+            // Content
             if (uiState.entries.isEmpty() && !uiState.isLoading) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(stringResource(Res.string.history_empty_message), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.DateRange,
+                        contentDescription = null,
+                        modifier = Modifier.size(64.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        stringResource(Res.string.history_empty_title),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        stringResource(Res.string.history_empty_message),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center
+                    )
                 }
             } else {
                 LazyColumn(
@@ -87,7 +120,10 @@ fun HistoryScreen(uiState: HistoryUiState, onUiEvent: (HistoryUiEvent) -> Unit) 
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(uiState.entries, key = { it.id }) { entry ->
-                        HistoryEntryCard(entry = entry)
+                        HistoryEntryCard(
+                            entry = entry,
+                            onDelete = { onUiEvent(HistoryUiEvent.OnDeleteEntry(entry.id)) }
+                        )
                     }
                     item { Spacer(modifier = Modifier.height(16.dp)) }
                 }

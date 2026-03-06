@@ -39,6 +39,7 @@ class BmrUiStateHolder(
                 heightCm = profile.heightCm,
                 weightKg = profile.weightKg,
                 bodyFatPct = profile.bodyFatPct,
+                knowsBodyFat = profile.bodyFatPct != null && (profile.bodyFatPct ?: 0.0) > 0,
                 activityLevelKey = profile.activityLevel,
                 calorieGoalKey = profile.calorieGoal
             )
@@ -52,10 +53,28 @@ class BmrUiStateHolder(
             is BmrUiEvent.OnWeightChanged -> _uiState.update { it.copy(weightKg = event.weight) }
             is BmrUiEvent.OnAgeChanged -> _uiState.update { it.copy(age = event.age) }
             is BmrUiEvent.OnBodyFatChanged -> _uiState.update { it.copy(bodyFatPct = event.bodyFat) }
-            is BmrUiEvent.OnActivityLevelChanged -> _uiState.update { it.copy(activityLevelKey = event.key) }
-            is BmrUiEvent.OnCalorieGoalChanged -> _uiState.update { it.copy(calorieGoalKey = event.key) }
+            BmrUiEvent.OnKnowsBodyFatToggled -> _uiState.update {
+                val toggled = !it.knowsBodyFat
+                it.copy(knowsBodyFat = toggled, bodyFatPct = if (toggled) it.bodyFatPct else null)
+            }
+            is BmrUiEvent.OnActivityLevelChanged -> {
+                _uiState.update { it.copy(activityLevelKey = event.key) }
+                recalculateTdeeAndGoal()
+            }
+            is BmrUiEvent.OnCalorieGoalChanged -> {
+                _uiState.update { it.copy(calorieGoalKey = event.key) }
+                recalculateTdeeAndGoal()
+            }
             BmrUiEvent.OnCalculate -> calculate()
         }
+    }
+
+    private fun recalculateTdeeAndGoal() {
+        val s = _uiState.value
+        if (!s.isCalculated || s.bmr <= 0) return
+        val tdee = TdeeCalculator.calculateFromKey(s.bmr, s.activityLevelKey)
+        val goalCal = TdeeCalculator.calculateGoalCaloriesFromKey(tdee, s.bmr, s.calorieGoalKey)
+        _uiState.update { it.copy(tdee = tdee, goalCalories = goalCal) }
     }
 
     @OptIn(ExperimentalUuidApi::class)

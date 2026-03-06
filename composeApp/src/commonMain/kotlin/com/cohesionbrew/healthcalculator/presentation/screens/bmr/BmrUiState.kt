@@ -11,6 +11,7 @@ data class BmrUiState(
     val weightKg: Double = 0.0,
     val age: Int = 0,
     val bodyFatPct: Double? = null,
+    val knowsBodyFat: Boolean = false,
     val activityLevelKey: String = "sedentary",
     val calorieGoalKey: String = "maintenance",
     val formulaResults: List<BmrCalculator.BmrResult> = emptyList(),
@@ -30,6 +31,7 @@ sealed interface BmrUiEvent {
     data class OnWeightChanged(val weight: Double) : BmrUiEvent
     data class OnAgeChanged(val age: Int) : BmrUiEvent
     data class OnBodyFatChanged(val bodyFat: Double?) : BmrUiEvent
+    data object OnKnowsBodyFatToggled : BmrUiEvent
     data class OnActivityLevelChanged(val key: String) : BmrUiEvent
     data class OnCalorieGoalChanged(val key: String) : BmrUiEvent
     data object OnCalculate : BmrUiEvent

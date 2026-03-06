@@ -22,7 +22,7 @@ fun AppNavigation(){
     CompositionLocalProvider(LocalNavigator provides navController) {
         NavHost(
             navController = navController,
-            startDestination = OnBoardingScreenRoute()
+            startDestination = MainScreenRoute()
         ) {
             composable<OnBoardingScreenRoute> { navBackStackEntry ->
                 navBackStackEntry.toRoute<OnBoardingScreenRoute>().Content()

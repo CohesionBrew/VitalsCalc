@@ -123,6 +123,8 @@
     <string name="obese_class_ii">Obese Class II</string>
     <string name="obese_class_iii">Obese Class III</string>
     <string name="unknown_category">Unknown</string>
+    <string name="weight_status">Weight Status</string>
+    <string name="at_or_below_healthy_weight">At or below healthy weight</string>
     <string name="bmi_diff_to_lose">%1$s %2$s to lose to reach healthy range</string>
     <string name="bmi_diff_to_gain">%1$s %2$s to gain to reach healthy range</string>
 
@@ -135,6 +137,32 @@
     <string name="formula_breakdown">Formula Breakdown</string>
     <string name="calorie_goal">Calorie Goal</string>
     <string name="calories">Calories</string>
+    <string name="bmr_details">BMR Details</string>
+    <string name="tdee_details">TDEE Details</string>
+    <string name="calorie_goals">Calorie Goals</string>
+    <string name="i_know_my_body_fat">I know my body fat %</string>
+    <string name="body_fat_percent">Body Fat %</string>
+    <string name="body_fat_note">Body fat is only used for the Katch-McArdle calculation</string>
+    <string name="bmr_comparison">BMR Comparison</string>
+    <string name="average">Average</string>
+    <string name="note_oxford_henry_accurate">Note: Oxford/Henry is generally the most accurate for most people</string>
+    <string name="kcal_day_format">%1$s kcal/day</string>
+    <string name="kcal_format">%1$s kcal</string>
+    <string name="daily_macros">Daily Macros</string>
+    <string name="protein_fats_carbs">Protein / Fats / Carbs</string>
+    <string name="protein">Protein</string>
+    <string name="fats">Fats</string>
+    <string name="carbs">Carbs</string>
+    <string name="moderate_carb">Moderate Carb (30/35/35)</string>
+    <string name="lower_carb">Lower Carb (40/40/20)</string>
+    <string name="higher_carb">Higher Carb (30/20/50)</string>
+    <string name="maintenance">Maintenance</string>
+    <string name="weight_loss">Weight Loss</string>
+    <string name="weight_gain">Weight Gain</string>
+    <string name="faster_weight_loss">Faster Weight Loss</string>
+    <string name="faster_weight_gain">Faster Weight Gain</string>
+    <string name="show_all_formulas">Show all formulas</string>
+    <string name="show_macro_splits">Macros</string>
 
     <!-- Heart Rate -->
     <string name="heart_rate">Heart Rate Zones</string>
@@ -146,6 +174,23 @@
     <string name="tanaka_formula">Tanaka Formula</string>
     <string name="tanaka_formula_desc">208 - 0.7 × age</string>
     <string name="standard_formula_desc">220 - age</string>
+    <string name="i_know_my_resting_heart_rate">I know my resting heart rate</string>
+    <string name="tooltip_knowing_resting_hr">Providing your resting heart rate improves heart-rate zone accuracy using the Karvonen (Heart Rate Reserve) method. If not provided, we\'ll estimate zones using an age-based maximum heart rate.</string>
+    <string name="heart_rate_info">Heart Rate Info</string>
+    <string name="target_zone">Target Zone</string>
+    <string name="calculated_heart_rate">Calculated Heart Rate</string>
+    <string name="description">Description</string>
+    <string name="hr_zone_1_name">Recovery Zone</string>
+    <string name="hr_zone_1_description">Best for warm-ups and cool-downs during your training sessions.</string>
+    <string name="hr_zone_2_name">Endurance Zone</string>
+    <string name="hr_zone_2_description">Builds aerobic base and improves how efficiently you use fat and carbohydrates for fuel.</string>
+    <string name="hr_zone_3_name">Aerobic Zone</string>
+    <string name="hr_zone_3_description">Improves aerobic capacity and delays fatigue by increasing lactate clearance.</string>
+    <string name="hr_zone_4_name">Threshold Zone</string>
+    <string name="hr_zone_4_description">Develops high-speed endurance and raises your sustainable performance threshold.</string>
+    <string name="hr_zone_5_name">Anaerobic Zone</string>
+    <string name="hr_zone_5_description">Short, very high-intensity bouts to develop peak power and speed.</string>
+    <string name="enter_a_value_between_20_and_100">Please enter a value between 20 and 100</string>
 
     <!-- Body Fat -->
     <string name="body_fat">Body Fat</string>
@@ -162,6 +207,8 @@
     <string name="bodyfat_category_fitness">Fitness</string>
     <string name="bodyfat_category_average">Average</string>
     <string name="bodyfat_category_obese">Obese</string>
+    <string name="bodyfat_categories_male">Body Fat Categories (Male)</string>
+    <string name="bodyfat_categories_female">Body Fat Categories (Female)</string>
 
     <!-- Ideal Weight -->
     <string name="idealweight_title">Ideal Weight Calculator</string>
@@ -190,8 +237,20 @@
     <string name="bp_systolic">Systolic</string>
     <string name="bp_diastolic">Diastolic</string>
     <string name="bp_pulse_optional">Pulse (optional)</string>
+    <string name="bp_notes_optional">Notes (optional)</string>
+    <string name="bp_notes_placeholder">e.g., After exercise</string>
     <string name="bp_classify">Classify</string>
     <string name="bp_reading_format">%1$d / %2$d mmHg</string>
+    <string name="bp_clear">Clear</string>
+    <string name="bp_save_reading">Save Reading</string>
+    <string name="bp_reading_saved">Reading saved!</string>
+    <string name="bp_health_guidance">Health Guidance</string>
+    <string name="bp_health_alert">Important Health Alert</string>
+    <string name="bp_medical_disclaimer">This app is for informational purposes only and does not provide medical advice. Always consult your healthcare provider for diagnosis and treatment.</string>
+    <string name="bp_recent_readings">Recent Readings</string>
+    <string name="bp_total_readings">%1$d total</string>
+    <string name="bp_pulse_bpm">\u2022 %1$d BPM</string>
+    <string name="bp_delete_reading_desc">Delete reading %1$d/%2$d</string>
 
     <!-- Dashboard / Home -->
     <string name="dashboard">Dashboard</string>
@@ -199,6 +258,8 @@
     <string name="welcome_title">Welcome to VitalsCalc</string>
     <string name="welcome_message">Start by using any calculator from the Calculators tab. Your results will appear here.</string>
     <string name="calculations_recorded">%1$d calculations recorded</string>
+    <string name="your_measurements">Your Measurements</string>
+    <string name="your_goals_recommendations">Your Goals &amp; Recommendations</string>
 
     <!-- History -->
     <string name="history">History</string>
@@ -207,7 +268,8 @@
     <string name="history_clear_all">Clear All</string>
     <string name="history_clear_icon_desc">Clear history</string>
     <string name="history_limited_banner">Showing last 30 days · Upgrade for full history</string>
-    <string name="history_empty_message">No history entries yet</string>
+    <string name="history_empty_title">No History Yet</string>
+    <string name="history_empty_message">Your calculation history will appear here. Start by using any calculator!</string>
 
     <!-- Settings -->
     <string name="settings">Settings</string>
@@ -254,6 +316,14 @@
     <string name="calc_tile_ideal_weight">Ideal Weight</string>
     <string name="calc_tile_water_intake">Water Intake</string>
     <string name="calc_tile_blood_pressure">Blood Pressure</string>
+
+    <!-- Dashboard -->
+    <string name="no_data_yet">No data yet</string>
+    <string name="tap_to_calculate">Tap to calculate</string>
+    <string name="tap_to_log">Tap to log</string>
+    <string name="pro_badge">PRO</string>
+    <string name="unlock_charts">Unlock Trend Charts</string>
+    <string name="upgrade_for_trends">See how your health metrics change over time</string>
 
     <!-- Validation Errors -->
     <string name="error_height_required">Please enter your height</string>

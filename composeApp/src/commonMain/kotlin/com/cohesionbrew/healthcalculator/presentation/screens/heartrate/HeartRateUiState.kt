@@ -7,16 +7,19 @@ import com.cohesionbrew.healthcalculator.domain.calculator.HeartRateZoneCalculat
 data class HeartRateUiState(
     val age: Int = 0,
     val restingHr: Int = 0,
+    val knowsRestingHr: Boolean = false,
     val useTanaka: Boolean = false,
     val maxHr: Int = 0,
     val zones: List<HeartRateZoneCalculator.Zone> = emptyList(),
     val isCalculated: Boolean = false,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val restingHrError: String? = null
 )
 
 sealed interface HeartRateUiEvent {
     data class OnAgeChanged(val age: Int) : HeartRateUiEvent
     data class OnRestingHrChanged(val hr: Int) : HeartRateUiEvent
     data class OnMethodChanged(val useTanaka: Boolean) : HeartRateUiEvent
+    data object OnKnowsRestingHrToggled : HeartRateUiEvent
     data object OnCalculate : HeartRateUiEvent
 }
