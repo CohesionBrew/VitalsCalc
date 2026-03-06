@@ -16,7 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import com.cohesionbrew.healthcalculator.generated.resources.*
 import kotlin.math.absoluteValue
+import org.jetbrains.compose.resources.stringResource
 
 enum class TrendDirection {
     UP, DOWN, STABLE
@@ -43,10 +45,11 @@ fun TrendBadge(
         TrendDirection.STABLE -> MaterialTheme.colorScheme.onSurfaceVariant
     }
 
+    val pct = percentChange.absoluteValue.toInt()
     val accessibilityText = when (direction) {
-        TrendDirection.UP -> "Trending up ${percentChange.absoluteValue.toInt()}%"
-        TrendDirection.DOWN -> "Trending down ${percentChange.absoluteValue.toInt()}%"
-        TrendDirection.STABLE -> "Stable trend"
+        TrendDirection.UP -> stringResource(Res.string.trending_up, pct)
+        TrendDirection.DOWN -> stringResource(Res.string.trending_down, pct)
+        TrendDirection.STABLE -> stringResource(Res.string.stable_trend)
     }
 
     Row(

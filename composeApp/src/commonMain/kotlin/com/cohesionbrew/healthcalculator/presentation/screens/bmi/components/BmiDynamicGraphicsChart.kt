@@ -29,7 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cohesionbrew.healthcalculator.generated.resources.*
-import com.cohesionbrew.healthcalculator.presentation.components.health.AutosizeText
+import com.cohesionbrew.healthcalculator.designsystem.components.AutoResizableText
 import org.jetbrains.compose.resources.stringResource
 
 /**
@@ -171,14 +171,16 @@ fun BmiDynamicGraphicsChart(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 categories.forEach { category ->
-                    AutosizeText(
+                    AutoResizableText(
                         text = category.label,
                         modifier = Modifier
                             .weight(1f)
                             .padding(horizontal = 2.dp),
                         textAlign = TextAlign.Center,
-                        targetFontSize = targetLabelSize,
-                        fontWeight = if (category == currentCategory) FontWeight.Bold else FontWeight.Normal,
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontSize = targetLabelSize,
+                            fontWeight = if (category == currentCategory) FontWeight.Bold else FontWeight.Normal
+                        ),
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 }

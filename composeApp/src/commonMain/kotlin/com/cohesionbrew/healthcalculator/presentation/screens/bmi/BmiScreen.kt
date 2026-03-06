@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -29,6 +28,7 @@ import com.cohesionbrew.healthcalculator.designsystem.components.health.HealthUn
 import com.cohesionbrew.healthcalculator.designsystem.components.health.formatDoubleDisplay
 import com.cohesionbrew.healthcalculator.generated.resources.*
 import com.cohesionbrew.healthcalculator.presentation.components.health.BmiIndicatorBar
+import com.cohesionbrew.healthcalculator.presentation.components.health.getBmiCategoryColor
 import com.cohesionbrew.healthcalculator.presentation.screens.bmi.components.BmiDynamicGraphicsChart
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -92,21 +92,6 @@ fun BmiScreen(
                 BmiDynamicGraphicsChart(currentBmi = uiState.bmi)
             }
         }
-    }
-}
-
-/**
- * Returns the color for a BMI category index.
- */
-private fun getBmiCategoryColor(categoryIndex: Int): Color {
-    return when (categoryIndex) {
-        0 -> Color(0xFF2196F3)    // Underweight - Blue
-        1 -> Color(0xFF4CAF50)    // Normal - Green
-        2 -> Color(0xFFFFC107)    // Overweight - Amber
-        3 -> Color(0xFFFF9800)    // Obese I - Orange
-        4 -> Color(0xFFFF5722)    // Obese II - Deep Orange
-        5 -> Color(0xFFF44336)    // Obese III - Red
-        else -> Color.Gray
     }
 }
 

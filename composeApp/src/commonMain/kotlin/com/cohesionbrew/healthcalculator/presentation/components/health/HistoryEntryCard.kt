@@ -21,7 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cohesionbrew.healthcalculator.domain.model.history.CalculationEntry
+import com.cohesionbrew.healthcalculator.generated.resources.*
 import kotlin.math.roundToInt
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun HistoryEntryCard(
@@ -85,7 +87,7 @@ fun HistoryEntryCard(
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Delete,
-                            contentDescription = "Delete",
+                            contentDescription = stringResource(Res.string.delete),
                             modifier = Modifier.size(18.dp),
                             tint = MaterialTheme.colorScheme.error
                         )

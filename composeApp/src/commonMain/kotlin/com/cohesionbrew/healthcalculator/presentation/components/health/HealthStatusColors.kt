@@ -4,6 +4,8 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import com.cohesionbrew.healthcalculator.domain.model.BpCategory
+import com.cohesionbrew.healthcalculator.domain.model.BodyFatCategory
 
 data class HealthStatusColors(
     val healthy: Color,
@@ -90,6 +92,22 @@ fun getCalorieGoalColor(goal: String): Color {
         "weight_gain" -> colors.info
         "faster_weight_gain" -> colors.info
         else -> colors.healthy
+    }
+}
+
+@Composable
+fun getBodyFatCategoryColor(category: BodyFatCategory): Color =
+    getBodyFatCategoryColor(category.name.lowercase())
+
+@Composable
+fun getBpCategoryColor(category: BpCategory): Color {
+    val colors = rememberHealthStatusColors()
+    return when (category) {
+        BpCategory.NORMAL -> colors.healthy
+        BpCategory.ELEVATED -> colors.warning
+        BpCategory.HYPERTENSION_1 -> colors.alert
+        BpCategory.HYPERTENSION_2 -> colors.critical
+        BpCategory.CRISIS -> colors.critical
     }
 }
 

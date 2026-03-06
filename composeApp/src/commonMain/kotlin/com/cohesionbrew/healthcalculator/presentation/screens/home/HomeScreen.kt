@@ -26,7 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cohesionbrew.healthcalculator.designsystem.components.ScreenWithToolbar
 import com.cohesionbrew.healthcalculator.generated.resources.*
 import com.cohesionbrew.healthcalculator.presentation.components.health.DashboardMetricCard
-import com.cohesionbrew.healthcalculator.presentation.components.health.ProUpgradeBanner
+import com.cohesionbrew.healthcalculator.designsystem.components.premium.UpgradePremiumBanner
 import com.cohesionbrew.healthcalculator.presentation.components.health.getBmiCategoryColor
 import com.cohesionbrew.healthcalculator.presentation.components.health.getBodyFatCategoryColor
 import com.cohesionbrew.healthcalculator.presentation.components.health.getBpCategoryColor
@@ -173,8 +173,7 @@ fun HomeScreen(
                 // Pro upgrade banner (if not Pro)
                 if (!uiState.isPro) {
                     item(span = { GridItemSpan(maxLineSpan) }) {
-                        ProUpgradeBanner(
-                            onUpgrade = { /* TODO: navigate to paywall */ },
+                        UpgradePremiumBanner(
                             modifier = Modifier.padding(top = 8.dp)
                         )
                     }

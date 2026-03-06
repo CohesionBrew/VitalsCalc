@@ -21,7 +21,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -33,6 +32,7 @@ import com.cohesionbrew.healthcalculator.designsystem.components.health.HealthGe
 import com.cohesionbrew.healthcalculator.designsystem.components.health.HealthScreenTitle
 import com.cohesionbrew.healthcalculator.designsystem.components.health.formatDoubleDisplay
 import com.cohesionbrew.healthcalculator.domain.model.BodyFatCategory
+import com.cohesionbrew.healthcalculator.presentation.components.health.getBodyFatCategoryColor
 import com.cohesionbrew.healthcalculator.domain.model.BodyFatMethod
 import com.cohesionbrew.healthcalculator.generated.resources.*
 import kotlin.math.roundToInt
@@ -98,19 +98,6 @@ fun BodyFatScreen(uiState: BodyFatUiState, onUiEvent: (BodyFatUiEvent) -> Unit) 
                 BodyFatResultCard(uiState)
             }
         }
-    }
-}
-
-/**
- * Returns the color for a body fat category.
- */
-private fun getBodyFatCategoryColor(category: BodyFatCategory): Color {
-    return when (category) {
-        BodyFatCategory.ESSENTIAL -> Color(0xFF2196F3)  // Blue
-        BodyFatCategory.ATHLETES -> Color(0xFF4CAF50)   // Green
-        BodyFatCategory.FITNESS -> Color(0xFF4CAF50)    // Green
-        BodyFatCategory.AVERAGE -> Color(0xFFFF9800)    // Orange
-        BodyFatCategory.OBESE -> Color(0xFFF44336)      // Red
     }
 }
 

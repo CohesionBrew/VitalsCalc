@@ -342,4 +342,10 @@
     <string name="error_save_profile_failed">Unable to save your profile. Please try again.</string>
     <string name="error_save_settings_failed">Unable to save settings. Please try again.</string>
     <string name="error_unknown">An unexpected error occurred.</string>
+
+    <!-- Accessibility -->
+    <string name="trending_up">Trending up %1$d%%</string>
+    <string name="trending_down">Trending down %1$d%%</string>
+    <string name="stable_trend">Stable trend</string>
+    <string name="delete">Delete</string>
 </resources>

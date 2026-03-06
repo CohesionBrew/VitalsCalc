@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cohesionbrew.healthcalculator.designsystem.components.ScreenWithToolbar
 import com.cohesionbrew.healthcalculator.domain.model.BpCategory
+import com.cohesionbrew.healthcalculator.presentation.components.health.getBpCategoryColor
 import com.cohesionbrew.healthcalculator.domain.model.history.BloodPressureHistoryEntry
 import com.cohesionbrew.healthcalculator.generated.resources.*
 import kotlinx.datetime.Instant
@@ -277,7 +278,7 @@ private fun BpCategoryDisplay(
     category: BpCategory,
     modifier: Modifier = Modifier
 ) {
-    val statusColor = category.toColor()
+    val statusColor = getBpCategoryColor(category)
 
     Surface(
         modifier = modifier,
@@ -430,7 +431,7 @@ private fun CompactReadingRow(
     modifier: Modifier = Modifier
 ) {
     val category = reading.category?.let { categoryFromDisplayName(it) } ?: BpCategory.NORMAL
-    val statusColor = category.toColor()
+    val statusColor = getBpCategoryColor(category)
 
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -500,17 +501,6 @@ private fun categoryFromDisplayName(name: String): BpCategory {
     return BpCategory.entries.firstOrNull {
         it.displayName.equals(name, ignoreCase = true)
     } ?: BpCategory.NORMAL
-}
-
-/**
- * Maps BpCategory to a display color.
- */
-private fun BpCategory.toColor(): Color = when (this) {
-    BpCategory.NORMAL -> Color(0xFF4CAF50)
-    BpCategory.ELEVATED -> Color(0xFFFFC107)
-    BpCategory.HYPERTENSION_1 -> Color(0xFFFF9800)
-    BpCategory.HYPERTENSION_2 -> Color(0xFFF44336)
-    BpCategory.CRISIS -> Color(0xFFB71C1C)
 }
 
 /**
