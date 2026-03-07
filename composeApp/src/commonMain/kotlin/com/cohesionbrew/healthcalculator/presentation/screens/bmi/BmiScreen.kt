@@ -215,17 +215,20 @@ private fun BmiEntryCard(
     var latestWeightValue by remember { mutableStateOf<Double?>(null) }
     var isFocused by remember { mutableStateOf(false) }
 
+    // Convert kg to display units (lbs for imperial)
+    val displayWeight = if (uiState.useMetric) uiState.weightKg
+        else kotlin.math.round(uiState.weightKg * 2.20462 * 10) / 10.0
+
     val commitWeightChange = {
         latestWeightValue?.let { newWeight ->
-            val currentWeight = uiState.weightKg
-            if (newWeight != currentWeight) {
+            if (newWeight != displayWeight) {
                 onUiEvent(BmiUiEvent.OnWeightChanged(newWeight))
                 onUiEvent(BmiUiEvent.OnCalculate)
             }
         }
     }
 
-    val weightDisplay = formatDoubleDisplay(uiState.weightKg)
+    val weightDisplay = formatDoubleDisplay(displayWeight)
     val unitLabel = if (uiState.useMetric) {
         stringResource(Res.string.unit_kg)
     } else {

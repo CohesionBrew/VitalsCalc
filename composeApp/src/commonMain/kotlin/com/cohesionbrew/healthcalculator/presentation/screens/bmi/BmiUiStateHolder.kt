@@ -17,10 +17,13 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.yearsUntil
+import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
+
+private const val KG_TO_LB = 2.20462
 
 class BmiUiStateHolder(
     private val historyRepository: HistoryRepository,
@@ -76,7 +79,11 @@ class BmiUiStateHolder(
     fun onUiEvent(event: BmiUiEvent) {
         when (event) {
             is BmiUiEvent.OnHeightChanged -> _uiState.update { it.copy(heightCm = event.height) }
-            is BmiUiEvent.OnWeightChanged -> _uiState.update { it.copy(weightKg = event.weight) }
+            is BmiUiEvent.OnWeightChanged -> {
+                // Weight arrives in display units (kg or lbs) — always store as kg
+                val weightInKg = if (_uiState.value.useMetric) event.weight else event.weight / KG_TO_LB
+                _uiState.update { it.copy(weightKg = weightInKg) }
+            }
             is BmiUiEvent.OnUnitSystemChanged -> _uiState.update { it.copy(useMetric = event.useMetric) }
             BmiUiEvent.OnCalculate -> calculate()
         }
@@ -91,19 +98,34 @@ class BmiUiStateHolder(
 
         val bmi = BmiCalculator.calculate(state.heightCm, state.weightKg)
         val categoryIndex = BmiCalculator.getCategory(bmi)
+
+        // Healthy range in kg (for history storage)
         val (minKg, maxKg) = BmiCalculator.getHealthyWeightRange(state.heightCm, useMetric = true)
-        val diff = BmiCalculator.getDifferenceFromHealthy(state.heightCm, state.weightKg, state.useMetric)
+        // Healthy range in display units (for UI)
+        val (minDisplay, maxDisplay) = BmiCalculator.getHealthyWeightRange(state.heightCm, state.useMetric)
+
+        // Diff from healthy — matches old app: only positive (overweight) or 0
+        val currentDisplayWeight = if (state.useMetric) state.weightKg else state.weightKg * KG_TO_LB
+        val displayedMaxWeight = floor(maxDisplay)
+        val weightDiff = currentDisplayWeight - displayedMaxWeight
+        val diff = if (weightDiff > 0) weightDiff else 0.0
 
         _uiState.update {
             it.copy(
                 bmi = bmi,
                 categoryIndex = categoryIndex,
-                healthyMinKg = minKg,
-                healthyMaxKg = maxKg,
+                healthyMinKg = minDisplay,
+                healthyMaxKg = maxDisplay,
                 differenceFromHealthy = diff,
                 isCalculated = true,
                 isLoading = false
             )
+        }
+
+        // Save weight to profile
+        uiStateHolderScope.launch {
+            val profile = userProfileRepository.getProfile() ?: return@launch
+            userProfileRepository.saveProfile(profile.copy(weightKg = state.weightKg))
         }
 
         uiStateHolderScope.launch {
