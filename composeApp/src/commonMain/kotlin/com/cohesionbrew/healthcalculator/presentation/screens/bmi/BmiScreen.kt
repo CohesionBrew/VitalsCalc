@@ -40,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cohesionbrew.healthcalculator.designsystem.components.health.FormattedDoubleTextField
-import com.cohesionbrew.healthcalculator.designsystem.components.health.HealthActionButton
 import com.cohesionbrew.healthcalculator.designsystem.components.health.HealthOutlinedText
 import com.cohesionbrew.healthcalculator.designsystem.components.health.HealthScreenTitle
 import com.cohesionbrew.healthcalculator.designsystem.components.health.formatDoubleDisplay
@@ -226,6 +225,7 @@ private fun BmiEntryCard(
                 onUiEvent(BmiUiEvent.OnCalculate)
             }
         }
+        focusManager.clearFocus()
     }
 
     val weightDisplay = formatDoubleDisplay(displayWeight)
@@ -287,16 +287,6 @@ private fun BmiEntryCard(
                 allowNegative = false
             )
         }
-
-        HealthActionButton(
-            text = stringResource(Res.string.calculate_bmi),
-            isLoading = uiState.isLoading,
-            onClick = {
-                latestWeightValue?.let { onUiEvent(BmiUiEvent.OnWeightChanged(it)) }
-                onUiEvent(BmiUiEvent.OnCalculate)
-                focusManager.clearFocus()
-            }
-        )
     }
 }
 
