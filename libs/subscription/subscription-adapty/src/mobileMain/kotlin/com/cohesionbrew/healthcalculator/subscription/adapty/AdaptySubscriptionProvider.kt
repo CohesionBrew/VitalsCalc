@@ -224,7 +224,7 @@ internal class AdaptySubscriptionProvider : SubscriptionProvider {
 
     private fun AdaptyPrice.asGrantedAccessPrice(): Price {
         return Price(
-            amount = amount,
+            amount = amount.toFloat(),
             currencyCodeOrSymbol = currencyCode ?: currencySymbol,
             localizedString = localizedString
         )

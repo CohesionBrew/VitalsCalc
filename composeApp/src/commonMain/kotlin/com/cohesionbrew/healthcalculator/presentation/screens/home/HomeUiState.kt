@@ -5,10 +5,13 @@ import com.cohesionbrew.healthcalculator.domain.model.history.CalculationEntry
 
 @Immutable
 data class HomeUiState(
+    val latestWeight: CalculationEntry? = null,
     val latestBmi: CalculationEntry? = null,
-    val latestBmr: CalculationEntry? = null,
     val latestBodyFat: CalculationEntry? = null,
     val latestBp: CalculationEntry? = null,
+    val latestIdealWeight: CalculationEntry? = null,
+    val latestBmr: CalculationEntry? = null,
+    val latestWaterIntake: CalculationEntry? = null,
     val historyCount: Int = 0,
     val isPro: Boolean = false,
     val isLoading: Boolean = true
@@ -16,4 +19,5 @@ data class HomeUiState(
 
 sealed interface HomeUiEvent {
     data object OnRefresh : HomeUiEvent
+    data class OnNavigateToCalculator(val route: Any) : HomeUiEvent
 }

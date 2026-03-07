@@ -28,16 +28,29 @@ class HomeUiStateHolder(
     fun onUiEvent(event: HomeUiEvent) {
         when (event) {
             HomeUiEvent.OnRefresh -> loadLatest()
+            is HomeUiEvent.OnNavigateToCalculator -> Unit // handled by UI layer
         }
     }
 
     private fun loadLatest() = uiStateHolderScope.launch {
+        val weight = historyRepository.getLatestByType(CalculationType.WEIGHT)
         val bmi = historyRepository.getLatestByType(CalculationType.BMI)
-        val bmr = historyRepository.getLatestByType(CalculationType.BMR)
         val bodyFat = historyRepository.getLatestByType(CalculationType.BODY_FAT)
         val bp = historyRepository.getLatestByType(CalculationType.BLOOD_PRESSURE)
+        val idealWeight = historyRepository.getLatestByType(CalculationType.IDEAL_WEIGHT)
+        val bmr = historyRepository.getLatestByType(CalculationType.BMR)
+        val waterIntake = historyRepository.getLatestByType(CalculationType.WATER_INTAKE)
         _uiState.update {
-            it.copy(latestBmi = bmi, latestBmr = bmr, latestBodyFat = bodyFat, latestBp = bp, isLoading = false)
+            it.copy(
+                latestWeight = weight,
+                latestBmi = bmi,
+                latestBodyFat = bodyFat,
+                latestBp = bp,
+                latestIdealWeight = idealWeight,
+                latestBmr = bmr,
+                latestWaterIntake = waterIntake,
+                isLoading = false
+            )
         }
     }
 

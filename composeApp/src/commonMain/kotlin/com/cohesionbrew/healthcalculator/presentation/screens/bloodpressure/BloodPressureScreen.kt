@@ -6,18 +6,22 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
@@ -49,7 +53,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.cohesionbrew.healthcalculator.designsystem.components.ScreenWithToolbar
+import com.cohesionbrew.healthcalculator.designsystem.components.health.HealthScreenTitle
 import com.cohesionbrew.healthcalculator.domain.model.BpCategory
 import com.cohesionbrew.healthcalculator.presentation.components.health.getBpCategoryColor
 import com.cohesionbrew.healthcalculator.domain.model.history.BloodPressureHistoryEntry
@@ -67,15 +71,59 @@ fun BloodPressureScreen(uiStateHolder: BloodPressureUiStateHolder) {
 
 @Composable
 fun BloodPressureScreen(uiState: BloodPressureUiState, onUiEvent: (BloodPressureUiEvent) -> Unit) {
-    ScreenWithToolbar(
-        title = stringResource(Res.string.title_screen_blood_pressure),
-        isScrollableContent = true,
-        includeBottomInsets = false
+    val title = stringResource(Res.string.title_screen_blood_pressure)
+    val subtitle = stringResource(Res.string.bp_subtitle)
+
+    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+        val isLandscape = maxWidth > maxHeight
+
+        if (isLandscape) {
+            LandscapeLayout(
+                title = title,
+                subtitle = subtitle,
+                uiState = uiState,
+                onUiEvent = onUiEvent
+            )
+        } else {
+            PortraitLayout(
+                title = title,
+                subtitle = subtitle,
+                uiState = uiState,
+                onUiEvent = onUiEvent
+            )
+        }
+    }
+}
+
+// --- Portrait Layout (matches old StandardHealthScaffold PortraitLayout) ---
+
+@Composable
+private fun PortraitLayout(
+    title: String,
+    subtitle: String,
+    uiState: BloodPressureUiState,
+    onUiEvent: (BloodPressureUiEvent) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            HealthScreenTitle(text = title)
+
+            Text(
+                text = subtitle,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+
             // Input card with real-time classification
             BpInputCard(
                 uiState = uiState,
@@ -153,8 +201,108 @@ fun BloodPressureScreen(uiState: BloodPressureUiState, onUiEvent: (BloodPressure
 
             Spacer(modifier = Modifier.height(16.dp))
         }
+        // Ad banner slot (reserved)
     }
 }
+
+// --- Landscape Layout (matches old StandardHealthScaffold LandscapeLayout) ---
+
+@Composable
+private fun LandscapeLayout(
+    title: String,
+    subtitle: String,
+    uiState: BloodPressureUiState,
+    onUiEvent: (BloodPressureUiEvent) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // Left Column: title + subtitle + input card + action buttons
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                HealthScreenTitle(text = title)
+
+                Text(
+                    text = subtitle,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+
+                BpInputCard(
+                    uiState = uiState,
+                    onUiEvent = onUiEvent
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    OutlinedButton(
+                        onClick = { onUiEvent(BloodPressureUiEvent.OnClearInputs) },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(stringResource(Res.string.bp_clear))
+                    }
+
+                    Button(
+                        onClick = { onUiEvent(BloodPressureUiEvent.OnSaveReading) },
+                        enabled = uiState.canSave,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(stringResource(Res.string.bp_save))
+                    }
+                }
+            }
+
+            // Right Column: guidance card + recent readings
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                uiState.category?.let { category ->
+                    BpGuidanceCard(
+                        category = category,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
+                if (uiState.recentReadings.isNotEmpty()) {
+                    Text(
+                        text = stringResource(Res.string.bp_recent_readings),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    uiState.recentReadings.take(5).forEach { reading ->
+                        CompactReadingRow(
+                            reading = reading,
+                            onDelete = { onUiEvent(BloodPressureUiEvent.OnDeleteReading(reading.id)) }
+                        )
+                    }
+                }
+            }
+        }
+        // Ad banner slot (reserved)
+    }
+}
+
+// --- Shared Composables ---
 
 @Composable
 private fun BpInputCard(
@@ -309,7 +457,7 @@ private fun BpCategoryDisplay(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "$systolic / $diastolic mmHg",
+                    text = stringResource(Res.string.bp_reading_format, systolic, diastolic),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )

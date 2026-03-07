@@ -46,25 +46,37 @@ data class AppColors(
         return if (isDark) darkColorScheme(
             primary = primary,
             onPrimary = onPrimary,
+            primaryContainer = alternative,
+            onPrimaryContainer = onAlternative,
             error = status.error,
             errorContainer = status.errorContainer,
             background = background,
             surfaceContainer = surfaceContainer,
             surfaceContainerHighest = surfaceContainer,
             surfaceContainerLow = surfaceContainer,
+            onSurface = text.primary,
             onBackground = text.primary,
+            surfaceVariant = Color(0xFF43474E),
+            onSurfaceVariant = Color(0xFFC4C6CF),
             outline = outline,
+            outlineVariant = Color(0xFF43474E),
         ) else lightColorScheme(
             primary = primary,
+            onPrimary = onPrimary,
+            primaryContainer = alternative,
+            onPrimaryContainer = onAlternative,
             surfaceContainer = surfaceContainer,
             surfaceContainerHighest = surfaceContainer,
             surfaceContainerLow = surfaceContainer,
-            onPrimary = onPrimary,
             error = status.error,
             errorContainer = status.errorContainer,
             background = background,
+            onSurface = text.primary,
             onBackground = text.primary,
+            surfaceVariant = Color(0xFFE0E2EC),
+            onSurfaceVariant = Color(0xFF43474E),
             outline = outline,
+            outlineVariant = Color(0xFFC4C6CF),
         )
     }
 
@@ -159,36 +171,47 @@ data class AppColors(
 
 }
 
-val PrimaryColor = Color(0xFF2A4B9F)
-val PrimaryAlpha8Color = Color(0xFFF3F7FF) // 8% alpha of PrimaryColor, solid hex
+val PrimaryColor = Color(0xFF3F5F90)
+val PrimaryAlpha8Color = Color(0xFFD6E3FF) // primaryContainer from old VitalsCalc
 
 val lightModeAppColors = AppColors(
-    primary = PrimaryColor,
+    primary = PrimaryColor,                    // #3F5F90
     onPrimary = Color.White,
-    alternative = PrimaryAlpha8Color,
-    onAlternative = PrimaryColor,
-    background = Color(0xFFF0EDE5),
-    surfaceContainer = Color.White,
-    text = AppColors.Text.DefaultLight,
-    textInput = AppColors.TextInput.DefaultLight,
-    bottomNav = AppColors.BottomNav.DefaultLight.copy(
-        background = Color(0xFFF0EDE5),
+    alternative = PrimaryAlpha8Color,          // #D6E3FF (primaryContainer)
+    onAlternative = Color(0xFF264777),         // onPrimaryContainer
+    background = Color(0xFFF9F9FF),            // old app background
+    surfaceContainer = Color(0xFFEDEDF4),      // old surfaceContainerLight
+    text = AppColors.Text(
+        primary = Color(0xFF191C20),           // onBackgroundLight
+        secondary = Color(0xFF43474E),         // onSurfaceVariantLight
     ),
-    outline = Color.GRAY_200,
-
+    textInput = AppColors.TextInput.DefaultLight,
+    bottomNav = AppColors.BottomNav(
+        background = Color(0xFFF9F9FF),        // match background
+        selectedTextIcon = PrimaryColor,
+        unselectedTextIcon = Color.GRAY_500
+    ),
+    outline = Color(0xFF74777F),               // outlineLight from old app
 )
 
 val darkModeAppColors = AppColors(
-    primary = PrimaryColor,
-    onPrimary = Color.White,
-    alternative = Color.BLACK_5_HEX_35,
-    onAlternative = Color.White,
-    background = Color.BLACK_1_HEX_18,
-    surfaceContainer = Color.BLACK_3_HEX_1F,
-    text = AppColors.Text.DefaultDark,
+    primary = Color(0xFFA8C8FF),               // primaryDark from old app
+    onPrimary = Color(0xFF07305F),             // onPrimaryDark
+    alternative = Color(0xFF264777),           // primaryContainerDark
+    onAlternative = Color(0xFFD6E3FF),         // onPrimaryContainerDark
+    background = Color(0xFF111318),            // old app dark background
+    surfaceContainer = Color(0xFF1D2024),      // surfaceContainerDark from old
+    text = AppColors.Text(
+        primary = Color(0xFFE2E2E9),           // onBackgroundDark
+        secondary = Color(0xFFC4C6CF),         // onSurfaceVariantDark
+    ),
     textInput = AppColors.TextInput.DefaultDark,
-    bottomNav = AppColors.BottomNav.DefaultDark,
-    outline = Color.BLACK_5_HEX_35,
+    bottomNav = AppColors.BottomNav(
+        background = Color(0xFF111318),        // match background
+        selectedTextIcon = Color(0xFFA8C8FF),  // primaryDark
+        unselectedTextIcon = Color.GRAY_500
+    ),
+    outline = Color(0xFF8E9099),               // outlineDark from old
 )
 
 

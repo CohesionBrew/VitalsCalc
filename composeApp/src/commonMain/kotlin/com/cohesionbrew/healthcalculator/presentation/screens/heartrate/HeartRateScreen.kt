@@ -5,17 +5,21 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -32,7 +36,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.cohesionbrew.healthcalculator.designsystem.components.ScreenWithToolbar
 import com.cohesionbrew.healthcalculator.designsystem.components.health.HealthActionButton
 import com.cohesionbrew.healthcalculator.designsystem.components.health.HealthInfoTooltip
 import com.cohesionbrew.healthcalculator.designsystem.components.health.HealthScreenTitle
@@ -50,57 +53,189 @@ fun HeartRateScreen(uiStateHolder: HeartRateUiStateHolder) {
 
 @Composable
 fun HeartRateScreen(uiState: HeartRateUiState, onUiEvent: (HeartRateUiEvent) -> Unit) {
-    ScreenWithToolbar(
-        title = stringResource(Res.string.title_screen_heart_rate),
-        isScrollableContent = true,
-        includeBottomInsets = false
+    val title = stringResource(Res.string.heart_rate_calculator)
+
+    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+        val isLandscape = maxWidth > maxHeight
+
+        if (isLandscape) {
+            LandscapeLayout(title = title, uiState = uiState, onUiEvent = onUiEvent)
+        } else {
+            PortraitLayout(title = title, uiState = uiState, onUiEvent = onUiEvent)
+        }
+    }
+}
+
+// --- Portrait Layout (matches old StandardHealthScaffold PortraitLayout) ---
+
+@Composable
+private fun PortraitLayout(
+    title: String,
+    uiState: HeartRateUiState,
+    onUiEvent: (HeartRateUiEvent) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        Column(modifier = Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            HealthScreenTitle(text = stringResource(Res.string.heart_rate))
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(0.dp)
+        ) {
+            HealthScreenTitle(text = title)
 
-            OutlinedTextField(
-                value = if (uiState.age > 0) uiState.age.toString() else "",
-                onValueChange = { onUiEvent(HeartRateUiEvent.OnAgeChanged(it.toIntOrNull() ?: 0)) },
-                label = { Text(stringResource(Res.string.label_age)) },
-                suffix = { Text(stringResource(Res.string.unit_years)) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            // "I know my resting heart rate" checkbox with info tooltip
-            HeartRateZoneDetailsCard(
-                knowsRestingHr = uiState.knowsRestingHr,
-                restingHr = uiState.restingHr,
-                restingHrError = uiState.restingHrError,
-                onKnowsRestingHrToggled = { onUiEvent(HeartRateUiEvent.OnKnowsRestingHrToggled) },
-                onRestingHrChanged = { onUiEvent(HeartRateUiEvent.OnRestingHrChanged(it)) }
-            )
-
-            HealthUnitSystemSwitch(
-                label = stringResource(Res.string.tanaka_formula),
-                description = if (uiState.useTanaka) stringResource(Res.string.tanaka_formula_desc) else stringResource(Res.string.standard_formula_desc),
-                isMetric = uiState.useTanaka,
-                onUnitSystemChange = { onUiEvent(HeartRateUiEvent.OnMethodChanged(it)) }
-            )
-
-            HealthActionButton(
-                text = stringResource(Res.string.calculate_zones),
-                isLoading = uiState.isLoading,
-                onClick = { onUiEvent(HeartRateUiEvent.OnCalculate) }
-            )
-
-            if (uiState.isCalculated) {
-                Spacer(modifier = Modifier.height(8.dp))
+            if (uiState.isCalculated && uiState.age > 0) {
                 Text(
-                    stringResource(Res.string.max_heart_rate, uiState.maxHr),
+                    text = stringResource(Res.string.max_heart_rate, uiState.maxHr),
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+
+            // --- Input Section ---
+            HeartRateInputSection(uiState = uiState, onUiEvent = onUiEvent)
+
+            // --- Results Section ---
+            if (uiState.isCalculated) {
+                HeartRateZoneDetailsCard(
+                    knowsRestingHr = uiState.knowsRestingHr,
+                    restingHr = uiState.restingHr,
+                    restingHrError = uiState.restingHrError,
+                    onKnowsRestingHrToggled = { onUiEvent(HeartRateUiEvent.OnKnowsRestingHrToggled) },
+                    onRestingHrChanged = { onUiEvent(HeartRateUiEvent.OnRestingHrChanged(it)) },
+                    modifier = Modifier.fillMaxWidth()
                 )
                 HeartRateZonesChart(zones = uiState.zones)
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
+        // Ad banner slot
+    }
+}
+
+// --- Landscape Layout (matches old StandardHealthScaffold LandscapeLayout) ---
+
+@Composable
+private fun LandscapeLayout(
+    title: String,
+    uiState: HeartRateUiState,
+    onUiEvent: (HeartRateUiEvent) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // Left Column: title + subtitle + input + details card
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(0.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                HealthScreenTitle(text = title)
+
+                if (uiState.isCalculated && uiState.age > 0) {
+                    Text(
+                        text = stringResource(Res.string.max_heart_rate, uiState.maxHr),
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+
+                HeartRateInputSection(uiState = uiState, onUiEvent = onUiEvent)
+
+                if (uiState.isCalculated) {
+                    HeartRateZoneDetailsCard(
+                        knowsRestingHr = uiState.knowsRestingHr,
+                        restingHr = uiState.restingHr,
+                        restingHrError = uiState.restingHrError,
+                        onKnowsRestingHrToggled = { onUiEvent(HeartRateUiEvent.OnKnowsRestingHrToggled) },
+                        onRestingHrChanged = { onUiEvent(HeartRateUiEvent.OnRestingHrChanged(it)) },
+                        modifier = Modifier
+                    )
+                }
+            }
+
+            // Right Column: zones chart
+            if (uiState.isCalculated) {
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(0.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    HeartRateZonesChart(zones = uiState.zones)
+                }
+            }
+        }
+        // Ad banner slot
+    }
+}
+
+// --- Input Section (age + Tanaka toggle + calculate button) ---
+
+@Composable
+private fun HeartRateInputSection(
+    uiState: HeartRateUiState,
+    onUiEvent: (HeartRateUiEvent) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        OutlinedTextField(
+            value = if (uiState.age > 0) uiState.age.toString() else "",
+            onValueChange = { onUiEvent(HeartRateUiEvent.OnAgeChanged(it.toIntOrNull() ?: 0)) },
+            label = { Text(stringResource(Res.string.label_age)) },
+            suffix = { Text(stringResource(Res.string.unit_years)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        // Checkbox + resting HR input shown before calculation
+        if (!uiState.isCalculated) {
+            HeartRateZoneDetailsCard(
+                knowsRestingHr = uiState.knowsRestingHr,
+                restingHr = uiState.restingHr,
+                restingHrError = uiState.restingHrError,
+                onKnowsRestingHrToggled = { onUiEvent(HeartRateUiEvent.OnKnowsRestingHrToggled) },
+                onRestingHrChanged = { onUiEvent(HeartRateUiEvent.OnRestingHrChanged(it)) },
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+        HealthUnitSystemSwitch(
+            label = stringResource(Res.string.tanaka_formula),
+            description = if (uiState.useTanaka) stringResource(Res.string.tanaka_formula_desc) else stringResource(Res.string.standard_formula_desc),
+            isMetric = uiState.useTanaka,
+            onUnitSystemChange = { onUiEvent(HeartRateUiEvent.OnMethodChanged(it)) }
+        )
+
+        HealthActionButton(
+            text = stringResource(Res.string.calculate_zones),
+            isLoading = uiState.isLoading,
+            onClick = { onUiEvent(HeartRateUiEvent.OnCalculate) }
+        )
     }
 }
 
@@ -112,10 +247,13 @@ private fun HeartRateZoneDetailsCard(
     restingHr: Int,
     restingHrError: String?,
     onKnowsRestingHrToggled: () -> Unit,
-    onRestingHrChanged: (Int) -> Unit
+    onRestingHrChanged: (Int) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
@@ -177,7 +315,7 @@ private val zoneColors = listOf(
 )
 
 @Composable
-fun HeartRateZonesChart(zones: List<HeartRateZoneCalculator.Zone>) {
+private fun HeartRateZonesChart(zones: List<HeartRateZoneCalculator.Zone>) {
     if (zones.isEmpty()) return
 
     // Build static data for each zone (displayed in reverse order: Z5 at top, Z1 at bottom)
@@ -242,7 +380,7 @@ private fun ZoneDetailRow(staticData: ZoneStaticData, calculatedHeartRate: Strin
         modifier = Modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
-            .defaultMinSize(minHeight = 80.dp)
+            .defaultMinSize(minHeight = 70.dp)
             .border(BorderStroke(0.5.dp, Color.LightGray.copy(alpha = 0.8f)))
             .semantics(mergeDescendants = true) {
                 contentDescription = accessibilityDesc

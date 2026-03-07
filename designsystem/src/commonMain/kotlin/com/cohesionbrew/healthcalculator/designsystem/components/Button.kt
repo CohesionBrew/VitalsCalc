@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -44,10 +45,10 @@ enum class ButtonStyle {
 }
 
 enum class ButtonSize(val value: Dp) {
-    LARGE(65.dp),
-    MEDIUM(58.dp),
-    SMALL(50.dp),
-    EXTRA_SMALL(43.dp)
+    LARGE(55.dp),
+    MEDIUM(48.dp),
+    SMALL(40.dp),
+    EXTRA_SMALL(34.dp)
 }
 
 @Composable
@@ -60,7 +61,7 @@ fun AppButton(
     enabled: Boolean = true,
     startIcon: DrawableResource? = null,
     endIcon: DrawableResource? = null,
-    shape: Shape = CircleShape,
+    shape: Shape = RoundedCornerShape(100f),
     onClick: () -> Unit,
 ) {
 

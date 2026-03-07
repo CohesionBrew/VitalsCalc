@@ -163,6 +163,28 @@
     <string name="faster_weight_gain">Faster Weight Gain</string>
     <string name="show_all_formulas">Show all formulas</string>
     <string name="show_macro_splits">Macros</string>
+    <string name="show_bmr_chart">Show BMR chart</string>
+    <string name="show_tdee_grid">Show TDEE grid</string>
+    <string name="show_calorie_grid">Show calorie grid</string>
+    <string name="calorie_recommendations">Calorie Recommendations</string>
+    <string name="bmr_calculation">BMR Calculation</string>
+    <string name="oxford_henry">Oxford/Henry</string>
+    <string name="mifflin_st_jeor">Mifflin-St Jeor</string>
+    <string name="harris_benedict">Harris-Benedict</string>
+    <string name="katch_mcardle">Katch-McArdle</string>
+    <string name="average_of_all">Average of All</string>
+    <string name="bmr_info">BMR Info</string>
+    <string name="tooltiptext_knowing_bmr">Your Basal Metabolic Rate (BMR) is the number of calories your body needs at complete rest to maintain vital functions like breathing, circulation, and cell production.\n\nKnowing your BMR helps you understand your minimum calorie needs and is the foundation for calculating your Total Daily Energy Expenditure (TDEE).</string>
+    <string name="tdee_info">TDEE Info</string>
+    <string name="tooltiptext_tdee">TDEE (Total Daily Energy Expenditure) estimates the total number of calories you burn each day, including your BMR plus calories burned through physical activity.\n\nTDEE = BMR x Activity Level Multiplier\n\nTDEE helps you estimate how many calories you need to maintain, lose, or gain weight.</string>
+    <string name="calorie_goal_info">Calorie Goal Info</string>
+    <string name="tooltiptext_calorie_goal">Your calorie goal depends on whether you want to maintain, lose, or gain weight.\n\nMaintenance: Eat around your TDEE to keep your current weight.\nWeight Loss: Eat fewer calories than your TDEE, typically 10-25%% less.\nWeight Gain: Eat more calories than your TDEE, usually 5-20%% more.\n\nThis number should just be used as a starting point for your daily calorie goals and you would adjust it based on the results you see over the course of a week.</string>
+    <string name="body_fat_info">Body Fat Info</string>
+    <string name="tooltiptext_body_fat">Knowing your body fat percentage allows us to use the Katch-McArdle formula, which can be more accurate for lean individuals.</string>
+    <string name="why_body_fat">Why Body Fat?</string>
+    <string name="tooltiptext_why_body_fat">Used for more accurate BMR calculation via Katch-McArdle</string>
+    <string name="activity_level_desc">Activity Level</string>
+    <string name="calories_day">Calories/Day</string>
 
     <!-- Heart Rate -->
     <string name="heart_rate">Heart Rate Zones</string>
@@ -220,17 +242,21 @@
     <string name="idealweight_miller">Miller (1983)</string>
     <string name="idealweight_devine">Devine (1974)</string>
     <string name="idealweight_hamwi">Hamwi (1964)</string>
+    <string name="idealweight_average">Average across formulas</string>
 
     <!-- Water Intake -->
     <string name="water_title">Water Intake Calculator</string>
     <string name="daily_water_intake">Daily Water Intake</string>
     <string name="water_calculate_button">Calculate</string>
-    <string name="hot_climate">Hot Climate</string>
-    <string name="hot_climate_description">Increases water needs by 20%</string>
+    <string name="hot_climate">Hot/Humid Climate</string>
+    <string name="hot_climate_description">Increases recommendation by 20%</string>
     <string name="recommended_daily_intake">Recommended Daily Intake</string>
+    <string name="daily_water_goal">Daily Water Goal</string>
     <string name="water_result_liters">%1$s L</string>
-    <string name="water_result_fl_oz">≈ %1$s fl oz</string>
-    <string name="water_result_glasses">≈ %1$d glasses (250ml each)</string>
+    <string name="water_result_fl_oz">(%1$s oz)</string>
+    <string name="water_result_glasses">About %1$d glasses of water</string>
+    <string name="water_weight_label">Weight: %1$s</string>
+    <string name="water_set_weight_message">Set your weight in profile to see recommendation</string>
 
     <!-- Blood Pressure -->
     <string name="bp_title">Blood Pressure</string>
@@ -251,6 +277,8 @@
     <string name="bp_total_readings">%1$d total</string>
     <string name="bp_pulse_bpm">\u2022 %1$d BPM</string>
     <string name="bp_delete_reading_desc">Delete reading %1$d/%2$d</string>
+    <string name="bp_subtitle">Track your readings</string>
+    <string name="bp_save">Save</string>
 
     <!-- Dashboard / Home -->
     <string name="dashboard">Dashboard</string>
@@ -258,8 +286,12 @@
     <string name="welcome_title">Welcome to VitalsCalc</string>
     <string name="welcome_message">Start by using any calculator from the Calculators tab. Your results will appear here.</string>
     <string name="calculations_recorded">%1$d calculations recorded</string>
-    <string name="your_measurements">Your Measurements</string>
-    <string name="your_goals_recommendations">Your Goals &amp; Recommendations</string>
+    <string name="my_measurements">My Measurements</string>
+    <string name="my_goals_recommendations">My Goals &amp; Recommendations</string>
+    <string name="ideal_weight">Ideal Weight</string>
+    <string name="water_intake">Water Intake</string>
+    <string name="training_zone">Training Zone</string>
+    <string name="bmr_tdee">BMR/TDEE</string>
 
     <!-- History -->
     <string name="history">History</string>
@@ -281,11 +313,14 @@
 
     <!-- More Menu -->
     <string name="more">More</string>
+    <string name="profile">Profile</string>
     <string name="upgrade_to_pro">Upgrade to Pro</string>
     <string name="upgrade_to_pro_subtitle">Unlock unlimited history &amp; more</string>
     <string name="my_profile">My Profile</string>
     <string name="my_profile_subtitle">Height, weight, and default values</string>
     <string name="settings_subtitle">Units, theme, and preferences</string>
+    <string name="remove_ads_premium_features">Remove Ads / Premium Features</string>
+    <string name="release_notes_about">Release Notes / About</string>
     <string name="references">References</string>
     <string name="references_subtitle">Medical sources and formulas</string>
     <string name="about">About</string>

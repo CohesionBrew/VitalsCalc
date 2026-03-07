@@ -34,7 +34,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun AppCardContainer(
     modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(24.dp),
+    shape: Shape = RoundedCornerShape(12.dp),
     backgroundColor: Color = AppTheme.colors.surfaceContainer,
     onClick: (() -> Unit)? = null,
     contentPaddingValues: PaddingValues = PaddingValues(AppTheme.spacing.cardContentSpacing),

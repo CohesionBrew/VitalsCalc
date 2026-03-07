@@ -6,7 +6,22 @@
       "Bash(git submodule:*)",
       "Bash(xcrun simctl:*)",
       "Bash(test:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(./gradlew assembleDebug:*)",
+      "Bash(./gradlew :composeApp:compileDebugKotlinAndroid:*)",
+      "Bash(jar tf:*)",
+      "Bash(./gradlew linkDebugFrameworkIosSimulatorArm64:*)",
+      "Bash(git status:*)",
+      "Bash(rm:*)",
+      "Bash(git commit:*)",
+      "Bash(./gradlew :composeApp:compileKotlinJvm:*)",
+      "Bash(./gradlew compileDebugKotlin:*)",
+      "Bash(./gradlew :designsystem:compileDebugKotlinAndroid:*)",
+      "Bash(./gradlew generateComposeResClass:*)",
+      "Bash(xcodebuild:*)",
+      "Bash(./gradlew :libs:subscription:subscription-adapty:compileDebugKotlinAndroid:*)",
+      "Bash(ls:*)",
+      "Bash(git:*)"
     ]
   }
 }

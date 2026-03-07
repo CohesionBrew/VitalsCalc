@@ -9,35 +9,17 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.cohesionbrew.healthcalculator.designsystem.generated.resources.UiRes
-import com.cohesionbrew.healthcalculator.designsystem.generated.resources.poppins_bold
-import com.cohesionbrew.healthcalculator.designsystem.generated.resources.poppins_medium
-import com.cohesionbrew.healthcalculator.designsystem.generated.resources.poppins_regular
-import com.cohesionbrew.healthcalculator.designsystem.generated.resources.poppins_semibold
+import com.cohesionbrew.healthcalculator.designsystem.generated.resources.acme_regular
 import org.jetbrains.compose.resources.Font
 
 
 private val fontFamily
     @Composable get() = FontFamily(
         Font(
-            UiRes.font.poppins_regular,
+            UiRes.font.acme_regular,
             FontWeight.Normal,
             FontStyle.Normal
         ),
-        Font(
-            UiRes.font.poppins_medium,
-            FontWeight.Medium,
-            FontStyle.Normal
-        ),
-        Font(
-            UiRes.font.poppins_semibold,
-            FontWeight.SemiBold,
-            FontStyle.Normal
-        ),
-        Font(
-            UiRes.font.poppins_bold,
-            FontWeight.Bold,
-            FontStyle.Normal
-        )
     )
 
 
@@ -66,28 +48,39 @@ class AppTypography(
 )
 
 
-// Default Material 3 typography values
-private val baseline = Typography()
-
-
 val MaterialThemAppTypography
     @Composable
-    get() = Typography(
-        displayLarge = baseline.displayLarge.copy(fontFamily = fontFamily),
-        displayMedium = baseline.displayMedium.copy(fontFamily = fontFamily),
-        displaySmall = baseline.displaySmall.copy(fontFamily = fontFamily),
-        headlineLarge = baseline.headlineLarge.copy(fontFamily = fontFamily),
-        headlineMedium = baseline.headlineMedium.copy(fontFamily = fontFamily),
-        headlineSmall = baseline.headlineSmall.copy(fontFamily = fontFamily),
-        titleLarge = baseline.titleLarge.copy(fontFamily = fontFamily),
-        titleMedium = baseline.titleMedium.copy(fontFamily = fontFamily),
-        titleSmall = baseline.titleSmall.copy(fontFamily = fontFamily),
-        bodyLarge = baseline.bodyLarge.copy(fontFamily = fontFamily),
-        bodyMedium = baseline.bodyMedium.copy(fontFamily = fontFamily),
-        bodySmall = baseline.bodySmall.copy(fontFamily = fontFamily),
-        labelLarge = baseline.labelLarge.copy(fontFamily = fontFamily),
-        labelMedium = baseline.labelMedium.copy(fontFamily = fontFamily),
-        labelSmall = baseline.labelSmall.copy(fontFamily = fontFamily),
+    get() = Typography().copy(
+        headlineMedium = TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 24.sp
+        ),
+        bodySmall = TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 12.sp,
+            lineHeight = 20.sp
+        ),
+        bodyMedium = TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp,
+            lineHeight = 22.sp,
+        ),
+        bodyLarge = TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 16.sp,
+            lineHeight = 24.sp,
+            letterSpacing = 0.5.sp,
+        ),
+        labelLarge = TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp,
+            lineHeight = 24.sp,
+        )
     )
 
 val appTypography

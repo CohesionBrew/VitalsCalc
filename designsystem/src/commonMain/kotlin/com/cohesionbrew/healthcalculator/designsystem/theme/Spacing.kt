@@ -21,4 +21,7 @@ class AppSpacing(
     val largeSpacing: Dp = 36.dp, //Larger spacing
 )
 
-val appSpacing = AppSpacing()
+val appSpacing = AppSpacing(
+    outerSpacing = 16.dp,
+    cardContentSpacing = 12.dp,
+)

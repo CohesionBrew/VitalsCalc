@@ -1,194 +1,237 @@
 package com.cohesionbrew.healthcalculator.presentation.screens.home
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.cohesionbrew.healthcalculator.designsystem.components.ScreenWithToolbar
+import com.cohesionbrew.healthcalculator.designsystem.components.premium.UpgradePremiumBanner
+import com.cohesionbrew.healthcalculator.domain.model.history.BloodPressureHistoryEntry
+import com.cohesionbrew.healthcalculator.domain.model.history.BmrHistoryEntry
 import com.cohesionbrew.healthcalculator.generated.resources.*
 import com.cohesionbrew.healthcalculator.presentation.components.health.DashboardMetricCard
-import com.cohesionbrew.healthcalculator.designsystem.components.premium.UpgradePremiumBanner
 import com.cohesionbrew.healthcalculator.presentation.components.health.getBmiCategoryColor
 import com.cohesionbrew.healthcalculator.presentation.components.health.getBodyFatCategoryColor
 import com.cohesionbrew.healthcalculator.presentation.components.health.getBpCategoryColor
+import com.cohesionbrew.healthcalculator.presentation.screens.bloodpressure.BloodPressureScreenRoute
+import com.cohesionbrew.healthcalculator.presentation.screens.bmi.BmiScreenRoute
+import com.cohesionbrew.healthcalculator.presentation.screens.bmr.BmrScreenRoute
+import com.cohesionbrew.healthcalculator.presentation.screens.bodyfat.BodyFatScreenRoute
+import com.cohesionbrew.healthcalculator.presentation.screens.heartrate.HeartRateScreenRoute
+import com.cohesionbrew.healthcalculator.presentation.screens.idealweight.IdealWeightScreenRoute
+import com.cohesionbrew.healthcalculator.presentation.screens.waterintake.WaterIntakeScreenRoute
 import kotlin.math.roundToInt
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    uiStateHolder: HomeUiStateHolder
+    uiStateHolder: HomeUiStateHolder,
+    onNavigateToCalculator: (Any) -> Unit = {}
 ) {
     val uiState by uiStateHolder.uiState.collectAsStateWithLifecycle()
-    HomeScreen(modifier = modifier.fillMaxSize(), uiState = uiState, onUiEvent = uiStateHolder::onUiEvent)
+    HomeScreen(
+        modifier = modifier.fillMaxSize(),
+        uiState = uiState,
+        onUiEvent = { event ->
+            when (event) {
+                is HomeUiEvent.OnNavigateToCalculator -> onNavigateToCalculator(event.route)
+                else -> uiStateHolder.onUiEvent(event)
+            }
+        }
+    )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     uiState: HomeUiState,
     onUiEvent: (HomeUiEvent) -> Unit
 ) {
-    ScreenWithToolbar(
-        modifier = modifier,
-        isScrollableContent = false,
-        title = stringResource(Res.string.title_screen_home),
-        includeBottomInsets = false
+    val pullRefreshState = rememberPullToRefreshState()
+
+    PullToRefreshBox(
+        isRefreshing = uiState.isLoading,
+        onRefresh = { onUiEvent(HomeUiEvent.OnRefresh) },
+        state = pullRefreshState,
+        modifier = modifier
     ) {
-        if (uiState.historyCount == 0 && !uiState.isLoading) {
-            // Empty / welcome state
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp, vertical = 32.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.fillMaxSize()
+        ) {
+            // Section 1: My Measurements (logged health data)
+            item(span = { GridItemSpan(maxLineSpan) }) {
                 Text(
-                    stringResource(Res.string.welcome_title),
+                    text = stringResource(Res.string.my_measurements),
                     style = MaterialTheme.typography.titleLarge
                 )
-                Text(
-                    stringResource(Res.string.welcome_message),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+            }
+
+            // Weight
+            item {
+                val entry = uiState.latestWeight
+                DashboardMetricCard(
+                    title = stringResource(Res.string.weight),
+                    value = entry?.let { fmt(it.primaryValue) },
+                    unit = stringResource(Res.string.unit_lbs),
+                    icon = Icons.Filled.Home,
+                    isElevated = true,
+                    isPro = uiState.isPro,
+                    onClick = { onUiEvent(HomeUiEvent.OnNavigateToCalculator(BmiScreenRoute())) }
                 )
             }
-        } else {
-            // Dashboard grid with section headers
-            val hasMeasurements = uiState.latestBmi != null || uiState.latestBodyFat != null || uiState.latestBp != null
-            val hasGoals = uiState.latestBmr != null
 
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(12.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxSize()
-            ) {
-                // Section: Your Measurements
-                if (hasMeasurements) {
-                    item(span = { GridItemSpan(maxLineSpan) }) {
-                        Text(
-                            text = stringResource(Res.string.your_measurements),
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+            // BMI
+            item {
+                val entry = uiState.latestBmi
+                val cat = entry?.category
+                val bmiCategoryIndex = getBmiCategoryIndexFromName(cat)
+                DashboardMetricCard(
+                    title = stringResource(Res.string.bmi),
+                    value = entry?.let { fmt(it.primaryValue) },
+                    unit = stringResource(Res.string.unit_kg_m2),
+                    subtitle = cat,
+                    icon = Icons.Filled.Home,
+                    isElevated = true,
+                    statusColor = if (cat != null) getBmiCategoryColor(bmiCategoryIndex) else null,
+                    isPro = uiState.isPro,
+                    onClick = { onUiEvent(HomeUiEvent.OnNavigateToCalculator(BmiScreenRoute())) }
+                )
+            }
 
-                    uiState.latestBmi?.let { entry ->
-                        item {
-                            val cat = entry.category
-                            val bmiCategoryIndex = getBmiCategoryIndexFromName(cat)
-                            DashboardMetricCard(
-                                title = stringResource(Res.string.bmi),
-                                value = fmt(entry.primaryValue),
-                                unit = stringResource(Res.string.unit_kg_m2),
-                                subtitle = cat,
-                                icon = Icons.Filled.Person,
-                                isElevated = true,
-                                statusColor = if (cat != null) getBmiCategoryColor(bmiCategoryIndex) else null,
-                                isPro = uiState.isPro
-                            )
-                        }
-                    }
+            // Body Fat
+            item {
+                val entry = uiState.latestBodyFat
+                val cat = entry?.category
+                DashboardMetricCard(
+                    title = stringResource(Res.string.body_fat),
+                    value = entry?.let { fmt(it.primaryValue) },
+                    unit = "%",
+                    subtitle = cat,
+                    icon = Icons.Filled.Person,
+                    isElevated = true,
+                    statusColor = if (cat != null) getBodyFatCategoryColor(cat) else null,
+                    isPro = uiState.isPro,
+                    onClick = { onUiEvent(HomeUiEvent.OnNavigateToCalculator(BodyFatScreenRoute())) }
+                )
+            }
 
-                    uiState.latestBodyFat?.let { entry ->
-                        item {
-                            val cat = entry.category
-                            DashboardMetricCard(
-                                title = stringResource(Res.string.body_fat),
-                                value = fmt(entry.primaryValue),
-                                unit = "%",
-                                subtitle = cat,
-                                icon = Icons.Filled.Info,
-                                isElevated = true,
-                                statusColor = if (cat != null) getBodyFatCategoryColor(cat) else null,
-                                isPro = uiState.isPro
-                            )
-                        }
-                    }
-
-                    uiState.latestBp?.let { entry ->
-                        item {
-                            val cat = entry.category
-                            DashboardMetricCard(
-                                title = stringResource(Res.string.bp_title),
-                                value = entry.primaryValue.toInt().toString(),
-                                unit = stringResource(Res.string.unit_mmhg),
-                                subtitle = cat,
-                                icon = Icons.Filled.Favorite,
-                                isElevated = true,
-                                statusColor = if (cat != null) getBpCategoryColor(cat) else null,
-                                isPro = uiState.isPro
-                            )
-                        }
-                    }
+            // Blood Pressure
+            item {
+                val entry = uiState.latestBp
+                val cat = entry?.category
+                val bpValue = (entry as? BloodPressureHistoryEntry)?.let {
+                    "${it.systolic}/${it.diastolic}"
                 }
+                DashboardMetricCard(
+                    title = stringResource(Res.string.bp_title),
+                    value = bpValue,
+                    unit = stringResource(Res.string.unit_mmhg),
+                    subtitle = cat,
+                    icon = Icons.Filled.Favorite,
+                    isElevated = true,
+                    statusColor = if (cat != null) getBpCategoryColor(cat) else null,
+                    isPro = uiState.isPro,
+                    onClick = { onUiEvent(HomeUiEvent.OnNavigateToCalculator(BloodPressureScreenRoute())) }
+                )
+            }
 
-                // Section: Your Goals & Recommendations
-                if (hasGoals) {
-                    item(span = { GridItemSpan(maxLineSpan) }) {
-                        Text(
-                            text = stringResource(Res.string.your_goals_recommendations),
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top = if (hasMeasurements) 16.dp else 0.dp)
-                        )
-                    }
+            // Section 2: My Goals & Recommendations (calculated targets)
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Text(
+                    text = stringResource(Res.string.my_goals_recommendations),
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(top = 16.dp)
+                )
+            }
 
-                    uiState.latestBmr?.let { entry ->
-                        item {
-                            DashboardMetricCard(
-                                title = stringResource(Res.string.bmr),
-                                value = fmt(entry.primaryValue),
-                                unit = stringResource(Res.string.unit_kcal),
-                                icon = Icons.Filled.Star,
-                                isElevated = false,
-                                isPro = uiState.isPro
-                            )
-                        }
-                    }
-                }
+            // Ideal Weight
+            item {
+                val entry = uiState.latestIdealWeight
+                DashboardMetricCard(
+                    title = stringResource(Res.string.ideal_weight),
+                    value = entry?.let { fmt(it.primaryValue) },
+                    unit = stringResource(Res.string.unit_lbs),
+                    icon = Icons.Filled.Person,
+                    isElevated = false,
+                    isPro = uiState.isPro,
+                    onClick = { onUiEvent(HomeUiEvent.OnNavigateToCalculator(IdealWeightScreenRoute())) }
+                )
+            }
 
-                // Pro upgrade banner (if not Pro)
-                if (!uiState.isPro) {
-                    item(span = { GridItemSpan(maxLineSpan) }) {
-                        UpgradePremiumBanner(
-                            modifier = Modifier.padding(top = 8.dp)
-                        )
-                    }
-                }
+            // BMR/TDEE
+            item {
+                val entry = uiState.latestBmr
+                val bmrEntry = entry as? BmrHistoryEntry
+                val subtitle = bmrEntry?.tdee?.let { "${it.roundToInt()} ${stringResource(Res.string.unit_kcal)}" }
+                DashboardMetricCard(
+                    title = stringResource(Res.string.bmr_tdee),
+                    value = entry?.let { "${it.primaryValue.roundToInt()}" },
+                    unit = stringResource(Res.string.unit_kcal),
+                    subtitle = subtitle,
+                    icon = Icons.Filled.Star,
+                    isElevated = false,
+                    isPro = uiState.isPro,
+                    onClick = { onUiEvent(HomeUiEvent.OnNavigateToCalculator(BmrScreenRoute())) }
+                )
+            }
 
-                // Footer: calculation count
-                if (uiState.historyCount > 0) {
-                    item(span = { GridItemSpan(maxLineSpan) }) {
-                        Text(
-                            text = stringResource(Res.string.calculations_recorded, uiState.historyCount),
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(top = 8.dp)
-                        )
-                    }
+            // Training Zone
+            item {
+                DashboardMetricCard(
+                    title = stringResource(Res.string.training_zone),
+                    value = null,
+                    unit = stringResource(Res.string.unit_bpm),
+                    icon = Icons.Filled.Favorite,
+                    isElevated = false,
+                    isPro = uiState.isPro,
+                    onClick = { onUiEvent(HomeUiEvent.OnNavigateToCalculator(HeartRateScreenRoute())) }
+                )
+            }
+
+            // Water Intake
+            item {
+                val entry = uiState.latestWaterIntake
+                DashboardMetricCard(
+                    title = stringResource(Res.string.water_intake),
+                    value = entry?.let { fmt(it.primaryValue) },
+                    unit = stringResource(Res.string.unit_fl_oz),
+                    icon = Icons.Filled.Info,
+                    isElevated = false,
+                    isPro = uiState.isPro,
+                    onClick = { onUiEvent(HomeUiEvent.OnNavigateToCalculator(WaterIntakeScreenRoute())) }
+                )
+            }
+
+            // Pro upgrade banner (if not Pro) - spans full width
+            if (!uiState.isPro) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    UpgradePremiumBanner(
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
                 }
             }
         }
