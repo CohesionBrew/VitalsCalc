@@ -14,7 +14,8 @@ data class HomeUiState(
     val latestWaterIntake: CalculationEntry? = null,
     val historyCount: Int = 0,
     val isPro: Boolean = false,
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val useMetric: Boolean = false
 )
 
 sealed interface HomeUiEvent {

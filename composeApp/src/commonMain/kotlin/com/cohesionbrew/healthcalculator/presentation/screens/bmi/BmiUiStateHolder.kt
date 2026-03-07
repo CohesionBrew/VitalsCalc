@@ -5,6 +5,7 @@ import com.cohesionbrew.healthcalculator.data.repository.UserProfileRepository
 import com.cohesionbrew.healthcalculator.domain.calculator.BmiCalculator
 import com.cohesionbrew.healthcalculator.domain.model.history.BmiHistoryEntry
 import com.cohesionbrew.healthcalculator.domain.model.history.CalculationType
+import com.cohesionbrew.healthcalculator.domain.model.history.WeightHistoryEntry
 import com.cohesionbrew.healthcalculator.domain.widget.WidgetUpdater
 import com.cohesionbrew.healthcalculator.util.UiStateHolder
 import com.cohesionbrew.healthcalculator.util.uiStateHolderScope
@@ -143,6 +144,19 @@ class BmiUiStateHolder(
                 )
             )
             widgetUpdater.updateWidget(CalculationType.BMI, bmi, categoryName)
+
+            // Also save weight history entry (matches old app)
+            val displayWeight = if (state.useMetric) state.weightKg
+                else kotlin.math.round(state.weightKg * KG_TO_LB * 10) / 10.0
+            historyRepository.addEntry(
+                WeightHistoryEntry(
+                    id = Uuid.random().toString(),
+                    primaryValue = displayWeight,
+                    createdAt = Clock.System.now().toEpochMilliseconds(),
+                    weightKg = state.weightKg,
+                    bmi = ((bmi * 10).roundToInt() / 10.0)
+                )
+            )
         }
     }
 }

@@ -93,10 +93,11 @@ fun HomeScreen(
             // Weight
             item {
                 val entry = uiState.latestWeight
+                val weightUnit = if (uiState.useMetric) stringResource(Res.string.unit_kg) else stringResource(Res.string.unit_lbs)
                 DashboardMetricCard(
                     title = stringResource(Res.string.weight),
                     value = entry?.let { fmt(it.primaryValue) },
-                    unit = stringResource(Res.string.unit_lbs),
+                    unit = weightUnit,
                     icon = Icons.Filled.Home,
                     isElevated = true,
                     isPro = uiState.isPro,
@@ -171,10 +172,11 @@ fun HomeScreen(
             // Ideal Weight
             item {
                 val entry = uiState.latestIdealWeight
+                val idealWeightUnit = if (uiState.useMetric) stringResource(Res.string.unit_kg) else stringResource(Res.string.unit_lbs)
                 DashboardMetricCard(
                     title = stringResource(Res.string.ideal_weight),
                     value = entry?.let { fmt(it.primaryValue) },
-                    unit = stringResource(Res.string.unit_lbs),
+                    unit = idealWeightUnit,
                     icon = Icons.Filled.Person,
                     isElevated = false,
                     isPro = uiState.isPro,

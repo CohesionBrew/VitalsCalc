@@ -36,6 +36,14 @@ fun MainScreen(
                 .fillMaxSize()
                 .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top))
         ) {
+            // Show back button toolbar on non-root (calculator/detail) screens
+            if (!mainScreenUiState.bottomNavUiState.isVisible) {
+                AppToolbar(
+                    title = "",
+                    onNavigationIconClick = { onUiEvent(MainScreenUiEvent.OnToolbarNavItemClick) }
+                )
+            }
+
             //Main Content
             Box(modifier = Modifier.weight(1f)) {
                 content()
