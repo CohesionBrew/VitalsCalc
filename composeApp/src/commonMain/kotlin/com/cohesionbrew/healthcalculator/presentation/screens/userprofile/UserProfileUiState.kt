@@ -13,6 +13,7 @@ data class UserProfileUiState(
     val heightInches: String = "7",
     val useMetric: Boolean = true,
     val isSaving: Boolean = false,
+    val isSaved: Boolean = false,
     val isLoading: Boolean = true
 )
 

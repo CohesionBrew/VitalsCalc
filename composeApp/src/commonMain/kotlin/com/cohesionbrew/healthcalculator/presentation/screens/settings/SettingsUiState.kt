@@ -8,6 +8,7 @@ data class SettingsUiState(
     val advancedMode: Boolean = false,
     val language: String = "en",
     val isSaving: Boolean = false,
+    val isSaved: Boolean = false,
     val isLoading: Boolean = true
 )
 

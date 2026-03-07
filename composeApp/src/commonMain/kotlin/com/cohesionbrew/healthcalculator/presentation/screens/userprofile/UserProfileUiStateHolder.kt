@@ -92,7 +92,7 @@ class UserProfileUiStateHolder(
                 heightCm = heightCm
             )
         )
-        _uiState.update { it.copy(isSaving = false) }
+        _uiState.update { it.copy(isSaving = false, isSaved = true) }
     }
 
     private fun calculateAge(dob: LocalDate): Int {

@@ -52,6 +52,6 @@ class SettingsUiStateHolder(
                 language = state.language
             )
         )
-        _uiState.update { it.copy(isSaving = false) }
+        _uiState.update { it.copy(isSaving = false, isSaved = true) }
     }
 }
