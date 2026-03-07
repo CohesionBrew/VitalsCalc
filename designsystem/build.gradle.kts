@@ -61,6 +61,7 @@ kotlin {
             api(libs.cupertino.adaptive)
             api(libs.cupertino.native)
             api(libs.cupertino.icons.extended)
+            implementation(libs.kotlinx.datetime)
             implementation(libs.kmpauth.uihelper)
         }
         androidMain.dependencies {

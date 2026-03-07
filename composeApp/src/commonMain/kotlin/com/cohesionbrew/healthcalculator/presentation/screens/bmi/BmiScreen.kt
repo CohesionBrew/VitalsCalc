@@ -108,6 +108,15 @@ private fun PortraitLayout(
         ) {
             HealthScreenTitle(text = title)
 
+            // Profile info subtitle (matches old app: "Age 100, H = 5 ft 11 in")
+            if (uiState.age != null && uiState.heightDisplayText.isNotEmpty()) {
+                Text(
+                    text = stringResource(Res.string.bmi_profile_subtitle, uiState.age.toString(), uiState.heightDisplayText),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
             BmiEntryCard(
                 uiState = uiState,
                 onUiEvent = onUiEvent,
@@ -157,6 +166,16 @@ private fun LandscapeLayout(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 HealthScreenTitle(text = title)
+
+                // Profile info subtitle (matches old app: "Age 100, H = 5 ft 11 in")
+                if (uiState.age != null && uiState.heightDisplayText.isNotEmpty()) {
+                    Text(
+                        text = stringResource(Res.string.bmi_profile_subtitle, uiState.age.toString(), uiState.heightDisplayText),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
                 BmiEntryCard(
                     uiState = uiState,
                     onUiEvent = onUiEvent,

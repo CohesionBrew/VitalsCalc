@@ -1,27 +1,31 @@
 package com.cohesionbrew.healthcalculator.presentation.screens.settings
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import io.github.robinpcrd.cupertino.adaptive.AdaptiveSwitch
-import io.github.robinpcrd.cupertino.adaptive.ExperimentalAdaptiveApi
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.cohesionbrew.healthcalculator.designsystem.components.ScreenWithToolbar
-import com.cohesionbrew.healthcalculator.designsystem.components.health.HealthAlertDialog
+import com.cohesionbrew.healthcalculator.designsystem.components.health.AdaptiveSettingsToggleRow
+import com.cohesionbrew.healthcalculator.designsystem.components.health.HealthActionButton
+import com.cohesionbrew.healthcalculator.designsystem.components.health.HealthLanguageDropdown
+import com.cohesionbrew.healthcalculator.designsystem.components.health.HealthMenuPagesHeaderText
+import com.cohesionbrew.healthcalculator.designsystem.components.health.LanguageMenuItem
 import com.cohesionbrew.healthcalculator.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
 
@@ -36,77 +40,101 @@ fun SettingsScreen(
     uiState: SettingsUiState,
     onUiEvent: (SettingsUiEvent) -> Unit
 ) {
-    if (uiState.showClearConfirmation) {
-        HealthAlertDialog(
-            title = stringResource(Res.string.settings_clear_data_title),
-            message = stringResource(Res.string.settings_clear_data_message),
-            confirmText = stringResource(Res.string.settings_clear_button),
-            dismissText = stringResource(Res.string.cancel),
-            onConfirm = { onUiEvent(SettingsUiEvent.OnConfirmClear) },
-            onDismiss = { onUiEvent(SettingsUiEvent.OnDismissClear) }
+    val languageMenuOptions = remember {
+        listOf(
+            LanguageMenuItem("English", "en", Res.drawable.us),
+            LanguageMenuItem("Espanol / Spanish", "es", Res.drawable.es),
+            LanguageMenuItem("Francais / French", "fr", Res.drawable.fr),
+            LanguageMenuItem("Deutsch / German", "de", Res.drawable.flag_germany),
+            LanguageMenuItem("Portugues / Portuguese", "pt-BR", Res.drawable.flag_brazil),
+            LanguageMenuItem("Japanese", "ja", Res.drawable.japan_flag),
+            LanguageMenuItem("Korean", "ko", Res.drawable.flag_south_korea),
+            LanguageMenuItem("Chinese (Simplified)", "zh-CN", Res.drawable.flag_china),
+            LanguageMenuItem("Chinese (Traditional - Taiwan)", "zh-TW", Res.drawable.flag_taiwan),
+            LanguageMenuItem("Chinese (Traditional - Hong Kong)", "zh-HK", Res.drawable.flag_hong_kong),
         )
     }
 
-    ScreenWithToolbar(
-        title = stringResource(Res.string.title_screen_settings),
-        isScrollableContent = true,
-        includeBottomInsets = true
+    val selectedLanguage = remember(uiState.language) {
+        languageMenuOptions.find { it.code == uiState.language }
+    }
+
+    val metricSubtitle = stringResource(
+        Res.string.settings_you_have_chosen,
+        if (uiState.useMetric) {
+            stringResource(Res.string.settings_metric_cm_kg)
+        } else {
+            stringResource(Res.string.settings_imperial_inch_pound)
+        }
+    )
+
+    val advancedModeSubtitle = if (uiState.advancedMode) {
+        stringResource(Res.string.settings_advanced_mode_enabled)
+    } else {
+        stringResource(Res.string.settings_advanced_mode_disabled)
+    }
+
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.TopCenter
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            shape = RoundedCornerShape(16.dp),
+            border = BorderStroke(6.dp, MaterialTheme.colorScheme.outline),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            )
         ) {
-            Text(
-                stringResource(Res.string.measurement_units),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Text(stringResource(Res.string.use_metric), style = MaterialTheme.typography.bodyLarge)
-                    Text(
-                        stringResource(if (uiState.useMetric) Res.string.metric_kg_cm else Res.string.imperial_lb_in),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                @OptIn(ExperimentalAdaptiveApi::class)
-                AdaptiveSwitch(
-                    checked = uiState.useMetric,
-                    onCheckedChange = { onUiEvent(SettingsUiEvent.OnUnitSystemChanged(it)) }
-                )
-            }
-
-            Text(
-                stringResource(Res.string.settings_section_data),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
-            )
-
-            Row(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onUiEvent(SettingsUiEvent.OnClearData) }
-                    .padding(vertical = 12.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(
-                    Icons.Filled.Delete,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.error
+                HealthMenuPagesHeaderText(
+                    text = stringResource(Res.string.title_screen_settings)
                 )
-                Text(
-                    stringResource(Res.string.settings_clear_all_history),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.error
+
+                HorizontalDivider(thickness = 1.dp)
+
+                AdaptiveSettingsToggleRow(
+                    title = stringResource(Res.string.settings_use_metric_units),
+                    subtitle = metricSubtitle,
+                    checked = uiState.useMetric,
+                    onCheckedChange = { onUiEvent(SettingsUiEvent.OnUseMetricChanged(it)) }
+                )
+
+                HorizontalDivider(thickness = 1.dp)
+
+                AdaptiveSettingsToggleRow(
+                    title = stringResource(Res.string.settings_advanced_mode),
+                    subtitle = advancedModeSubtitle,
+                    checked = uiState.advancedMode,
+                    onCheckedChange = { onUiEvent(SettingsUiEvent.OnAdvancedModeChanged(it)) }
+                )
+
+                HorizontalDivider(thickness = 1.dp)
+
+                HealthLanguageDropdown(
+                    label = stringResource(Res.string.settings_language),
+                    options = languageMenuOptions,
+                    selectedOption = selectedLanguage,
+                    onOptionSelected = { onUiEvent(SettingsUiEvent.OnLanguageChanged(it.code)) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                HorizontalDivider(thickness = 1.dp)
+
+                HealthActionButton(
+                    text = stringResource(Res.string.settings_save_and_close),
+                    isLoading = uiState.isSaving,
+                    onClick = { onUiEvent(SettingsUiEvent.OnSave) }
                 )
             }
         }

@@ -127,6 +127,7 @@
     <string name="at_or_below_healthy_weight">At or below healthy weight</string>
     <string name="bmi_diff_to_lose">%1$s %2$s to lose to reach healthy range</string>
     <string name="bmi_diff_to_gain">%1$s %2$s to gain to reach healthy range</string>
+    <string name="bmi_profile_subtitle">Age %1$s, H = %2$s</string>
 
     <!-- BMR / TDEE Calculator -->
     <string name="bmr">BMR</string>
@@ -310,6 +311,15 @@
     <string name="settings_clear_button">Clear</string>
     <string name="settings_section_data">Data</string>
     <string name="settings_clear_all_history">Clear All History</string>
+    <string name="settings_use_metric_units">Use Metric Units?</string>
+    <string name="settings_you_have_chosen">You have chosen: %1$s</string>
+    <string name="settings_imperial_inch_pound">Imperial [Inch &amp; Pound]</string>
+    <string name="settings_metric_cm_kg">Metric [cm &amp; kg]</string>
+    <string name="settings_advanced_mode">Advanced Mode</string>
+    <string name="settings_advanced_mode_enabled">Enabled</string>
+    <string name="settings_advanced_mode_disabled">Disabled</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_save_and_close">Save and Close</string>
 
     <!-- More Menu -->
     <string name="more">More</string>
@@ -341,6 +351,12 @@
     <string name="profile_resting_hr">Resting Heart Rate (bpm)</string>
     <string name="profile_saved">Saved!</string>
     <string name="profile_save_button">Save Profile</string>
+    <string name="used_for_metabolic_calculations">(used for metabolic calculations)</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="age_years">Age: %1$d years</string>
+    <string name="save_and_close">Save and Close</string>
+    <string name="feet">Feet</string>
+    <string name="inches">Inches</string>
     <string name="privacy_policy">Privacy Policy</string>
 
     <!-- Calculator Tile Names -->

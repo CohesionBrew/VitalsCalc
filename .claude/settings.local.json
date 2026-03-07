@@ -21,7 +21,8 @@
       "Bash(xcodebuild:*)",
       "Bash(./gradlew :libs:subscription:subscription-adapty:compileDebugKotlinAndroid:*)",
       "Bash(ls:*)",
-      "Bash(git:*)"
+      "Bash(git:*)",
+      "Bash(cp:*)"
     ]
   }
 }

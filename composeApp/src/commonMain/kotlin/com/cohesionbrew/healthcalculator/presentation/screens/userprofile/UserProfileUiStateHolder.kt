@@ -9,6 +9,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.yearsUntil
+import kotlin.math.roundToInt
+import kotlin.time.Clock
 
 class UserProfileUiStateHolder(
     private val userProfileRepository: UserProfileRepository
@@ -22,12 +28,22 @@ class UserProfileUiStateHolder(
 
     private fun loadProfile() = uiStateHolderScope.launch {
         val profile = userProfileRepository.getProfile() ?: UserProfile()
+        val dob = profile.dob?.let {
+            try { LocalDate.parse(it) } catch (_: Exception) { null }
+        } ?: LocalDate(1990, 1, 1)
+        val age = calculateAge(dob)
+        val totalInches = profile.heightCm / 2.54
+        val feet = (totalInches / 12).toInt()
+        val inches = (totalInches % 12).roundToInt()
+
         _uiState.update {
             it.copy(
                 gender = profile.gender,
-                heightCm = profile.heightCm.takeIf { h -> h > 0 },
-                weightKg = profile.weightKg.takeIf { w -> w > 0 },
-                restingHr = profile.restingHr.takeIf { r -> r > 0 }?.toDouble(),
+                dob = dob,
+                age = age,
+                heightCm = profile.heightCm,
+                heightFeet = feet.coerceIn(3, 7).toString(),
+                heightInches = inches.coerceIn(0, 11).toString(),
                 useMetric = profile.useMetric,
                 isLoading = false
             )
@@ -37,27 +53,50 @@ class UserProfileUiStateHolder(
     fun onUiEvent(event: UserProfileUiEvent) {
         when (event) {
             is UserProfileUiEvent.OnGenderChanged -> _uiState.update {
-                it.copy(gender = if (event.isMale) "male" else "female", isSaved = false)
+                it.copy(gender = if (event.isMale) "male" else "female")
             }
-            is UserProfileUiEvent.OnHeightChanged -> _uiState.update { it.copy(heightCm = event.value, isSaved = false) }
-            is UserProfileUiEvent.OnWeightChanged -> _uiState.update { it.copy(weightKg = event.value, isSaved = false) }
-            is UserProfileUiEvent.OnRestingHrChanged -> _uiState.update { it.copy(restingHr = event.value, isSaved = false) }
-            is UserProfileUiEvent.OnUseMetricChanged -> _uiState.update { it.copy(useMetric = event.value, isSaved = false) }
+            is UserProfileUiEvent.OnDobChanged -> {
+                val age = calculateAge(event.dob)
+                _uiState.update { it.copy(dob = event.dob, age = age) }
+            }
+            is UserProfileUiEvent.OnHeightCmChanged -> _uiState.update {
+                it.copy(heightCm = event.value ?: 0.0)
+            }
+            is UserProfileUiEvent.OnHeightFeetChanged -> _uiState.update {
+                it.copy(heightFeet = event.feet)
+            }
+            is UserProfileUiEvent.OnHeightInchesChanged -> _uiState.update {
+                it.copy(heightInches = event.inches)
+            }
             UserProfileUiEvent.OnSave -> saveProfile()
         }
     }
 
     private fun saveProfile() = uiStateHolderScope.launch {
+        _uiState.update { it.copy(isSaving = true) }
         val state = _uiState.value
         val existing = userProfileRepository.getProfile() ?: UserProfile()
-        val updated = existing.copy(
-            gender = state.gender,
-            heightCm = state.heightCm ?: 0.0,
-            weightKg = state.weightKg ?: 0.0,
-            restingHr = state.restingHr?.toInt() ?: 0,
-            useMetric = state.useMetric
+
+        val heightCm = if (state.useMetric) {
+            state.heightCm
+        } else {
+            val feet = state.heightFeet.toIntOrNull() ?: 5
+            val inches = state.heightInches.toIntOrNull() ?: 0
+            ((feet * 12) + inches) * 2.54
+        }
+
+        userProfileRepository.saveProfile(
+            existing.copy(
+                gender = state.gender,
+                dob = state.dob.toString(),
+                heightCm = heightCm
+            )
         )
-        userProfileRepository.saveProfile(updated)
-        _uiState.update { it.copy(isSaved = true) }
+        _uiState.update { it.copy(isSaving = false) }
+    }
+
+    private fun calculateAge(dob: LocalDate): Int {
+        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+        return dob.yearsUntil(now)
     }
 }

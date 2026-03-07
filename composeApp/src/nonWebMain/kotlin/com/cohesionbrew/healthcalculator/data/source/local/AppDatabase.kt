@@ -17,7 +17,7 @@ import com.cohesionbrew.healthcalculator.data.source.local.entity.UserProfileEnt
         CalculationHistoryEntity::class,
         UserProfileEntity::class
     ],
-    version = 3
+    version = 4
 )
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {

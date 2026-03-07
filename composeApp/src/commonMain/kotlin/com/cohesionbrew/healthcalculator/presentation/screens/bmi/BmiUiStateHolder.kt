@@ -13,6 +13,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.yearsUntil
 import kotlin.math.roundToInt
 import kotlin.time.Clock
 import kotlin.uuid.ExperimentalUuidApi
@@ -32,8 +36,31 @@ class BmiUiStateHolder(
 
     private fun loadDefaults() = uiStateHolderScope.launch {
         val profile = userProfileRepository.getProfile() ?: return@launch
+
+        // Calculate age from DOB
+        val age = profile.dob?.let { dobStr ->
+            try {
+                val dob = LocalDate.parse(dobStr)
+                val now = Clock.System.now()
+                    .toLocalDateTime(TimeZone.currentSystemDefault()).date
+                dob.yearsUntil(now)
+            } catch (_: Exception) { null }
+        }
+
+        // Format height display
+        val heightText = if (profile.useMetric) {
+            "${profile.heightCm.roundToInt()} cm"
+        } else {
+            val totalInches = profile.heightCm / 2.54
+            val feet = (totalInches / 12).toInt()
+            val inches = (totalInches % 12).roundToInt()
+            "$feet ft $inches in"
+        }
+
         _uiState.update {
             it.copy(
+                age = age,
+                heightDisplayText = heightText,
                 heightCm = profile.heightCm,
                 weightKg = profile.weightKg,
                 useMetric = profile.useMetric

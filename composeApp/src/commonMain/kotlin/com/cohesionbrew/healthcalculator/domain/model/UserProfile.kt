@@ -15,5 +15,7 @@ data class UserProfile(
     val useMetric: Boolean = true,
     val activityLevel: String = "sedentary",
     val calorieGoal: String = "maintenance",
-    val bmrFormula: String = "mifflin"
+    val bmrFormula: String = "mifflin",
+    val advancedMode: Boolean = false,
+    val language: String = "en"
 )

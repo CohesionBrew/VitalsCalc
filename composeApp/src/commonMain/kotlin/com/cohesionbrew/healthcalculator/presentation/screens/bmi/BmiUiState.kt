@@ -13,7 +13,9 @@ data class BmiUiState(
     val healthyMaxKg: Double = 0.0,
     val differenceFromHealthy: Double = 0.0,
     val isCalculated: Boolean = false,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val age: Int? = null,
+    val heightDisplayText: String = ""
 ) {
     companion object {
         val categoryNames = listOf("Underweight", "Normal", "Overweight", "Obese I", "Obese II", "Obese III")

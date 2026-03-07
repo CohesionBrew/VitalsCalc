@@ -24,7 +24,9 @@ data class UserProfileEntity(
     @ColumnInfo(name = "use_metric") val useMetric: Boolean = true,
     @ColumnInfo(name = "activity_level") val activityLevel: String = "sedentary",
     @ColumnInfo(name = "calorie_goal") val calorieGoal: String = "maintenance",
-    @ColumnInfo(name = "bmr_formula") val bmrFormula: String = "mifflin"
+    @ColumnInfo(name = "bmr_formula") val bmrFormula: String = "mifflin",
+    @ColumnInfo(name = "advanced_mode") val advancedMode: Boolean = false,
+    @ColumnInfo(name = "language") val language: String = "en"
 )
 
 class UserProfileEntityMapper : EntityMapper<UserProfileEntity, UserProfile> {
@@ -44,7 +46,9 @@ class UserProfileEntityMapper : EntityMapper<UserProfileEntity, UserProfile> {
             useMetric = model.useMetric,
             activityLevel = model.activityLevel,
             calorieGoal = model.calorieGoal,
-            bmrFormula = model.bmrFormula
+            bmrFormula = model.bmrFormula,
+            advancedMode = model.advancedMode,
+            language = model.language
         )
     }
 
@@ -64,7 +68,9 @@ class UserProfileEntityMapper : EntityMapper<UserProfileEntity, UserProfile> {
             useMetric = entity.useMetric,
             activityLevel = entity.activityLevel,
             calorieGoal = entity.calorieGoal,
-            bmrFormula = entity.bmrFormula
+            bmrFormula = entity.bmrFormula,
+            advancedMode = entity.advancedMode,
+            language = entity.language
         )
     }
 }
