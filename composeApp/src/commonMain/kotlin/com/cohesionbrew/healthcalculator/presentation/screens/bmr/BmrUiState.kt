@@ -14,12 +14,16 @@ data class BmrUiState(
     val knowsBodyFat: Boolean = false,
     val activityLevelKey: String = "sedentary",
     val calorieGoalKey: String = "maintenance",
+    val bmrFormula: String = "average_of_all",
     val formulaResults: List<BmrCalculator.BmrResult> = emptyList(),
     val bmr: Double = 0.0,
     val tdee: Double = 0.0,
     val goalCalories: Int = 0,
     val isCalculated: Boolean = false,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val useMetric: Boolean = true,
+    val weightDisplayText: String = "",
+    val heightDisplayText: String = ""
 ) {
     val activityLevels: List<TdeeCalculator.ActivityLevel> get() = TdeeCalculator.ActivityLevel.entries
     val calorieGoals: List<TdeeCalculator.CalorieGoal> get() = TdeeCalculator.CalorieGoal.entries
@@ -34,5 +38,6 @@ sealed interface BmrUiEvent {
     data object OnKnowsBodyFatToggled : BmrUiEvent
     data class OnActivityLevelChanged(val key: String) : BmrUiEvent
     data class OnCalorieGoalChanged(val key: String) : BmrUiEvent
+    data class OnBmrFormulaChanged(val formula: String) : BmrUiEvent
     data object OnCalculate : BmrUiEvent
 }

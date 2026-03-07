@@ -128,6 +128,9 @@
     <string name="bmi_diff_to_lose">%1$s %2$s to lose to reach healthy range</string>
     <string name="bmi_diff_to_gain">%1$s %2$s to gain to reach healthy range</string>
     <string name="bmi_profile_subtitle">Age %1$s, H = %2$s</string>
+    <string name="age_w_kg_h_cm">%1$s, Age %2$d, W = %3$s kg, H = %4$s cm</string>
+    <string name="age_w_lbs_h_in">%1$s, Age %2$d, W = %3$s lbs, H = %4$s</string>
+    <string name="ft_in_for_header">%1$d ft %2$d in</string>
 
     <!-- BMR / TDEE Calculator -->
     <string name="bmr">BMR</string>

@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
@@ -25,7 +24,6 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,25 +35,55 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.cohesionbrew.healthcalculator.designsystem.components.health.FormattedDoubleTextField
-import com.cohesionbrew.healthcalculator.designsystem.components.health.HealthActionButton
 import com.cohesionbrew.healthcalculator.designsystem.components.health.HealthDropdownWithKeysSelector
-import com.cohesionbrew.healthcalculator.designsystem.components.health.HealthGenderSelectorToggle
 import com.cohesionbrew.healthcalculator.designsystem.components.health.HealthInfoTooltip
 import com.cohesionbrew.healthcalculator.designsystem.components.health.HealthScreenTitle
 import com.cohesionbrew.healthcalculator.designsystem.components.health.SelectableItem
 import com.cohesionbrew.healthcalculator.designsystem.components.health.TooltipMode
-import com.cohesionbrew.healthcalculator.designsystem.components.health.formatDoubleDisplay
 import com.cohesionbrew.healthcalculator.domain.calculator.BmrCalculator
 import com.cohesionbrew.healthcalculator.generated.resources.*
 import kotlin.math.roundToInt
 import org.jetbrains.compose.resources.stringResource
+
+@Composable
+private fun BmrProfileSubtitle(uiState: BmrUiState) {
+    if (uiState.age <= 0) return
+
+    val genderDisplay = if (uiState.gender.lowercase() == "male") {
+        stringResource(Res.string.male)
+    } else {
+        stringResource(Res.string.female)
+    }
+
+    val subtitle = if (uiState.useMetric) {
+        stringResource(
+            Res.string.age_w_kg_h_cm,
+            genderDisplay,
+            uiState.age,
+            uiState.weightDisplayText,
+            uiState.heightDisplayText
+        )
+    } else {
+        stringResource(
+            Res.string.age_w_lbs_h_in,
+            genderDisplay,
+            uiState.age,
+            uiState.weightDisplayText,
+            uiState.heightDisplayText
+        )
+    }
+
+    Text(
+        text = subtitle,
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant
+    )
+}
 
 @Composable
 fun BmrScreen(uiStateHolder: BmrUiStateHolder) {
@@ -78,7 +106,7 @@ fun BmrScreen(uiState: BmrUiState, onUiEvent: (BmrUiEvent) -> Unit) {
     }
 }
 
-// --- Portrait Layout (matches old StandardHealthScaffold PortraitLayout) ---
+// --- Portrait Layout ---
 
 @Composable
 private fun PortraitLayout(
@@ -101,23 +129,18 @@ private fun PortraitLayout(
         ) {
             HealthScreenTitle(text = title)
 
-            // --- Input Section ---
-            BmrInputSection(uiState = uiState, onUiEvent = onUiEvent)
+            BmrProfileSubtitle(uiState)
 
-            // --- Results Section ---
-            if (uiState.isCalculated) {
-                Spacer(modifier = Modifier.height(8.dp))
-                BmrDetailsCard(uiState, onUiEvent, modifier = Modifier.fillMaxWidth())
-                TdeeDetailsCard(uiState, onUiEvent, modifier = Modifier.fillMaxWidth())
-                CalorieGoalCard(uiState, onUiEvent, modifier = Modifier.fillMaxWidth())
-                Spacer(modifier = Modifier.height(16.dp))
-            }
+            Spacer(modifier = Modifier.height(8.dp))
+            BmrDetailsCard(uiState, onUiEvent, modifier = Modifier.fillMaxWidth())
+            TdeeDetailsCard(uiState, onUiEvent, modifier = Modifier.fillMaxWidth())
+            CalorieGoalCard(uiState, onUiEvent, modifier = Modifier.fillMaxWidth())
+            Spacer(modifier = Modifier.height(16.dp))
         }
-        // Ad banner slot
     }
 }
 
-// --- Landscape Layout (matches old StandardHealthScaffold LandscapeLayout) ---
+// --- Landscape Layout ---
 
 @Composable
 private fun LandscapeLayout(
@@ -137,7 +160,7 @@ private fun LandscapeLayout(
                 .padding(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Left Column: title + input + BmrDetailsCard
+            // Left Column: title + subtitle + BmrDetailsCard
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -146,83 +169,78 @@ private fun LandscapeLayout(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 HealthScreenTitle(text = title)
-                BmrInputSection(uiState = uiState, onUiEvent = onUiEvent)
-                if (uiState.isCalculated) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    BmrDetailsCard(uiState, onUiEvent, modifier = Modifier.fillMaxWidth())
-                }
+
+                BmrProfileSubtitle(uiState)
+
+                Spacer(modifier = Modifier.height(8.dp))
+                BmrDetailsCard(uiState, onUiEvent, modifier = Modifier.fillMaxWidth())
             }
 
             // Right Column: TdeeDetailsCard + CalorieGoalCard
-            if (uiState.isCalculated) {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(0.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    TdeeDetailsCard(uiState, onUiEvent, modifier = Modifier.fillMaxWidth())
-                    CalorieGoalCard(uiState, onUiEvent, modifier = Modifier.fillMaxWidth())
-                }
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(0.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                TdeeDetailsCard(uiState, onUiEvent, modifier = Modifier.fillMaxWidth())
+                CalorieGoalCard(uiState, onUiEvent, modifier = Modifier.fillMaxWidth())
             }
         }
-        // Ad banner slot
     }
 }
 
-// ==================== Input Section ====================
+// ==================== BMR Details Card (with body fat + formula selector, matches old app) ====================
 
 @Composable
-private fun BmrInputSection(
+private fun BmrDetailsCard(
     uiState: BmrUiState,
-    onUiEvent: (BmrUiEvent) -> Unit
+    onUiEvent: (BmrUiEvent) -> Unit,
+    containerColor: Color = MaterialTheme.colorScheme.surface,
+    modifier: Modifier = Modifier
 ) {
+    var showChartPopup by remember { mutableStateOf(false) }
+
+    val calculatorTypes = listOf(
+        SelectableItem(key = "oxford_henry", displayName = stringResource(Res.string.oxford_henry)),
+        SelectableItem(key = "mifflin_st_jeor", displayName = stringResource(Res.string.mifflin_st_jeor)),
+        SelectableItem(key = "harris_benedict", displayName = stringResource(Res.string.harris_benedict)),
+        SelectableItem(key = "katch_mcardle", displayName = stringResource(Res.string.katch_mcardle)),
+        SelectableItem(key = "average_of_all", displayName = stringResource(Res.string.average_of_all))
+    )
+
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        modifier = modifier
+            .background(containerColor)
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
-        // --- Gender selector ---
-        HealthGenderSelectorToggle(
-            maleLabel = stringResource(Res.string.male),
-            femaleLabel = stringResource(Res.string.female),
-            isMaleSelected = uiState.gender == "male",
-            onMaleSelected = { onUiEvent(BmrUiEvent.OnGenderChanged("male")) },
-            onFemaleSelected = { onUiEvent(BmrUiEvent.OnGenderChanged("female")) }
-        )
-
-        // --- Height ---
-        FormattedDoubleTextField(
-            value = formatDoubleDisplay(uiState.heightCm),
-            onValueChange = { onUiEvent(BmrUiEvent.OnHeightChanged(it ?: 0.0)) },
-            label = { Text(stringResource(Res.string.height)) },
-            suffix = { Text(stringResource(Res.string.unit_cm)) },
+        // --- Title Row ---
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()
-        )
+        ) {
+            Text(
+                text = stringResource(Res.string.bmr_details),
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.weight(1f, fill = false)
+            )
+            Spacer(Modifier.width(8.dp))
+            HealthInfoTooltip(
+                mode = TooltipMode.Dialog,
+                tooltipText = stringResource(Res.string.tooltiptext_knowing_bmr),
+                modifier = Modifier,
+                tooltipTitle = stringResource(Res.string.bmr_info)
+            )
+        }
 
-        // --- Weight ---
-        FormattedDoubleTextField(
-            value = formatDoubleDisplay(uiState.weightKg),
-            onValueChange = { onUiEvent(BmrUiEvent.OnWeightChanged(it ?: 0.0)) },
-            label = { Text(stringResource(Res.string.weight)) },
-            suffix = { Text(stringResource(Res.string.unit_kg)) },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        // --- Age ---
-        OutlinedTextField(
-            value = if (uiState.age > 0) uiState.age.toString() else "",
-            onValueChange = { onUiEvent(BmrUiEvent.OnAgeChanged(it.toIntOrNull() ?: 0)) },
-            label = { Text(stringResource(Res.string.label_age)) },
-            suffix = { Text(stringResource(Res.string.unit_years)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        // --- Body fat checkbox + input (matching old app layout) ---
+        // --- Body fat checkbox (matches old app's BmrDetailsCard) ---
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
@@ -254,73 +272,30 @@ private fun BmrInputSection(
         }
 
         AnimatedVisibility(visible = uiState.knowsBodyFat) {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                FormattedDoubleTextField(
-                    value = formatDoubleDisplay(uiState.bodyFatPct),
-                    onValueChange = { onUiEvent(BmrUiEvent.OnBodyFatChanged(it)) },
-                    label = { Text(stringResource(Res.string.body_fat_percent)) },
-                    suffix = { Text(stringResource(Res.string.unit_percent)) },
-                    modifier = Modifier.fillMaxWidth()
-                )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
                 Text(
                     text = stringResource(Res.string.body_fat_note),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
+                    textAlign = TextAlign.Center
                 )
             }
         }
 
-        // --- Calculate button ---
-        HealthActionButton(
-            text = stringResource(Res.string.calculate),
-            isLoading = uiState.isLoading,
-            onClick = { onUiEvent(BmrUiEvent.OnCalculate) }
+        // --- BMR Calculation formula dropdown ---
+        HealthDropdownWithKeysSelector(
+            label = stringResource(Res.string.bmr_calculation),
+            options = calculatorTypes,
+            selectedKey = uiState.bmrFormula,
+            onItemSelected = { key, _ ->
+                onUiEvent(BmrUiEvent.OnBmrFormulaChanged(key))
+            }
         )
-    }
-}
-
-// ==================== BMR Details Card ====================
-
-@Composable
-private fun BmrDetailsCard(
-    uiState: BmrUiState,
-    onUiEvent: (BmrUiEvent) -> Unit,
-    containerColor: Color = MaterialTheme.colorScheme.surface,
-    modifier: Modifier = Modifier
-) {
-    var showChartPopup by remember { mutableStateOf(false) }
-
-    Column(
-        modifier = modifier
-            .background(containerColor)
-            .padding(horizontal = 8.dp, vertical = 4.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(2.dp)
-    ) {
-        // --- Title Row ---
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = stringResource(Res.string.bmr_details),
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.weight(1f, fill = false)
-            )
-            Spacer(Modifier.width(8.dp))
-            HealthInfoTooltip(
-                mode = TooltipMode.Dialog,
-                tooltipText = stringResource(Res.string.tooltiptext_knowing_bmr),
-                modifier = Modifier,
-                tooltipTitle = stringResource(Res.string.bmr_info)
-            )
-        }
 
         // --- BMR Result Row ---
         Row(
