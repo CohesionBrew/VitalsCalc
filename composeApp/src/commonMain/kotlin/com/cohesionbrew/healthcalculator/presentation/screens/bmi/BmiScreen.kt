@@ -123,15 +123,13 @@ private fun PortraitLayout(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            if (uiState.isCalculated) {
-                Spacer(modifier = Modifier.height(8.dp))
-                BmiDataCard(
-                    uiState = uiState,
-                    modifier = Modifier
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                BmiDynamicGraphicsChart(currentBmi = uiState.bmi)
-            }
+            Spacer(modifier = Modifier.height(8.dp))
+            BmiDataCard(
+                uiState = uiState,
+                modifier = Modifier
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            BmiDynamicGraphicsChart(currentBmi = uiState.bmi)
         }
         // Ad banner slot would go here if needed
     }
@@ -181,25 +179,21 @@ private fun LandscapeLayout(
                     onUiEvent = onUiEvent,
                     modifier = Modifier.fillMaxWidth()
                 )
-                if (uiState.isCalculated) {
-                    BmiDynamicGraphicsChart(currentBmi = uiState.bmi)
-                }
+                BmiDynamicGraphicsChart(currentBmi = uiState.bmi)
             }
 
             // Right Column
-            if (uiState.isCalculated) {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    BmiDataCard(
-                        uiState = uiState,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                BmiDataCard(
+                    uiState = uiState,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
         // Ad banner slot would go here if needed

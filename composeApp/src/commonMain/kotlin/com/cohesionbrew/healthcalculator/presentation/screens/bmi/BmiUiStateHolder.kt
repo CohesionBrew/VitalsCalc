@@ -66,6 +66,11 @@ class BmiUiStateHolder(
                 useMetric = profile.useMetric
             )
         }
+
+        // Auto-calculate if profile has valid height and weight
+        if (profile.heightCm > 0 && profile.weightKg > 0) {
+            calculate()
+        }
     }
 
     fun onUiEvent(event: BmiUiEvent) {
